@@ -1,0 +1,103 @@
+{% extends '/base/style/base.html' %}
+{% set static_url = '/static' %}
+
+{% block navbar %}
+    {% include 'base/style/navbar-admin.html' %}
+{% endblock %}
+
+{% block content %}
+
+<section class="gray-simple">
+    <div class="container">
+
+    
+        <!-- row Start -->
+        <div class="row justify-content-center">
+            
+            <!-- Single blog Grid -->
+            <div class="col-xl-7 col-lg-8 col-md-9">
+                <div class="card border-0 rounded-4 p-xl-4 p-lg-4 p-md-4 p-3">
+                    
+                    <div class="simple-form">
+                        <div class="form-header text-center mb-5">
+                            <h4 class="modal-header-title">Admin Log In</h4>
+                            <div class="d-flex align-items-center justify-content-center mb-3">
+                                <img class="logo-fixed" src="{{ url_for('static', filename='img/cosmoxclub-logo.png')}}" alt="Cosmox Club Logo">
+                            </div>
+                        </div>
+
+                        <form id="adminLoginForm" method="POST" action="{{ url_for('admin') }}" autocomplete="off">
+					
+							<div class="form-floating mb-3">
+								<input type="email" name="email" class="form-control" placeholder="name@example.com">
+								<label>Email address</label>
+							</div>
+						
+							<div class="form-floating mb-5 position-relative">
+								<input type="password" name="password" class="form-control" placeholder="Password" id="passwordInput3">
+								<label>Password</label>
+								<span class="position-absolute top-50 end-0 translate-middle-y me-3" onclick="togglePassword3()" style="cursor: pointer;">
+									<i class="fa fa-eye" id="toggleIcon3"></i>
+								</span>
+							</div>
+						
+							<div class="form-group">
+								<button type="submit" class="btn btn-lg btn-primary fw-medium full-width rounded-2">Log In</button>
+							</div>
+
+							<div id="response-message-login-admin" style="display: none; margin-top: 10px;"></div>
+						
+						</form>
+                    </div>    
+                </div>
+            </div>
+        </div>
+        <!-- /row -->					
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    $('#adminLoginForm').submit(function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const url = form.attr('action');
+        const formData = form.serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            success: function (response) {
+                // Only redirect — do not show any message
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
+            },
+            error: function (xhr) {
+                form[0].reset(); 
+                const res = xhr.responseJSON;
+                const message = res?.message || 'Something went wrong.';
+
+                const $msgBox = $('#response-message-login-admin');
+                $msgBox
+                    .text(message)
+                    .css({
+                        color: 'red',
+                        display: 'block'
+                    });
+
+                // Hide after 10 seconds
+                setTimeout(() => {
+                    $msgBox.fadeOut();
+                }, 10000);
+            }
+        });
+    });
+});
+
+</script>
+
+
+{% endblock %}

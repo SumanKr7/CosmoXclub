@@ -1,0 +1,50 @@
+{% set static_url = '/static' %}
+
+{% set services = [
+    {
+        'img': '/img/svg/property.svg',
+        'title': "Sign Up for Free",
+        'desc': "Create your free account to get started. It only takes a minute, and you'll be one step closer to unforgettable home exchange experiences.",
+        'style': "middle-icon-features-item",
+        'style1': "middle-icon-large-features-box f-light-success"
+    },
+    {
+        'img': '/img/svg/agent.svg',
+        'title': "Complete Your Profile",
+        'desc': "Introduce yourself to the community by adding details about you and your home. Verified profiles build trust and open doors to better exchange opportunities.",
+        'style': "middle-icon-features-item",
+        'style1': "middle-icon-large-features-box f-light-warning"
+    },
+    {
+        'img': '/img/svg/membership.svg',
+        'title': "Become a Member",
+        'desc': "Unlock all features and start exchanging by paying an annual subscription fee of ₹9,999 + GST.",
+        'style': "middle-icon-features-item",
+        'style1': "middle-icon-large-features-box f-light-warning"
+    },
+    {
+        'img': '/img/svg/deal.svg',
+        'title': "Enjoy Unlimited Exchanges",
+        'desc': "With our secure guarantees in place, you’re free to explore new places, meet like-minded travelers, and enjoy a full year of worry-free home exchanges.",
+        'style': "middle-icon-features-item remove",
+        'style1': "middle-icon-large-features-box f-light-success"
+    }
+] %}
+
+{% for item in services %}
+<div class="col-lg-3 col-md-5">
+    <div class="{{ item.style }}">
+        <div class="icon-features-wrap">
+            <div class="{{ item.style1 }}">
+                <span class="svg-icon text-success svg-icon-2hx">
+                    <img src="{{ static_url }}{{ item.img }}" alt="">
+                </span>
+            </div>
+        </div>
+        <div class="middle-icon-features-content">
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.desc }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}

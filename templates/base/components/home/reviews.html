@@ -1,0 +1,57 @@
+{% set static_url = '/static' %}
+
+{% set reviews = [
+    {
+        'img': '/img/profile.png',
+        'name': "Anita & Rohit",
+        'desc': "We stayed in a cozy home in Goa for a week, and it felt like our own. The host was amazing, and the whole experience was stress-free. Can’t wait for our next exchange!",
+        'style': "quotes bg-primary"
+    },
+    {
+        'img': '/img/profile.png',
+        'name': "Meena",
+        'desc': "Meeting locals and experiencing their way of life made our trip to Himachal truly special. This platform made it all possible.",
+        'style': "quotes bg-primary"
+    },
+    {
+        'img': '/img/profile.png',
+        'name': "Saurabh & Family",
+        'desc': "For just the price of a hotel night, we got a full year of travel opportunities. It's the best decision we made for our family holidays.",
+        'style': "quotes bg-primary"
+    },
+    {
+        'img': '/img/profile.png',
+        'name': "Ritika",
+        'desc': "I exchanged homes with someone in Kerala and worked from a peaceful, scenic location for a month. Reliable internet, great community, and zero hassle.",
+        'style': "quotes bg-primary"
+    },
+    {
+        'img': '/img/profile.png',
+        'name': "Karan & Neha",
+        'desc': "Every exchange has been smooth and welcoming. It's comforting to arrive in a real home rather than a hotel room.",
+        'style': "quotes bg-primary"
+    }
+] %}
+{% for item in reviews %}
+<!-- Single Item -->
+<div class="item">
+    <div class="item-box">
+        <div class="smart-tes-author">
+            <div class="st-author-box">
+                <div class="st-author-thumb">
+                    <div class="{{ item.style }}"><i class="fa-solid fa-quote-left"></i></div>
+                    <img src="{{ static_url ~ item.img }}" class="img-fluid" alt="" />
+                </div>
+            </div>
+        </div>
+
+        <div class="smart-tes-content">
+            <p>{{ item.desc }}</p>
+        </div>
+
+        <div class="st-author-info">
+            <h4 class="st-author-title">{{ item.name }}</h4>
+        </div>
+    </div>
+</div>
+{% endfor %}

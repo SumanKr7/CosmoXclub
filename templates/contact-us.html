@@ -1,0 +1,123 @@
+{% extends '/base/style/base.html' %}
+
+{% block content %}
+			
+<!-- ============================ Page Title Start================================== -->
+<div class="page-title">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12">
+				
+				<h2 class="ipt-title">Contact Us</h2>
+				<span class="ipn-subtitle">We’re here to help — reach out with your questions or feedback</span>
+				
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ============================ Page Title End ================================== -->
+
+<!-- ============================ Agency List Start ================================== -->
+<section>
+
+	<div class="container">
+	
+		<!-- row Start -->
+		<div class="row">
+		
+			<div class="col-lg-7 col-md-7">
+				<form method="POST" action="/contact-us" name="myForm" id="myForm" >
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<div class="form-group">
+								<label class="mb-2" for="name">Name</label>
+								<input name="name" id="name" type="text" class="form-control simple" placeholder="Enter your full name">
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<div class="form-group">
+								<label class="mb-2" for="phone">Phone</label>
+								<input name="phone" id="phone" type="tel" class="form-control simple" placeholder="Enter your phone number">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="mb-2" for="email">Email</label>
+						<input name="email" id="email" type="email" class="form-control simple" placeholder="Enter your email address">
+					</div>
+
+
+					<div class="form-group">
+						<label class="mb-2" for="message">Message</label>
+						<textarea name="message" id="message" class="form-control simple" placeholder="Enter your message"></textarea>
+					</div>
+
+					<div class="form-group">
+						<button class="btn btn-primary px-5 rounded" type="submit" id="submit" name="send">
+							Submit
+						</button>
+					</div>
+				</form>
+
+			</div>
+			
+			<div class="col-lg-5 col-md-5">
+				<div class="contact-info">
+					
+					<h2>Get In Touch</h2>
+					<p>Have questions or need support? We're here to help! Reach out anytime—we’d love to hear from you.</p>
+
+						<div class="cn-info-detail mt-4">
+							<div class="cn-info-icon">
+								<i class="bi bi-house"></i>
+							</div>
+							<div class="cn-info-content">
+								<h4 class="cn-info-title">Reach Us</h4>
+								111A-36, Sector 3, Vaishali, Ghaziabad, UP 201010, India
+							</div>
+						</div>
+
+						<div class="cn-info-detail mt-4">
+							<div class="cn-info-icon">
+								<i class="bi bi-envelope-at"></i>
+							</div>
+							<div class="cn-info-content">
+								<h4 class="cn-info-title">Drop A Mail</h4>
+								<a style="color: #4e5c79;" href="mailto:contact@cosmoxclub.com">contact@cosmoxclub.com</a>
+							</div>
+						</div>
+
+						<div class="cn-info-detail mt-4">
+							<div class="cn-info-icon">
+								<i class="bi bi-telephone"></i>
+							</div>
+							<div class="cn-info-content">
+								<h4 class="cn-info-title">Call Us</h4>
+								<a style="color: #4e5c79;" href="tel:+91-9354080920">+91-9354080920</a>
+							</div>
+						</div>
+
+
+					
+				</div>
+			</div>
+			
+		</div>
+		<!-- /row -->		
+		
+	</div>
+			
+</section>
+<!-- ============================ Agency List End ================================== -->
+
+<script>
+  document.getElementById('myForm').addEventListener('submit', function(event) {
+    setTimeout(() => {
+        this.reset();
+    }, 10);
+  });
+</script>
+
+{% endblock %}	

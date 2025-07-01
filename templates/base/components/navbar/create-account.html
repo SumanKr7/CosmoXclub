@@ -1,0 +1,66 @@
+<!-- Log In Modal -->
+<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="registermodal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered login-pop-form" role="document">
+		<div class="modal-content" id="registermodal">
+			<span class="mod-close" data-bs-dismiss="modal" aria-hidden="true">
+				<span class="svg-icon text-primary svg-icon-2hx">
+					<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>
+						<rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="currentColor"/>
+						<rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="currentColor"/>
+					</svg>
+				</span>
+			</span>
+			<div class="modal-body">
+				<h4 class="modal-header-title">Create Account</h4>
+				<div class="d-flex align-items-center justify-content-center mb-3">
+					<img class="logo-fixed" src="{{ url_for('static', filename='img/cosmoxclub-logo.png')}}" alt="Cosmox Club Logo">
+				</div>
+				<div class="login-form">
+					<form id="create-form" method="POST" action="{{ url_for('signup') }}" autocomplete="off">
+
+                        <div class="form-floating mb-3">
+							<input type="text" name="fullname" class="form-control" placeholder="Full Name">
+                            <label>Full Name</label>
+						</div>
+
+                        <div class="form-floating mb-3">
+							<input type="tel" name="phone" class="form-control" placeholder="Phone">
+                            <label>Phone</label>
+						</div>
+					
+						<div class="form-floating mb-3">
+							<input type="email" name="email" class="form-control" placeholder="name@example.com">
+							<label>Email address</label>
+						</div>
+						
+						<div class="form-floating mb-5 position-relative">
+							<input type="password" name="password" class="form-control" placeholder="Password" id="passwordInput2">
+							<label>Password</label>
+							<span class="position-absolute top-50 end-0 translate-middle-y me-3" onclick="togglePassword2()" style="cursor: pointer;">
+								<i class="fa fa-eye" id="toggleIcon2"></i>
+							</span>
+						</div>
+
+						
+						<div class="form-group">
+							<button type="submit" class="btn btn-lg btn-primary fw-medium full-width rounded-2">Create Account</button>
+						</div>
+
+						<div id="response-message-create" style="display: none; margin-top: 10px;"></div>
+					
+					</form>
+				</div>
+				<!-- <div class="modal-divider"><span>Or login via</span></div>
+				<div class="social-login mb-3">
+					<ul class=" justify-content-center">
+						<li><a href="/login/google" class="btn connect-google">
+							<svg style="margin-right: 5px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><g fill-rule="nonzero" fill="none"><path fill="#FBBC05" d="M8.43 15.813c0-.825.14-1.617.39-2.358l-4.373-3.27a12.45 12.45 0 00-1.332 5.627c0 2.023.478 3.932 1.33 5.625l4.37-3.276a7.357 7.357 0 01-.385-2.349"/><path fill="#EA4335" d="M16.11 8.305c1.83 0 3.484.635 4.784 1.674l3.78-3.696c-2.303-1.963-5.256-3.176-8.564-3.176-5.135 0-9.55 2.875-11.663 7.077l4.375 3.27c1.007-2.995 3.879-5.149 7.288-5.149"/><path fill="#34A853" d="M16.11 23.322c-3.41 0-6.282-2.154-7.29-5.15l-4.373 3.27c2.113 4.203 6.527 7.078 11.663 7.078 3.169 0 6.195-1.102 8.467-3.167l-4.152-3.143c-1.171.723-2.646 1.112-4.316 1.112"/><path fill="#4285F4" d="M28.514 15.813c0-.75-.119-1.56-.295-2.31h-12.11v4.91h6.97c-.348 1.674-1.296 2.96-2.653 3.797l4.15 3.143c2.387-2.168 3.938-5.397 3.938-9.54"/></g></svg>
+							Continue with Google</a></li>
+					</ul>
+				</div> -->
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->

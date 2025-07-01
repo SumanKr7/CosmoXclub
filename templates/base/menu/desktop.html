@@ -1,0 +1,24 @@
+<div class="dropdown-menu pull-right" id="showing-desktop">
+    <a href="/my-account" class="sub-menu-item {% if request.path == '/my-account' %}bg-success-subtle{% endif %}">
+        <i class="bi bi-person me-2"></i>My Account
+    </a>
+    <a href="/my-home" class="sub-menu-item {% if request.path == '/my-home' %}bg-success-subtle{% endif %}">
+        <i class="bi bi-house-door me-2"></i>
+        {% if user.get('properties') and user.properties.get('title') %}
+            My Home
+        {% else %}
+            Add Home
+        {% endif %}
+    </a>
+    {% if user.get('properties') and user.properties.get('title') %}
+        <a href="/edit-home-details" class="sub-menu-item {% if request.path == '/edit-home-details' %}bg-success-subtle{% endif %}">
+            <i class="bi bi-pencil-square me-2"></i>Edit Home Details
+        </a>
+        <a href="/update-home-images" class="sub-menu-item {% if request.path == '/update-home-images' %}bg-success-subtle{% endif %}">
+            <i class="bi bi-cloud-arrow-up me-2"></i>Update Home Images
+        </a>
+    {% endif %}
+    <a href="{{ url_for('logout') }}" class="sub-menu-item">
+        <i class="bi bi-power me-2"></i>Log Out
+    </a>
+</div>

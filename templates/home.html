@@ -1,0 +1,272 @@
+{% extends '/base/style/base.html' %}
+
+{% block navbar %}
+    {% include 'base/style/navbar-home.html' %}
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- ============================ Hero Banner  Start================================== -->
+<div class="hero-banner vedio-banner">
+	<div class="overlay"></div>	
+
+	<video id="desktopVideo" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+		<source src="static/img/banners.mp4" type="video/mp4">
+	</video>
+
+	<video id="mobileVideo" playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop" style="display: none;">
+		<source src="static/img/mobile-banners.mp4" type="video/mp4">
+	</video>
+
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-xl-7 col-lg-9 col-md-12 col-sm-10 header-search-form">
+				<div class="full-search-2 eclip-search italian-search hero-search-radius shadow-hard">
+					<div class="hero-search-content">
+
+						<div class="row  justify-content-center">
+
+							<div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 elio">
+							   
+								<div class="form-group borders">
+									<div class="position-relative">
+										<input type="text" class="form-control ps-5" placeholder="Enter Your Membership ID for Home Exchange">
+										<div class="position-absolute top-50 start-0 translate-middle-y ms-2">
+											<span class="svg-icon text-primary svg-icon-2hx">
+                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" x="0" y="0" viewBox="0 0 64 64" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M18.34 41.37a1.001 1.001 0 0 0-1.371-.348l-1.544.919v-1.796a1 1 0 0 0-2 0v1.796l-1.543-.918a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0 1.022 1.719l1.543-.918v1.796a1 1 0 0 0 2 0v-1.796l1.544.919a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 0 0 .348-1.371zM30.056 41.37a1.001 1.001 0 0 0-1.371-.348l-1.544.919v-1.796a1 1 0 0 0-2 0v1.796l-1.543-.918a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0 1.022 1.719l1.543-.918v1.796a1 1 0 0 0 2 0v-1.796l1.544.919a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 0 0 .348-1.371zM41.772 41.37a1.001 1.001 0 0 0-1.371-.348l-1.543.918v-1.796a1 1 0 0 0-2 0v1.796l-1.544-.919a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0 1.022 1.719l1.544-.919v1.796a1 1 0 0 0 2 0v-1.796l1.543.918a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 0 0 .348-1.371zM45.66 46.027a1.001 1.001 0 0 0 1.37.348l1.544-.919v1.796a1 1 0 0 0 2 0v-1.796l1.543.918a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 1 0-1.023-1.719l-1.543.918v-1.796a1 1 0 0 0-2 0v1.796l-1.544-.919a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0-.348 1.371z" fill="currentColor" opacity="1" data-original="currentColor" class=""></path><path d="M57.89 32.22H42.9a1 1 0 0 0 0 2h14.99c1.164 0 2.11.946 2.11 2.11v14.74c0 1.164-.946 2.11-2.11 2.11H6.11A2.112 2.112 0 0 1 4 51.07V36.33c0-1.164.946-2.11 2.11-2.11H21.1a1 1 0 0 0 0-2H6.11A4.115 4.115 0 0 0 2 36.33v14.74a4.114 4.114 0 0 0 4.11 4.11h51.78A4.115 4.115 0 0 0 62 51.07V36.33a4.115 4.115 0 0 0-4.11-4.11zM36.559 19.756v-1.009c0-2.514-2.045-4.559-4.559-4.559s-4.559 2.045-4.559 4.559v1.009a2.021 2.021 0 0 0-1.586 1.971v5.062c0 1.114.906 2.021 2.021 2.021h8.25a2.023 2.023 0 0 0 2.021-2.021v-5.062c0-.965-.681-1.771-1.586-1.971zM32 16.188a2.562 2.562 0 0 1 2.559 2.559v.959h-5.118v-.959A2.562 2.562 0 0 1 32 16.188zm4.125 10.622-8.271-.021.021-5.083h8.25c.011 0 .021.009.021.021z" fill="currentColor" opacity="1" data-original="#currentColor" class=""></path><path d="M32 8.821c-7.418 0-13.453 6.035-13.453 13.453S24.582 35.728 32 35.728s13.453-6.035 13.453-13.454S39.418 8.821 32 8.821zm0 24.907c-6.315 0-11.453-5.138-11.453-11.454S25.685 10.821 32 10.821s11.453 5.138 11.453 11.453S38.315 33.728 32 33.728z" fill="currentColor" opacity="1" data-original="currentColor" class=""></path></g>
+                                                </svg>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-xl-5 col-lg-5 col-md-5 col-sm-12">
+								<div class="form-group">
+									<button type="button" class="btn btn-primary full-width">Search</button>
+								</div>
+							</div>
+									
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ============================ Hero Banner End ================================== -->
+
+
+<!-- ============================ Step How To Use Start ================================== -->
+<section>
+	<div class="container">
+		
+		<div class="row justify-content-center">
+			<div class="col-xl-6 col-lg-7 col-md-10 text-center">
+				<div class="sec-heading center">
+					<h2>How does it work?</h2>
+					<p>Sign up and take the membership to get one year of unlimited, worry-free exchanges for the price of one night’s stay at a hotel.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row justify-content-center g-4">
+			
+			<!-- services code  -->
+			{% include '/base/components/home/how-its-work.html' %}
+
+		</div>
+		
+	</div>
+</section>
+<div class="clearfix"></div>
+<!-- ============================ Step How To Use End ====================== -->
+
+
+<!-- ============================ Property Location Start ================================== -->
+<section class="pt-0">
+	<div class="container">
+		
+		<div class="row justify-content-center">
+			<div class="col-xl-6 col-lg-7 col-md-10 text-center">
+				<div class="sec-heading center">
+					<h2>Find Your Dream Destination</h2>
+					<p>Explore unique homes worldwide and choose the perfect stay for your next getaway—city breaks, beach escapes, mountain retreats, and more.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row g-2">
+		
+			<!-- locations Type code  -->
+			{% include '/base/components/home/locations-type.html' %}
+
+			
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 text-center mt-5">
+				<a href="home-exchange" class="btn btn-primary px-md-5 rounded">Browse More Locations</a>
+			</div>
+		</div>
+		
+	</div>
+</section>
+<!-- ============================ Property Location End ================================== -->
+
+
+<!-- ================= Explore Goods Places ================= -->
+<section>
+	<div class="container">
+		
+		<div class="row justify-content-center">
+			<div class="col-lg-7 col-md-10 text-center">
+				<div class="sec-heading center">
+					<h2>Committed to Sustainable Development</h2>
+					<p>We align our efforts with the United Nations Sustainable Development Goals (SDGs), promoting responsible travel, community empowerment, and eco-friendly practices in every exchange.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row justify-content-center g-4">
+			
+			<!-- sdgs code  -->
+			 {% include '/base/components/home/sdgs.html' %}
+			
+		</div>
+		
+	</div>	
+</section>
+<!-- ================================= Explore Goods Places =============================== -->
+
+
+<!-- ============================ Price Table Start ================================== -->
+<section>
+	<div class="container">
+	
+		<div class="row justify-content-center">
+			<div class="col-lg-7 col-md-10 text-center">
+				<div class="sec-heading center">
+					<h2>Our Membership Plan</h2>
+					<p>One membership. Unlimited secure exchanges for a full year. Travel more, worry less.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row justify-content-center g-lg-4 g-md-3 g-4">
+		
+			<!-- packages code  -->
+			 {% include '/base/components/home/packages.html' %}
+			
+		</div>
+		
+	</div>	
+</section>
+<!-- ============================ Price Table End ================================== -->	
+ 
+
+<!-- ============================ Smart Testimonials ================================== -->
+<section class="gray-bg">
+	<div class="container">
+	
+		<div class="row justify-content-center">
+			<div class="col-lg-7 col-md-10 text-center">
+				<div class="sec-heading center">
+					<h2>What Our Members Are Saying</h2>
+					<p>Join a community that’s built on trust and shared experiences. From seamless exchanges to unforgettable stays, hear directly from members who’ve turned travel into a lifestyle.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row justify-content-center">
+			
+			<div class="col-lg-12 col-md-12">
+				
+				<div class="smart-textimonials smart-center" id="smart-textimonials">
+					
+					<!-- reviews code  -->
+					{% include '/base/components/home/reviews.html' %}
+
+					
+				</div>
+			</div>
+			
+		</div>
+		
+	</div>
+</section>
+<!-- ============================ Smart Testimonials End ================================== -->
+ 
+
+<!-- ============================ Call To Action ================================== -->
+<section class="bg-light">
+	<div class="container">
+		
+		<div class="row align-items-center justify-content-center gx-5 gy-5">
+		
+			<!-- partners code  -->
+			 <!-- {% include '/base/components/home/partners.html' %} -->
+
+			
+		</div>
+		
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-7 col-lg-11">
+				
+				<div class="call-to-act-wrap text-center">
+					<div class="call-to-act-head mb-2">
+						<h2 class="fs-1 mb-3 lh-sm">Stay Connected</h2>
+						<span>Be the first to know about new listings, travel tips, exclusive offers, and community stories. Subscribe to our newsletter and let inspiration come straight to your inbox.</span>
+					</div>
+				</div>
+				<div class="call-to-act-form">
+					<form class="newsletter-boxes p-2" method="post" action="/" id="newsletterForm">
+						<div class="row m-0 g-0">
+							<div class="col-xl-10 col-9">
+								<input type="email" name="email" class="form-control border-0" placeholder="Subscribe Your Email...">
+							</div>
+							<div class="col-xl-2 col-3">
+								<button type="submit" class="btn btn-primary rounded-pill full-width">Subscribe</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+</section>
+<!-- ============================ Call To Action End ================================== -->
+
+<script>
+  const desktopVideo = document.getElementById('desktopVideo');
+  const mobileVideo = document.getElementById('mobileVideo');
+
+  function checkScreenSize() {
+    if (window.innerWidth <= 425) {
+      desktopVideo.style.display = 'none';
+      mobileVideo.style.display = 'block';
+    } else {
+      desktopVideo.style.display = 'block';
+      mobileVideo.style.display = 'none';
+    }
+  }
+
+  // Run on page load
+  checkScreenSize();
+
+  // Also run on window resize
+  window.addEventListener('resize', checkScreenSize);
+
+  document.getElementById('newsletterForm').addEventListener('submit', function(event) {
+    setTimeout(() => {
+        this.reset();
+    }, 10);
+  });
+</script>
+
+{% endblock %}	

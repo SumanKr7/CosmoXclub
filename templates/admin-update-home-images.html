@@ -1,0 +1,249 @@
+{% extends '/base/style/base.html' %}
+{% set static_url = '/static' %}
+
+{% block navbar %}
+    {% include 'base/style/navbar-admin.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="page-title">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12">
+				<h2 class="ipt-title">Update Home Images</h2>
+				<span class="ipn-subtitle">Manage images uploaded for the Home</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<section class="bg-light">
+	<div class="container">
+		<div class="row">
+
+            <div class="col-lg-3 col-md-12 pe-xl-4">
+                <div class="simple-sidebar sm-sidebar">
+                    <div class="sidebar-widgets">
+                        <div class="dashboard-navbar">
+                            <div class="d-user-avater">
+                                <img src="{{ url_for('static', filename='profile/default.webp') }}" class="img-fluid avater" alt=""/>
+                                <h4>Hi, Admin</h4>
+                            </div>
+                            <div class="d-navigation">
+                                <ul>    
+                                    {% include '/base/menu/admin-page-and-mobile.html' %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			<div class="col-lg-9 col-md-12">
+
+				<div class="dashboard-wraper mb-3">
+					<h3>Update Home Images</h3>
+				</div>
+				{% set properties = user['properties'] if 'properties' in user else None %}
+
+				{% if properties and properties['title'] %}
+
+				<div class="submit-page">
+					<h4 class="mb-3">Upload New Home Image</h4>
+					<form id="uploadForm1" method="POST" action="{{ url_for('admin_update_home_images', uid=uid) }}">
+						<div class="form-group col-md-12">
+							<div class="custom-file-upload form-control">
+								<label for="inputImage1" class="upload-label">Choose File</label>
+								<span id="file-name">No file chosen</span>
+								<input type="file" id="inputImage1" accept="image/*">
+							</div>
+							<ul class="upload-note">
+								<li>Only PNG, JPG, and JPEG file types are allowed.</li>
+								<li>Each image must be less than 400 KB in size.</li>
+							</ul>
+							<div class="preview1" style="max-width: 300px; max-height: 200px; margin: auto;">
+								<img id="image1" style="display:none; max-width: 300px; max-height: 200px;">
+							</div>
+							<input type="hidden" name="action_type" value="upload">
+							<input type="hidden" name="cropped_image1" id="croppedImageInput">
+						</div>
+						<div id="buttonContainer" style="display: none;">
+							<button type="submit" class="btn btn-primary mb-3">Crop & Upload</button>
+							<button type="button" class="btn btn-secondary text-white mb-3 ms-1" onclick="location.reload()">Cancel</button>
+						</div>
+					</form>
+
+					<form id="uploadForm" method="POST" action="{{ url_for('admin_update_home_images', uid=uid) }}">
+						<div class="form-submit">  
+							<h4>Existing Images</h4>
+							<div class="submit-section">
+								<div class="row">
+									<div class="form-group col-md-12">
+										{% set images = user.get('properties', {}).get('images', []) %}
+										<div class="upload-instructions">
+											<div id="imagePreview" class="d-flex flex-wrap">
+												{% if images %}
+													{% for img in images %}
+														<div class="img-thumb" style="position: relative; margin: 5px;">
+															<img src="{{ img }}" alt="Gallery Image" style="width: 150px; height: 100px; object-fit: cover;">
+															<button type="button" class="remove-img-btn" data-img="{{ img }}">&times;</button>
+														</div>
+													{% endfor %}
+												{% endif %}
+											</div>
+											<input type="hidden" name="action_type" value="update">
+											<input type="hidden" id="imagesToKeep" name="images_to_keep" value='{{ images | tojson }}'>
+										</div>
+										<ul class="upload-note mt-1">
+											<li>Click <span class="circle-close">×</span> to remove any image.</li>
+											<li>Press "Remove" to apply changes.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<button type="button" class="btn btn-primary d-none" id="removeButton">Remove</button>
+						<button type="button" class="btn btn-secondary d-none ms-1 text-white" id="removeButtonCancel">Cancel</button>
+					</form>
+				</div>
+
+				{% else %}
+                <div class="dashboard-wraper col-12">
+                    <p>Please add first home details first.</p>
+                    <div class="pricing-button mt-auto ms-2">
+                        <a href="/admin-edit-home-details/{{ uid }}" class="btn btn-main rounded"><i class="fas fa-plus-circle me-2"></i>Edit Home Details</a>
+                    </div>
+                </div>
+                {% endif %}
+
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- JavaScript logic -->
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const imagePreview = document.getElementById('imagePreview');
+		const removeButton = document.getElementById('removeButton');
+		const cancelRemoveButton = document.getElementById('removeButtonCancel');
+		const form = document.getElementById('uploadForm');
+		const imagesToKeepInput = document.getElementById('imagesToKeep');
+
+		// 🔧 Normalize initial image paths to relative
+		let originalImages = JSON.parse(imagesToKeepInput.value || '[]').map(path => {
+			try {
+				const url = new URL(path, window.location.origin);
+				return url.pathname;
+			} catch {
+				return path;
+			}
+		});
+
+		// ✅ Update imagesToKeepInput and button visibility
+		function checkForChanges() {
+			const currentImages = Array.from(imagePreview.querySelectorAll('img')).map(img => {
+				const url = new URL(img.src);
+				return url.pathname;
+			});
+			const hasChanges = JSON.stringify(currentImages) !== JSON.stringify(originalImages);
+			removeButton.classList.toggle('d-none', !hasChanges);
+			cancelRemoveButton.classList.toggle('d-none', !hasChanges);
+			imagesToKeepInput.value = JSON.stringify(currentImages);
+		}
+
+		// ✅ Remove image on click of × button
+		imagePreview.addEventListener('click', function (e) {
+			if (e.target.classList.contains('remove-img-btn')) {
+				const imgDiv = e.target.closest('.img-thumb');
+				if (imgDiv) imgDiv.remove();
+				checkForChanges();
+			}
+		});
+
+		// ✅ Watch for DOM changes (image removal)
+		const observer = new MutationObserver(checkForChanges);
+		observer.observe(imagePreview, { childList: true, subtree: true });
+
+		// ✅ Submit form to delete images
+		removeButton.addEventListener('click', function () {
+			Swal.fire({
+				title: 'Are you sure?',
+				text: 'Do you want to save changes after removing image(s)?',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Yes, save',
+				cancelButtonText: 'Cancel'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					form.submit();
+				} else {
+					location.reload();
+				}
+			});
+		});
+
+		// ✅ Cancel and reload original image list
+		cancelRemoveButton.addEventListener('click', function () {
+			location.reload();
+		});
+	});
+</script>
+
+
+<script>
+	let cropper;
+	const input = document.getElementById('inputImage1');
+	const image = document.getElementById('image1');
+	const buttonContainer = document.getElementById('buttonContainer');
+
+	input.addEventListener('change', e => {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = () => {
+				image.src = reader.result;
+				image.style.display = 'block';
+				buttonContainer.style.display = 'block';
+
+				if (cropper) cropper.destroy();
+				cropper = new Cropper(image, {
+					aspectRatio: 6 / 4,
+					viewMode: 1,
+					zoomable: false,
+					wheelZoom: false,
+					pinchZoom: false
+				});
+			};
+			reader.readAsDataURL(file);
+		}
+	});
+
+	document.getElementById('uploadForm1').addEventListener('submit', e => {
+		e.preventDefault();
+		if (cropper) {
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "Do you want to crop and upload this image?",
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonText: 'Yes, upload it!',
+				cancelButtonText: 'Cancel'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					const canvas = cropper.getCroppedCanvas({
+						width: 512,
+						height: 512,
+					});
+					document.getElementById('croppedImageInput').value = canvas.toDataURL('image/webp');
+					e.target.submit();
+				} else {
+					location.reload();
+				}
+			});
+		}
+	});
+</script>
+
+{% endblock %}

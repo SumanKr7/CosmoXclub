@@ -1,0 +1,122 @@
+<!-- Start Navigation -->
+<div class="header header-light head-shadow">
+    <div class="container">
+        <nav id="navigation" class="navigation navigation-landscape">
+            <div class="nav-header">
+                <a class="nav-brand text-logo" href="/">
+                    <img class="logo-fixed" src="{{ url_for('static', filename='img/cosmoxclub-logo.png')}}" alt="Cosmox Club Logo">
+                </a>
+                <div class="nav-toggle"></div>
+                <div class="mobile_nav">
+                    <ul>
+                        {% if 'admin-user' in session %}
+                        <li class="relative parent-parent-menu-item">
+                            <div class="btn-group account-drop">
+                                <a href="javascript:void(0);" onclick="openFilterSearch()" class="btn-order-by-filt">
+                                    <img src="{{ url_for('static', filename='profile/default.webp') }}"  class="avater-img header-avater-img" alt=""/>
+                                </a>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="d-lg-none col-lg-3 col-md-12">
+
+                {% if 'admin-user' in session %}
+				<div class="simple-sidebar sm-sidebar" id="filter_search">
+					
+					<div class="search-sidebar_header">
+						<h4 class="ssh_heading">Close Filter</h4>
+						<button onclick="closeFilterSearch()" class="w3-bar-item w3-button w3-large"><i class="fa-regular fa-circle-xmark fs-5 text-muted-2"></i></button>
+					</div>
+					
+					<div class="sidebar-widgets">
+						<div class="dashboard-navbar">
+							
+							<div class="d-user-avater">
+                                <img src="{{ url_for('static', filename='profile/default.webp') }}"  class="img-fluid avater" alt=""/>
+                                <h4>Hi, Admin</h4>
+							</div>
+							{% include '/base/menu/admin-page-and-mobile.html' %}
+						</div>
+					</div>	
+				</div>
+                {% endif %}
+			</div>
+
+
+
+            <div class="nav-menus-wrapper" style="transition-property: none;">
+                <ul class="nav-menu nav-menu-center">
+                    
+                    <li class="relative parent-parent-menu-item">
+                        <a href="/" class="home-link">Home</a>
+                    </li>
+                    <li><a href="/about-us" class="sub-menu-item">About Us</a></li>
+                    <li><a href="/contact-us" class="sub-menu-item">Contact Us</a></li>
+                    
+                </ul>
+                
+
+                <ul class="nav-menu nav-menu-social align-to-right">
+                    {% if 'admin-user' in session %}
+                    <li class="relative parent-parent-menu-item">
+                        <div class="btn-group account-drop">
+
+                            <button type="button" class="btn btn-order-by-filt account-head-color-fixed dropdown-toggle" id="showbutton-desktop">
+                                <img src="{{ url_for('static', filename='profile/default.webp') }}"  class="avater-img" alt=""/>
+                                <span>Hi, Admin</span>
+                            </button>
+                            {% include '/base/menu/admin-desktop.html' %}
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- End Navigation -->
+<div class="clearfix"></div>
+
+
+    <!-- log-in code  -->
+    {% include '/base/components/navbar/log-in.html' %}
+
+    {% include '/base/components/navbar/forgot-password.html' %}
+
+    {% include '/base/components/navbar/create-account.html' %}
+
+
+<script>
+    const currentPath = window.location.pathname;
+
+    const subMenuItems = document.querySelectorAll('.sub-menu-item');
+    subMenuItems.forEach((item) => {
+        if (item.getAttribute('href') === currentPath) {
+            item.classList.add('active');
+
+            let parentMenu = item.closest('.parent-menu-item');
+            while (parentMenu && !parentMenu.classList.contains('processed')) {
+                const parentLink = parentMenu.querySelector('a');
+                if (parentLink) {
+                    parentLink.classList.add('active');
+                }
+                parentMenu.classList.add('processed');
+                parentMenu = parentMenu.closest('.parent-parent-menu-item');
+            }
+
+            const topLevelMenu = item.closest('.parent-parent-menu-item');
+            if (topLevelMenu) {
+                const topLevelLink = topLevelMenu.querySelector('.home-link');
+                if (topLevelLink) {
+                    topLevelLink.classList.add('active');
+                }
+            }
+        }
+    });
+</script>

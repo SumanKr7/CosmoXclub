@@ -1,0 +1,315 @@
+{% extends '/base/style/base.html' %}
+{% set static_url = '/static' %}
+
+{% block content %}
+
+<!-- ============================ Page Title Start ================================== -->
+<div class="page-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <h2 class="ipt-title">Welcome!</h2>
+                <span class="ipn-subtitle">Welcome To Your Account</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================ Page Title End ================================== -->
+
+<!-- ============================ User Dashboard ================================== -->
+<section class="bg-light">
+    <div class="container">
+
+        {% if not email_verified %}
+        <div class="text-center p-2 mb-3 rounded bg-white " >
+            <p class="text-black mb-0">
+                Your email is not verified, <a href="{{ url_for('resend_verification_email') }}" class="text-danger"> click here </a> to verify now.
+            </p>
+        </div>
+        {% endif %}
+
+        <div class="row">
+
+            <div class="col-lg-3 col-md-12 col-sm-12">
+				
+				<div class="simple-sidebar sm-sidebar" id="filter_search">
+					
+					<div class="sidebar-widgets">
+						<div class="dashboard-navbar">
+							
+							<div class="d-user-avater">
+								{% if user.profile_image %}
+                                    <img src="{{ user.profile_image }}" class="img-fluid avater" alt=""/>
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='profile/default.webp') }}"  class="img-fluid avater" alt=""/>
+                                {% endif %}
+								{% if user.name %}
+                                    <h4>Hi, {{ user.name.split(' ')[0] }}</h4>
+                                {% else %}
+                                    <h4>Hi, User</h4>
+                                {% endif %}
+							</div>
+							
+							{% include '/base/menu/page-and-mobile.html' %}
+							
+						</div>
+					</div>
+					
+				</div>
+			</div>
+
+            <div class="col-lg-9 col-md-12">
+
+                <div class="row">
+
+                    {% if 'membership_details' in user %}
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dashboard-stat widget-4">
+                            <div class="dashboard-stat-content">
+                                {% if 'membership_details' in user and user.membership_details.plan %}
+                                    <h4>{{ user.membership_details.plan }}</h4>
+                                {% else %}
+                                    <h4>NA</h4>
+                                {% endif %}
+                                <span>Your Membership Plan</span>
+                            </div>
+                            <div class="dashboard-stat-icon">
+                                <i class="bi bi-person-lines-fill"></i>
+                            </div>
+                        </div>	
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dashboard-stat widget-1">
+                            <div class="dashboard-stat-content">
+                                {% if 'membership_details' in user and user.membership_details.start_date %}
+                                    <h4>{{ user.membership_details.start_date }}</h4>
+                                {% else %}
+                                    <h4>NA</h4>
+                                {% endif %}
+                                <span>Membership Start Date</span>
+                            </div>
+                            <div class="dashboard-stat-icon">
+                                <i class="bi bi-calendar3-week"></i>
+                            </div>
+                        </div>	
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dashboard-stat widget-2">
+                            <div class="dashboard-stat-content">
+                                {% if 'membership_details' in user and user.membership_details.end_date %}
+                                    <h4>{{ user.membership_details.end_date }}</h4>
+                                {% else %}
+                                    <h4>NA</h4>
+                                {% endif %}
+                                <span>Membership Start Date</span>
+                            </div>
+                            <div class="dashboard-stat-icon">
+                                <i class="bi bi-calendar3-week"></i>
+                            </div>
+                        </div>	
+                    </div>
+                    {% endif %}
+
+                </div>
+                
+
+                <div class="dashboard-wraper mb-3">
+                    <h3>My Account</h3>
+                </div>
+
+                <div class="dashboard-wraper mb-3">
+
+                    <h4 style="text-align: center;">Profile Picture</h4>
+
+                    <!-- Profile Image Container -->
+                    <div class="profile-container" id="profileTrigger">
+                        {% if user.profile_image %}
+                            <img id="currentProfile" src="{{ user.profile_image }}" alt="Profile">
+                        {% else %}
+                            <img id="currentProfile" src="{{ url_for('static', filename='profile/default.webp') }}" alt="Profile">
+                        {% endif %}
+                        <div class="overlay">Change Profile</div>
+                    </div>
+
+                    <!-- Hidden File Input -->
+                    <form id="uploadForm" method="POST" action="{{ url_for('my_account') }}">
+                        <input type="file" id="inputImage" accept="image/*">
+                        <div class="filename-display" id="fileName"></div>
+
+                        <div class="preview">
+                            <img id="image">
+                        </div>
+
+                        <input type="hidden" name="cropped_image" id="croppedImageInput">
+                        <div class="d-flex justify-content-center mt-3 mb-5">
+                            <button type="submit" id="uploadButton" class="btn btn-primary rounded px-5" style="display: none;">
+                                <i class="bi bi-crop me-2"></i>Crop & Upload
+                            </button>
+                        </div>
+
+                    </form>
+
+                        <form method="POST" action="{{ url_for('my_account') }}" class="form-submit" enctype="multipart/form-data">
+                            <div class="submit-section">
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <label for="name">Your Name</label>
+                                        <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}" placeholder="Enter your name">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" placeholder="Enter email address" disabled>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="occupation">Occupation</label>
+                                        <input type="text" id="occupation" name="occupation" class="form-control" value="{{ user.occupation }}" placeholder="Enter your Occupation">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="phone">Phone</label>
+                                        <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone }}" placeholder="Enter phone number">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="address">Address</label>
+                                        <input type="text" id="address" name="address" class="form-control" value="{{ user.address }}" placeholder="Enter address">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="city">City</label>
+                                        <input type="text" id="city" name="city" class="form-control" value="{{ user.city }}" placeholder="Enter city name">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="state">State</label>
+                                        <input type="text" id="state" name="state" class="form-control" value="{{ user.state }}" placeholder="Enter state name">
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="pin_code">Pin Code</label>
+                                        <input type="text" id="pin_code" name="pin_code" class="form-control" value="{{ user.pin_code }}" placeholder="Enter Pin code">
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label for="about">About</label>
+                                        <textarea id="about" name="about" class="form-control" placeholder="Tell us about yourself">{{ user.about }}</textarea>
+                                    </div>
+
+                                    <div class="form-group col-lg-12 col-md-12">
+                                        <button class="btn btn-primary rounded px-5" type="submit"><i class="bi bi-bookmark me-2"></i>Save</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ============================ User Dashboard End ================================== -->
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('profileImage');
+    const preview = document.getElementById('profilePreview');
+
+    input.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  });
+
+    let cropper;
+    const input = document.getElementById('inputImage');
+    const image = document.getElementById('image');
+
+    input.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            image.src = reader.result;
+            image.style.display = 'block';
+
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 1,
+                zoomable: false,
+                wheelZoom: false,
+                pinchZoom: false,
+                ready() {
+                    // Show the upload button when cropper is ready
+                    document.getElementById('uploadButton').style.display = 'inline-block';
+                }
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+
+    document.getElementById('uploadForm').addEventListener('submit', e => {
+        e.preventDefault();
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 512,
+                height: 512,
+            });
+            document.getElementById('croppedImageInput').value = canvas.toDataURL('image/webp');
+            e.target.submit();
+        }
+    });
+
+    const inputImage = document.getElementById('inputImage');
+    const profileTrigger = document.getElementById('profileTrigger');
+    const currentProfile = document.getElementById('currentProfile');
+    const previewImg = document.getElementById('image');
+    const fileNameDisplay = document.getElementById('fileName');
+
+    // Click profile image to trigger file input
+    profileTrigger.addEventListener('click', () => {
+      inputImage.click();
+    });
+
+    // When image is selected
+    inputImage.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        fileNameDisplay.textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImg.src = e.target.result;
+          previewImg.style.display = 'block';
+
+          // You can also show cropper here if needed
+          // Update current profile preview immediately (optional)
+          currentProfile.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        fileNameDisplay.textContent = '';
+        previewImg.style.display = 'none';
+      }
+    });
+
+</script>
+
+{% endblock %}

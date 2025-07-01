@@ -1,0 +1,256 @@
+{% extends '/base/style/base.html' %}
+{% set static_url = '/static' %}
+
+{% block content %}
+<!-- ============================ Page Title Start================================== -->
+<div class="page-title">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12">
+				<h2 class="ipt-title">Update Home Images</h2>
+				<span class="ipn-subtitle">Add images to showcase your home</span>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ============================ Page Title End ================================== -->
+
+<!-- ============================ Submit Property Start ================================== -->
+<section class="bg-light">
+	<div class="container">
+		
+		<div class="row">
+
+			<div class="col-lg-3 col-md-12 pe-xl-4">
+				
+				<div class="simple-sidebar sm-sidebar" id="filter_search">
+					
+					<div class="sidebar-widgets">
+						<div class="dashboard-navbar">
+							
+							<div class="d-user-avater">
+								{% if user.profile_image %}
+                                    <img src="{{ user.profile_image }}" class="img-fluid avater" alt=""/>
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='profile/default.webp') }}"  class="img-fluid avater" alt=""/>
+                                {% endif %}
+								<h4>Hi, {{ user.name.split(' ')[0] }}</h4>
+							</div>
+							
+							{% include '/base/menu/page-and-mobile.html' %}
+							
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+			
+			<!-- Submit Form -->
+			<div class="col-lg-9 col-md-12">
+
+                {% set properties = user['properties'] if 'properties' in user else None %}
+
+				{% if properties and properties['title'] %}
+
+				<div class="dashboard-wraper mb-3">
+                    <h3>Update Your Home Images</h3>
+                </div>
+
+				<div class="submit-page">
+					<h4 class="mb-3">Upload New Home Image</h4>
+					<form id="uploadForm1" method="POST" action="/update-home-images">
+						<div class="form-group col-md-12">
+							<div class="custom-file-upload form-control">
+								<label for="inputImage1" class="upload-label">Choose File</label>
+								<span id="file-name">No file chosen</span>
+								<input type="file" id="inputImage1" accept="image/*">
+							</div>
+							<ul class="upload-note">
+								<li>Only PNG, JPG, and JPEG file types are allowed.</li>
+								<li>Each image must be less than 400 KB in size.</li>
+							</ul>
+							<div class="preview1" style="max-width: 300px; max-height: 200px; margin: auto;">
+								<img id="image1" style="display:none; max-width: 300px; max-height: 200px;">
+							</div>
+                            <input type="hidden" name="action_type" value="upload">
+							<input type="hidden" name="cropped_image1" id="croppedImageInput">
+						</div>
+						    <div id="buttonContainer" style="display: none;">
+                                <button type="submit" class="btn btn-primary mb-3"><i class="bi bi-crop me-2"></i>Crop & Upload</button>
+                                <button type="button" class="btn btn-secondary text-white mb-3 ms-1" onclick="location.reload()"><i class="bi bi-x-circle me-2"></i>Cancel</button>
+                            </div>
+					</form>
+
+					<form id="uploadForm" method="POST" action="/update-home-images" enctype="multipart/form-data">
+						<div class="form-submit">  
+							<h4>Existing Images</h4>
+							<div class="submit-section">
+								<div class="row">
+									<div class="form-group col-md-12">
+
+										{% set images = user.get('properties', {}).get('images', []) %}
+
+										<div class="upload-instructions">
+											<div id="imagePreview" class="d-flex flex-wrap">
+												{% if images %}
+													{% for img in images %}
+														<div class="img-thumb">
+															<img src="{{ img }}" alt="Gallery Image">
+															<button type="button" class="remove-img-btn" data-img="{{ img }}">&times;</button>
+														</div>
+													{% endfor %}
+												{% endif %}
+											</div>
+                                            <input type="hidden" name="action_type" value="update">
+											<input type="hidden" id="imagesToKeep" name="images_to_keep" value='{{ images | tojson }}'>
+                                            
+										</div>
+                                        <ul class="upload-note mt-1">
+                                            <li>If you want to remove images, click <span class="circle-close">×</span> and then click the Remove button.</li>
+                                            <li>Upload at least 3 images</li>
+                                        </ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<button type="button" class="btn btn-primary d-none" id="removeButton"><i class="bi bi-archive me-2"></i>Remove</button>
+                        <button type="button" class="btn btn-secondary d-none ms-1 text-white" id="removeButtonCancel"><i class="bi bi-x-circle me-2"></i>Cancel</button>
+
+					</form>
+				</div>
+                
+                {% else %}
+                <div class="dashboard-wraper col-12">
+                    <p>You have not submitted your home details yet. Please add your home details first.</p>
+                    <div class="pricing-button mt-auto ms-2">
+                        <a href="/edit-home-details" class="btn btn-main rounded"><i class="fas fa-plus-circle me-2"></i>Add Your Home</a>
+                    </div>
+                </div>
+                {% endif %}
+
+			</div>
+
+		</div>
+	</div>
+</section>
+<!-- ============================ Submit Property End ================================== -->
+
+<script>
+	function openFilterSearch() {
+		document.getElementById("filter_search").style.display = "block";
+	}
+	function closeFilterSearch() {
+		document.getElementById("filter_search").style.display = "none";
+	}
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const imagePreview = document.getElementById('imagePreview');
+        const removeButton = document.getElementById('removeButton');
+        const cancelRemoveButton = document.getElementById('removeButtonCancel'); // NEW
+        const form = document.getElementById('uploadForm');
+        const imagesToKeepInput = document.getElementById('imagesToKeep');
+        let originalImages = JSON.parse(imagesToKeepInput.value);
+
+        function checkForChanges() {
+            const currentImages = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src);
+            const hasChanges = JSON.stringify(currentImages) !== JSON.stringify(originalImages);
+            removeButton.classList.toggle('d-none', !hasChanges);
+            cancelRemoveButton.classList.toggle('d-none', !hasChanges); // Show/hide cancel button too
+        }
+
+        imagePreview.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-img-btn')) {
+                const imgDiv = e.target.closest('.img-thumb');
+                if (imgDiv) imgDiv.remove();
+                checkForChanges();
+            }
+        });
+
+        const observer = new MutationObserver(checkForChanges);
+        observer.observe(imagePreview, { childList: true, subtree: true });
+
+        // Confirm Remove
+        removeButton.addEventListener('click', function () {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to save the changes after removing the image(s)?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    location.reload();
+                }
+            });
+        });
+
+        // Cancel Remove
+        cancelRemoveButton.addEventListener('click', function () {
+            location.reload(); // Simply refresh page to discard removals
+        });
+    });
+</script>
+
+<script>
+    let cropper;
+    const input = document.getElementById('inputImage1');
+    const image = document.getElementById('image1');
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    input.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                image.src = reader.result;
+                image.style.display = 'block';
+                buttonContainer.style.display = 'block';
+
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(image, {
+                    aspectRatio: 6 / 4,
+                    viewMode: 1,
+                    zoomable: false,
+                    wheelZoom: false,
+                    pinchZoom: false
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('uploadForm1').addEventListener('submit', e => {
+        e.preventDefault();
+        if (cropper) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to crop and upload this image?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, upload it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const canvas = cropper.getCroppedCanvas({
+                        width: 512,
+                        height: 512,
+                    });
+                    document.getElementById('croppedImageInput').value = canvas.toDataURL('image/webp');
+                    e.target.submit();
+                } else {
+                    // User clicked Cancel → refresh the page
+                    location.reload();
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock %}

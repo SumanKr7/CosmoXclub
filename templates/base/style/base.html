@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zxx">
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		
+        <title>Cosmo Xclub - HomeExchange</title>	
+        <link rel="icon" href="{{ url_for('static', filename='img/favicon.png')}}" type="image/gif" sizes="18x18">
+		
+        <!-- Custom CSS -->
+        <link href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet">
+		
+		<!-- Custom Color Option -->
+		<link href="{{ url_for('static', filename='css/colors.css')}}" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/@icon/themify-icons/themify-icons.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    </head>
+	
+    <body class="blue-skin">
+
+        <div id="preloader"><div class="preloader"><span></span><span></span></div></div>
+
+        <div id="main-wrapper">
+
+            {% block navbar %}
+                {% include 'base/style/navbar.html' %}
+            {% endblock %}
+
+
+
+            <!-- Main Content -->
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+
+            {% include 'base/style/footer.html' %}
+
+            <!-- Back to top -->
+            <a id="back2Top" class="top-scroll bg-primary" title="Back to top" href="#"><i class="ti ti-arrow-up"></i></a>
+            <!-- Back to top -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div id="flash-messages" class="flash-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} flash-message" role="alert">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+            {% endwith %}
+
+
+        </div>
+
+        <!-- ============================================================== -->
+		<!-- All Jquery -->
+		<!-- ============================================================== -->
+
+        
+		<script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/popper.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/rangeslider.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/select2.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js')}}"></script>
+
+        <script src="{{ url_for('static', filename='js/slick.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/slider-bg.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/lightbox.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/imagesloaded.js')}}"></script>
+
+        <script src="{{ url_for('static', filename='js/fullcustom.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/custom.js')}}"></script>
+
+        <script src="{{ url_for('static', filename='js/dropzone.js')}}"></script>
+        <!-- New Js -->
+         
+        <!-- Date Booking Script -->
+        <script src="{{ url_for('static', filename='js/moment.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/daterangepicker.js')}}"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            $(function () {
+                $('input[name="checkout"]').daterangepicker({
+                    singleDatePicker: true,
+                });
+                $('input[name="checkout"]').val('');
+                $('input[name="checkout"]').attr("placeholder", "Check Out");
+            });
+            $(function () {
+                $('input[name="checkin"]').daterangepicker({
+                    singleDatePicker: true,
+
+                });
+                $('input[name="checkin"]').val('');
+                $('input[name="checkin"]').attr("placeholder", "Check In");
+            });
+
+            try {
+                const counter = document.querySelectorAll('.counter-value');
+                const speed = 2500;
+
+                counter.forEach(counter_value => {
+                    const updateCount = () => {
+                        const target = +counter_value.getAttribute('data-target');
+                        const count = +counter_value.innerText;
+
+                        var inc = target / speed;
+
+                        if (inc < 1) {
+                            inc = 1;
+                        }
+
+                        if (count < target) {
+
+                            counter_value.innerText = (count + inc).toFixed(0);
+
+                            setTimeout(updateCount, 1);
+                        } else {
+                            counter_value.innerText = target;
+                        }
+                    };
+
+                    updateCount();
+                });
+            } catch (err) {
+
+            }
+
+            function openFilterSearch() {
+                document.getElementById("filter_search").style.display = "block";
+            }
+
+            function closeFilterSearch() {
+                document.getElementById("filter_search").style.display = "none";
+            }
+
+            $(document).ready(function () {
+
+                $("#showbutton-desktop").click(function (e) {
+                    e.stopPropagation();
+                    $("#showing-desktop").slideToggle("medium");
+                });
+
+                $("#showing-desktop").click(function (e) {
+                    e.stopPropagation();
+                });
+
+                $(document).click(function () {
+                    $("#showing-desktop").slideUp("medium");
+                });
+            });
+
+            $(document).ready(function () {
+
+                $("#showbutton-mobile").click(function (e) {
+                    e.stopPropagation();
+                    $("#showing-mobile").slideToggle("fast");
+                });
+
+                $("#showing-mobile").click(function (e) {
+                    e.stopPropagation();
+                });
+
+                $(document).click(function () {
+                    $("#showing-mobile").slideUp("fast");
+                });
+            });
+
+            window.onscroll = function () {
+                scrollFunction();
+            };
+
+            function scrollFunction() {
+                var mybutton = document.getElementById("back-to-top");
+                if (mybutton != null) {
+                    if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+                        mybutton.classList.add("block");
+                        mybutton.classList.remove("hidden");
+                    } else {
+                        mybutton.classList.add("hidden");
+                        mybutton.classList.remove("block");
+                    }
+                }
+            }
+
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+
+            document.addEventListener('click', function (event) {
+                const sidebar = document.querySelector('.sm-sidebar');
+                const filterButton = document.querySelector('.btn-order-by-filt');
+
+                const clickedInsideSidebar = sidebar.contains(event.target);
+                const clickedFilterButton = event.target.closest('.btn-order-by-filt');
+
+                if (!clickedInsideSidebar && !clickedFilterButton) {
+                    closeFilterSearch();
+                }
+            });
+
+            function closeFilterSearch() {
+                document.getElementById('filter_search').style.display = 'none';
+            }
+
+            window.onload = function() {
+                {% if show_login %}
+                    var loginModal = new bootstrap.Modal(document.getElementById('login'));
+                    loginModal.show();
+                {% endif %}
+            }
+        </script>
+
+	</body>
+</html>
