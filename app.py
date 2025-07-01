@@ -361,6 +361,9 @@ def resend_verification_email():
 
 @app.route('/email-action')
 def email_action():
+    if 'user' in session:
+            return redirect(url_for('home'))
+    
     mode = request.args.get('mode')
     oob_code = request.args.get('oobCode')
 

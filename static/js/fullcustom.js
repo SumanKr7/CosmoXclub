@@ -1,3 +1,33 @@
+function togglePassword5() {
+    const passwordInput = document.getElementById("new-password");
+    const toggleIcon = document.getElementById("toggleIcon5");
+
+    if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleIcon.classList.remove("fa-eye");
+    toggleIcon.classList.add("fa-eye-slash");
+    } else {
+    passwordInput.type = "password";
+    toggleIcon.classList.remove("fa-eye-slash");
+    toggleIcon.classList.add("fa-eye");
+    }
+}
+
+function togglePassword4() {
+    const passwordInput = document.getElementById("confirm-password");
+    const toggleIcon = document.getElementById("toggleIcon4");
+
+    if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleIcon.classList.remove("fa-eye");
+    toggleIcon.classList.add("fa-eye-slash");
+    } else {
+    passwordInput.type = "password";
+    toggleIcon.classList.remove("fa-eye-slash");
+    toggleIcon.classList.add("fa-eye");
+    }
+}
+
 function togglePassword3() {
     const passwordInput = document.getElementById("passwordInput3");
     const toggleIcon = document.getElementById("toggleIcon3");
