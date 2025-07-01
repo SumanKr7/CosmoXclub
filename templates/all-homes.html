@@ -112,6 +112,7 @@
                                     <th>Profile Image</th>
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>Email Verified</th>
                                     <th>Phone</th>
                                     <th>Occupation</th>
                                     <th>Address</th>
@@ -143,6 +144,7 @@
                                             </td>
                                             <td>{{ user.name if user.get('name') else '----' }}</td>
                                             <td>{{ user.email if user.get('email') else '----' }}</td>
+                                            <td>{{ user.email_verified if user.get('email_verified') else 'Not Verified' }}</td>
                                             <td>{{ user.phone if user.get('phone') else '----' }}</td>
                                             <td>{{ user.occupation if user.get('occupation') else '----' }}</td>
                                             <td>{{ user.address if user.get('address') else '----' }}</td>

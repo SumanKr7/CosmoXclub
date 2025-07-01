@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 import pyrebase, os, firebase_admin
 import requests
 import json
@@ -230,7 +230,7 @@ def signup():
             "name": name,
             "phone": phone,
             "email": email,
-            "email_verified": 'No',
+            "email_verified": "Not Verified",
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         admin_db.reference(f'users/{user["localId"]}').set(user_data)
@@ -316,8 +316,6 @@ def forgot_password():
     except Exception as e:
         return jsonify({"status": "error","message": "Failed to send password reset email. Please try again later."}), 500
     
-# User routes
-
 @app.route('/resend-verification-email')
 def resend_verification_email():
     if 'user' not in session or 'id_token' not in session or 'refresh_token' not in session:
@@ -352,18 +350,14 @@ def resend_verification_email():
         if response.status_code == 200:
             flash("Verification email sent successfully. Please check your inbox.", "success")
         else:
-            error = response.json().get('error', {}).get('message', 'Unknown error')
-            flash(f"Failed to send verification email: {error}", "danger")
+            flash(f"Failed to send verification email", "light")
     except Exception as e:
-        flash(f"Error sending verification email: {str(e)}", "danger")
+        flash(f"Error sending verification email", "light")
 
     return redirect(url_for('my_account'))
 
 @app.route('/email-action')
 def email_action():
-    if 'user' in session:
-            return redirect(url_for('home'))
-    
     mode = request.args.get('mode')
     oob_code = request.args.get('oobCode')
 
@@ -379,61 +373,35 @@ def email_action():
     else:
         return render_template("invalid-action.html")
     
-    
-@app.route('/api/email-verified', methods=['POST'])
-def email_verified():
-    try:
-        id_token = request.json.get('idToken')
-        if not id_token:
-            return jsonify({"error": "Missing ID token"}), 400
-
-        # Decode token to get user ID
-        decoded_token = admin_auth.verify_id_token(id_token)
-        uid = decoded_token['uid']
-
-        # Confirm email is verified in Auth
-        user_record = admin_auth.get_user(uid)
-        if not user_record.email_verified:
-            return jsonify({"error": "Email not verified in Auth"}), 403
-
-        # Prepare update data
-        data = {
-            "email_verified": "Yes",
-            "email_verified_at": datetime.now(timezone.utc).isoformat()
-        }
-
-        # Update using admin_db
-        admin_db.reference(f'users/{uid}').update(data)
-
-        return jsonify({"status": "success"}), 200
-
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+# User routes
     
 @app.route('/my-account', methods=['GET', 'POST'])
 def my_account():
     if 'user' not in session:
         return redirect(url_for('home'))
-    
+
     if not db_alive():
         flash("An unexpected error occurred while loading your account details.", "light")
         return render_template("503.html"), 503
 
+    uid = session['user']
+    user_ref = admin_db.reference(f'users/{uid}')
+    user = user_ref.get() or {}
+
     try:
-        uid = session['user']
         email_verified = is_email_verified()
+
+        if user and user.get('email_verified') == "Not Verified" and email_verified:
+            user_ref.update({'email_verified': 'Verified'})
 
         if request.method == "POST":
             return _process_post(uid)
 
         return render_template("my-account.html", email_verified=email_verified)
 
-    except Exception:
+    except Exception as e:
         flash("An unexpected error occurred while loading your account details.", "light")
         return render_template("503.html"), 503
-
 
 @app.route('/my-home', methods=['GET', 'POST'])
 def my_home():
