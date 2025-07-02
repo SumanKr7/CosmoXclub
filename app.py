@@ -834,9 +834,9 @@ def update_membership():
 
         return render_template(
             "update-membership.html",
-            total_users=total_users,
-            all_users=all_users,
-            total_members=total_members
+            total_users   = total_users,
+            all_users     = all_users,
+            total_members = total_members
         )
     
     except Exception as e:
