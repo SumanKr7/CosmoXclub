@@ -101,7 +101,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Interest in Plan</th>
-                                    <th>Time</th>
+                                    <th>Date & Time</th>
                                     <th>Take Action</th>
                                 </tr>
                             </thead>
@@ -116,7 +116,7 @@
                                             <td>{{ user.email if user.get('email') else '----' }}</td>
                                             <td>{{ user.phone if user.get('phone') else '----' }}</td>
                                             <td>{{ user.plan if user.get('plan') else '----' }}</td>
-                                            <td>{{ user.timestamp if user.get('timestamp') else '----'}}</td>
+                                            <td>{{ user.submitted_at if user.get('submitted_at') else '----'}}</td>
                                             <td>
                                                 <form method="POST" action="{{ url_for('membership_request') }}">
                                                     <input type="hidden" name="user_id" value="{{ uid }}">
@@ -163,22 +163,19 @@
 <!---- ============================ User Dashboard End ================================== ---->
 
 <script>
-function confirmRemove(form) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This will remove the user's membership details.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, remove it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            form.querySelector('input[name="action"]').value = 'remove';
-            form.submit();
+document.getElementById("userSearchInput").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(function(row) {
+        let text = row.textContent.toLowerCase();
+        if (text.includes(filter)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
         }
     });
-}
+});
 </script>
 
 {% endblock %}

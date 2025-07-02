@@ -3,7 +3,7 @@ import pyrebase, os, firebase_admin, requests, shutil, json
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 from firebase_admin import credentials, db as admin_db, auth as admin_auth
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from utils import (
     all_users_properties,
@@ -23,7 +23,7 @@ from utils import (
 
 load_dotenv()
 
-ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+ADMIN_EMAIL         = os.getenv("ADMIN_EMAIL")
 ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH")
 
 app = Flask(__name__)
@@ -35,19 +35,19 @@ firebase_admin.initialize_app(cred, {
 })
 
 firebaseConfig = {
-    'apiKey': os.getenv("FIREBASE_API_KEY"),
-    'authDomain': os.getenv("FIREBASE_AUTH_DOMAIN"),
-    'databaseURL': os.getenv("FIREBASE_DATABASE_URL"),
-    'projectId': os.getenv("FIREBASE_PROJECT_ID"),
-    'storageBucket': os.getenv("FIREBASE_STORAGE_BUCKET"),
-    'messagingSenderId': os.getenv("FIREBASE_MESSAGING_SENDER_ID"),
-    'appId': os.getenv("FIREBASE_APP_ID"),
-    'measurementId': os.getenv("FIREBASE_MEASUREMENT_ID")
+    'apiKey'            : os.getenv("FIREBASE_API_KEY"),
+    'authDomain'        : os.getenv("FIREBASE_AUTH_DOMAIN"),
+    'databaseURL'       : os.getenv("FIREBASE_DATABASE_URL"),
+    'projectId'         : os.getenv("FIREBASE_PROJECT_ID"),
+    'storageBucket'     : os.getenv("FIREBASE_STORAGE_BUCKET"),
+    'messagingSenderId' : os.getenv("FIREBASE_MESSAGING_SENDER_ID"),
+    'appId'             : os.getenv("FIREBASE_APP_ID"),
+    'measurementId'     : os.getenv("FIREBASE_MEASUREMENT_ID")
 }
 
-firebase = pyrebase.initialize_app(firebaseConfig)
+firebase      = pyrebase.initialize_app(firebaseConfig)
 pyrebase_auth = firebase.auth()
-db = firebase.database()
+db            = firebase.database()
 
 def is_email_verified():
     try:
@@ -60,6 +60,8 @@ def is_email_verified():
         pass
     return False
 
+IST = timezone(timedelta(hours=5, minutes=30))
+
 UPLOAD_FOLDER = 'static/uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -69,8 +71,8 @@ app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
 @app.after_request
 def add_no_cache_headers(response):
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
+    response.headers["Pragma"]        = "no-cache"
+    response.headers["Expires"]       = "0"
     return response
 
 @app.context_processor
@@ -95,9 +97,12 @@ def home():
                 flash("Please enter a valid email address.", "light")
             else:
                 try:
+                    now_ist = datetime.now(IST)
+                    time    = now_ist.strftime("%d-%m-%Y, %H:%M")
+
                     admin_db.reference('subscriptions').push({
-                        "email": email,
-                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "email"        : email,
+                        "submitted_at" : time
                     })
                     flash("Thank you for subscribing!", "success")
                 except Exception as e:
@@ -126,12 +131,16 @@ def home():
                 return redirect(url_for('home'))
 
             try:
+                now_ist = datetime.now(IST)
+                time    = now_ist.strftime("%d-%m-%Y, %H:%M")
+                
                 admin_db.reference('plan_inquiries').push({
-                    "fullname": fullname,
-                    "phone": phone,
-                    "email": email,
-                    "plan": plan_type,
-                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "fullname"     : fullname,
+                    "phone"        : phone,
+                    "email"        : email,
+                    "plan"         : plan_type,
+                    "action"       : "Not Connected",
+                    "submitted_at" : time
                 })
                 flash("Your inquiry has been submitted!", "success")
             except Exception as e:
@@ -159,33 +168,37 @@ def contact_us():
 
         if not all([name, email, phone, message]):
             flash("All fields are required.", "light")
-            return redirect(url_for('contact-us'))
+            return redirect(url_for('contact_us'))
         
         if not is_valid_name(name):
             flash("Please enter a valid name.", "light")
-            return redirect(url_for('contact-us'))
+            return redirect(url_for('contact_us'))
 
         if not is_valid_email(email):
             flash("Please enter a valid email address.", "light")
-            return redirect(url_for('contact-us'))
+            return redirect(url_for('contact_us'))
 
         if not is_valid_phone(phone):
             flash("Please enter a valid phone number.", "light")
-            return redirect(url_for('contact-us'))
+            return redirect(url_for('contact_us'))
 
         try:
+            now_ist = datetime.now(IST)
+            time    = now_ist.strftime("%d-%m-%Y, %H:%M")
+            
             admin_db.reference('contact_form').push({
-                "name": name,
-                "email": email,
-                "phone": phone,
-                "message": message,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "name"         : name,
+                "email"        : email,
+                "phone"        : phone,
+                "message"      : message,
+                "query_status" : "Not Solved",
+                "submitted_at" : time
             })
             flash("Thank you for contacting us!", "success")
         except Exception as e:
             flash("Your message couldn’t be sent right now. Please try again later.", "light")
         
-        return redirect(url_for('contact-us'))
+        return redirect(url_for('contact_us'))
 
     return render_template('contact-us.html')
 
@@ -252,17 +265,20 @@ def signup():
             return jsonify({"status": "error", "message":  "We're unable to process your request at the moment. Please try again later."}), 503
 
         user = pyrebase_auth.create_user_with_email_and_password(email, password)
-        session['user'] = user['localId']
-        session['id_token'] = user['idToken']
+        session['user']          = user['localId']
+        session['id_token']      = user['idToken']
         session['refresh_token'] = user['refreshToken']
-        session['email'] = email
+        session['email']         = email
+
+        now_ist = datetime.now(IST)
+        time    = now_ist.strftime("%d-%m-%Y, %H:%M")
 
         user_data = {
-            "name": name,
-            "phone": phone,
-            "email": email,
-            "email_verified": "Not Verified",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "name"           : name,
+            "phone"          : phone,
+            "email"          : email,
+            "email_verified" : "Not Verified",
+            "submitted_at"   : time
         }
         admin_db.reference(f'users/{user["localId"]}').set(user_data)
 
@@ -304,10 +320,10 @@ def login():
 
         user = pyrebase_auth.sign_in_with_email_and_password(email, password)
 
-        session['user']     = user['localId']
-        session['id_token'] = user['idToken']
+        session['user']          = user['localId']
+        session['id_token']      = user['idToken']
         session['refresh_token'] = user['refreshToken']
-        session['email']    = email
+        session['email']         = email
 
         return redirect(url_for('home'))
 
@@ -354,27 +370,27 @@ def resend_verification_email():
         return redirect(url_for('login'))
 
     try:
-        id_token = session['id_token']
+        id_token      = session['id_token']
         refresh_token = session['refresh_token']
-        api_key = os.getenv("FIREBASE_API_KEY")
+        api_key       = os.getenv("FIREBASE_API_KEY")
 
         refresh_url = f"https://securetoken.googleapis.com/v1/token?key={api_key}"
         refresh_payload = {
-            "grant_type": "refresh_token",
-            "refresh_token": refresh_token
+            "grant_type"    : "refresh_token",
+            "refresh_token" : refresh_token
         }
 
         refresh_response = requests.post(refresh_url, data=refresh_payload)
         if refresh_response.status_code == 200:
-            refreshed_data = refresh_response.json()
-            id_token = refreshed_data['id_token']
-            session['id_token'] = id_token
+            refreshed_data           = refresh_response.json()
+            id_token                 = refreshed_data['id_token']
+            session['id_token']      = id_token
             session['refresh_token'] = refreshed_data['refresh_token']
 
         verify_url = f"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={api_key}"
         payload = {
-            "requestType": "VERIFY_EMAIL",
-            "idToken": id_token
+            "requestType" : "VERIFY_EMAIL",
+            "idToken"     : id_token
         }
 
         response = requests.post(verify_url, json=payload)
@@ -389,12 +405,12 @@ def resend_verification_email():
 
 @app.route('/email-action')
 def email_action():
-    mode = request.args.get('mode')
+    mode     = request.args.get('mode')
     oob_code = request.args.get('oobCode')
 
     firebase_config = {
-        'apiKey': os.getenv("FIREBASE_API_KEY"),
-        'authDomain': os.getenv("FIREBASE_AUTH_DOMAIN"),
+        'apiKey'     : os.getenv("FIREBASE_API_KEY"),
+        'authDomain' : os.getenv("FIREBASE_AUTH_DOMAIN"),
     }
 
     if mode == 'verifyEmail':
@@ -415,9 +431,9 @@ def my_account():
         flash("An unexpected error occurred while loading your account details.", "light")
         return render_template("503.html"), 503
 
-    uid = session['user']
+    uid      = session['user']
     user_ref = admin_db.reference(f'users/{uid}')
-    user = user_ref.get() or {}
+    user     = user_ref.get() or {}
 
     try:
         email_verified = is_email_verified()
@@ -478,8 +494,11 @@ def edit_home_details():
         if request.method == 'POST':
             data = collect_property_form_data(request.form)
 
+            now_ist = datetime.now(IST)
+            time    = now_ist.strftime("%d-%m-%Y, %H:%M")
+
             data["house_status"] = "Not Verified"
-            data["submitted_at"] = datetime.now(timezone.utc).isoformat()
+            data["submitted_at"] = time
 
             required = [
                 "title", "status", "property_type", "price", "area",
@@ -548,7 +567,7 @@ def my_house_view(uid):
     
     try:
         one_properties = all_users_properties_admin()
-        house_details = one_properties.get(uid)
+        house_details  = one_properties.get(uid)
         if not house_details:
                 return render_template('404.html'), 404
         
@@ -569,7 +588,7 @@ def admin():
         if 'user' in session:
             session.clear()
 
-        email = request.form.get('email', '').strip()
+        email    = request.form.get('email', '').strip()
         password = request.form.get('password', '').strip()
 
         if not email and not password:
@@ -608,7 +627,7 @@ def dashboard():
         total_members            = 0
 
         for uid, user_data in house.items():
-            properties = user_data.get("properties", {})
+            properties   = user_data.get("properties", {})
             house_status = properties.get("house_status")
 
             if house_status == "Verified":
@@ -699,12 +718,12 @@ def all_homes():
                 member_count += 1
 
         context = {
-            "total_users":              len(all_users),
-            "all_users":                house_data,
-            "total_homes":              verified_homes + not_verified_homes,
-            "verified_homes_count":     verified_homes,
-            "not_verified_homes_count": not_verified_homes,
-            "total_members":            member_count,
+            "total_users"              : len(all_users),
+            "all_users"                : house_data,
+            "total_homes"              : verified_homes + not_verified_homes,
+            "verified_homes_count"     : verified_homes,
+            "not_verified_homes_count" : not_verified_homes,
+            "total_members"            : member_count,
         }
         return render_template("all-homes.html", **context)
 
@@ -719,7 +738,7 @@ def admin_home_details(uid):
     
     try:
         one_properties = all_users_properties_admin()
-        house_details = one_properties.get(uid)
+        house_details  = one_properties.get(uid)
         
         if not house_details:
             return render_template('404.html'), 404
@@ -745,7 +764,10 @@ def admin_edit_home_details1(uid):
         if request.method == 'POST':
             data = collect_property_form_data(request.form)
 
-            data["submitted_at"] = datetime.now(timezone.utc).isoformat()
+            now_ist = datetime.now(IST)
+            time    = now_ist.strftime("%d-%m-%Y, %H:%M")
+
+            data["submitted_at"] = time
 
             required = [
                 "title", "status", "property_type", "price", "area",
@@ -882,7 +904,46 @@ def membership_request():
     except Exception as e:
         flash("An unexpected error occurred while updating membership details.", "light")
         return render_template("503.html"), 503
+    
+@app.route('/contact-form', methods=['GET', 'POST'])
+def contact_form():
+    if 'admin-user' not in session:
+        return redirect(url_for('home'))
+    
+    try:
+        if request.method == 'POST':
+            user_id = request.form.get('user_id')
 
+            try:
+                ref = admin_db.reference(f'contact_form/{user_id}')
+                
+                ref.update({
+                    'query_status': request.form.get('dropdown_option')
+                })
+
+                flash("Membership request updated", "success")
+
+            except Exception as e:
+                flash("Error updating membership request. Please try again later.", "light")
+
+            return redirect(url_for('contact_form'))
+
+        contact_form = admin_db.reference('contact_form').get() or {}
+        total_contact_form = len(contact_form)
+        total_not_solved  = sum(
+            1 for req in contact_form.values() if req.get('query_status') == 'Not Solved'
+        )
+
+        return render_template(
+            "contact-form.html",
+            total_member_request = total_contact_form,
+            total_not_solved  = total_not_solved,
+            contact_form       = contact_form,
+        )
+    
+    except Exception as e:
+        flash("An unexpected error occurred while updating membership details.", "light")
+        return render_template("503.html"), 503
 
 @app.route('/logout')
 def logout():

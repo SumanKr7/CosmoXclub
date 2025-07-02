@@ -2,7 +2,7 @@ import re
 from flask import session, request, redirect, url_for, flash, current_app as app, Request
 import os
 import base64
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from PIL import Image
 from io import BytesIO
 from firebase_admin import initialize_app, credentials, auth
@@ -215,14 +215,14 @@ def validate_profile_form(profile_data: Dict[str, Any]) -> Tuple[bool, Dict[str,
     errors: Dict[str, str] = {}
 
     rules = {
-        "name":       (is_valid_name,       "Name must contain only letters and spaces (2-100 chars)."),
-        "occupation": (is_valid_occupation, "Occupation can include letters, spaces, &, /, or -."),
-        "phone":      (is_valid_phone,      "Phone must be 10-15 digits, optional leading '+'."),
-        "address":    (is_valid_address,    "Address must be 5-120 chars; letters, numbers & punctuation."),
-        "city":       (is_valid_city,       "City may contain only letters and spaces (2-50 chars)."),
-        "state":      (is_valid_state,      "State may contain only letters and spaces (2-50 chars)."),
-        "pin_code":   (is_valid_pin_code,   "PIN must be a 6-digit Indian postal code (cannot start with 0)."),
-        "about":      (is_valid_about,      "About section must be 1-1000 characters.")
+        "name"       : (is_valid_name,       "Name must contain only letters and spaces (2-100 chars)."),
+        "occupation" : (is_valid_occupation, "Occupation can include letters, spaces, &, /, or -."),
+        "phone"      : (is_valid_phone,      "Phone must be 10-15 digits, optional leading '+'."),
+        "address"    : (is_valid_address,    "Address must be 5-120 chars; letters, numbers & punctuation."),
+        "city"       : (is_valid_city,       "City may contain only letters and spaces (2-50 chars)."),
+        "state"      : (is_valid_state,      "State may contain only letters and spaces (2-50 chars)."),
+        "pin_code"   : (is_valid_pin_code,   "PIN must be a 6-digit Indian postal code (cannot start with 0)."),
+        "about"      : (is_valid_about,      "About section must be 1-1000 characters.")
     }
 
     for field, (validator, msg) in rules.items():
@@ -248,8 +248,11 @@ def _update_profile_details(uid):
         for message in errors.values():
             flash(message, "light")
         return redirect(request.url)
+    
+    now_ist = datetime.now(IST)
+    time    = now_ist.strftime("%d-%m-%Y, %H:%M")
 
-    profile_data["timestamp"] = datetime.utcnow().isoformat()
+    profile_data["submitted_at"] = time
 
     try:
         admin_db.reference(f"users/{uid}").update(profile_data)
@@ -263,24 +266,24 @@ def _update_profile_details(uid):
 
 def collect_property_form_data(form: "Request.form") -> Dict[str, Any]:
     field_map = {
-        "title":          "title",
-        "status":         "status",
-        "property_type":  "property_type",
-        "price":          "price",
-        "area":           "area",
-        "bedrooms":       "bedrooms",
-        "bathrooms":      "bathrooms",
-        "address":        "address",
-        "city":           "city",
-        "state":          "state",
-        "pincode":        "pin_code",
-        "description":    "description",
-        "building_age":   "building_age",
-        "garage":         "garage",
-        "rooms":          "rooms",
-        "contact_name":   "name",
-        "contact_email":  "email",
-        "contact_phone":  "phone",
+        "title"          : "title",
+        "status"         : "status",
+        "property_type"  : "property_type",
+        "price"          : "price",
+        "area"           : "area",
+        "bedrooms"       : "bedrooms",
+        "bathrooms"      : "bathrooms",
+        "address"        : "address",
+        "city"           : "city",
+        "state"          : "state",
+        "pincode"        : "pin_code",
+        "description"    : "description",
+        "building_age"   : "building_age",
+        "garage"         : "garage",
+        "rooms"          : "rooms",
+        "contact_name"   : "name",
+        "contact_email"  : "email",
+        "contact_phone"  : "phone",
     }
 
     data = {
@@ -295,25 +298,25 @@ def validate_property_form(data: Dict[str, Any]) -> Tuple[bool, Dict[str, str]]:
     errors: Dict[str, str] = {}
 
     rules = {
-        "title":          (is_valid_title,        "Title must be 5-100 characters, valid punctuation allowed."),
-        "status":         (is_valid_status,       "Status must be 'For Sale' or 'For Rent'."),
-        "property_type":  (is_valid_property_type,"Choose a valid property type."),
-        "price":          (is_valid_price,        "Enter a valid price (e.g., 100000 or 1,00,000.00)."),
-        "area":           (is_valid_area,         "Area must be a positive number (e.g., 1200.50)."),
-        "bedrooms":       (is_valid_bedrooms,     "Bedrooms must be between 1 and 5."),
-        "bathrooms":      (is_valid_bathrooms,    "Bathrooms must be between 1 and 5."),
-        "address":        (is_valid_address,      "Address must be 5-120 characters, letters, numbers, punctuation allowed."),
-        "city":           (is_valid_city,         "City can contain only letters & spaces (2-50 chars)."),
-        "state":          (is_valid_state,        "State can contain only letters & spaces (2-50 chars)."),
-        "pin_code":       (is_valid_pin_code,     "PIN code must be a valid 6-digit Indian postal code."),
-        "description":    (is_valid_description,  "Description must be 1-1000 characters."),
-        "building_age":   (is_valid_building_age, "Select a valid building age."),
-        "garage":         (is_valid_garage,       "Garage must be between 1-5 or left empty."),
-        "rooms":          (is_valid_rooms,        "Rooms must be between 1-5 or left empty."),
-        "features":       (is_valid_features,     "One or more selected features are invalid."),
-        "name":           (is_valid_name,         "Name must contain only letters and spaces (min 2 chars)."),
-        "email":          (is_valid_email,        "Please enter a valid email address."),
-        "phone":          (is_valid_phone,        "Phone number must be 10-15 digits with optional '+' sign."),
+        "title"          : (is_valid_title,        "Title must be 5-100 characters, valid punctuation allowed."),
+        "status"         : (is_valid_status,       "Status must be 'For Sale' or 'For Rent'."),
+        "property_type"  : (is_valid_property_type,"Choose a valid property type."),
+        "price"          : (is_valid_price,        "Enter a valid price (e.g., 100000 or 1,00,000.00)."),
+        "area"           : (is_valid_area,         "Area must be a positive number (e.g., 1200.50)."),
+        "bedrooms"       : (is_valid_bedrooms,     "Bedrooms must be between 1 and 5."),
+        "bathrooms"      : (is_valid_bathrooms,    "Bathrooms must be between 1 and 5."),
+        "address"        : (is_valid_address,      "Address must be 5-120 characters, letters, numbers, punctuation allowed."),
+        "city"           : (is_valid_city,         "City can contain only letters & spaces (2-50 chars)."),
+        "state"          : (is_valid_state,        "State can contain only letters & spaces (2-50 chars)."),
+        "pin_code"       : (is_valid_pin_code,     "PIN code must be a valid 6-digit Indian postal code."),
+        "description"    : (is_valid_description,  "Description must be 1-1000 characters."),
+        "building_age"   : (is_valid_building_age, "Select a valid building age."),
+        "garage"         : (is_valid_garage,       "Garage must be between 1-5 or left empty."),
+        "rooms"          : (is_valid_rooms,        "Rooms must be between 1-5 or left empty."),
+        "features"       : (is_valid_features,     "One or more selected features are invalid."),
+        "name"           : (is_valid_name,         "Name must contain only letters and spaces (min 2 chars)."),
+        "email"          : (is_valid_email,        "Please enter a valid email address."),
+        "phone"          : (is_valid_phone,        "Phone number must be 10-15 digits with optional '+' sign."),
     }
 
     for field, (validator, msg) in rules.items():
@@ -334,10 +337,10 @@ def homes_images(uid: str):
 
 def add_homes_image(uid: str):
     try:
-        cropped_data = request.form.get('cropped_image1')
+        cropped_data    = request.form.get('cropped_image1')
         header, encoded = cropped_data.split(',', 1)
-        img_data = base64.b64decode(encoded)
-        img = Image.open(BytesIO(img_data))
+        img_data        = base64.b64decode(encoded)
+        img             = Image.open(BytesIO(img_data))
 
         filename = f"{uuid.uuid4().hex}.webp"
         rel_path = os.path.join('static', 'uploads', uid, filename)

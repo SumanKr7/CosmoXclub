@@ -12,8 +12,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12">
-                <h2 class="ipt-title">Update Membership</h2>
-                <span class="ipn-subtitle">Manage membership plan and subscription details</span>
+                <h2 class="ipt-title">Contact Form</h2>
+                <span class="ipn-subtitle">Update contact form query status</span>
             </div>
         </div>
     </div>
@@ -57,8 +57,8 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="dashboard-stat widget-4">
                             <div class="dashboard-stat-content">
-                                <h4>{{ total_users }}</h4>
-                                <span>Total Users</span>
+                                <h4>{{ total_member_request }}</h4>
+                                <span>Total Query</span>
                             </div>
                             <div class="dashboard-stat-icon">
                                 <i class="bi bi-people"></i>
@@ -69,8 +69,8 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="dashboard-stat widget-5">
                             <div class="dashboard-stat-content">
-                                <h4>{{ total_members }}</h4>
-                                <span>Total Members</span>
+                                <h4>{{ total_not_solved }}</h4>
+                                <span>Not Solved Query</span>
                             </div>
                             <div class="dashboard-stat-icon">
                                 <i class="bi bi-person-badge"></i>
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="dashboard-wraper mb-3">
-                    <h3 class="mb-0">Update Membership</h3>
+                    <h3 class="mb-0">Membership Request</h3>
                 </div>
 
                 <div class="dashboard-wraper mb-3 p-3">
@@ -97,54 +97,41 @@
                             <thead>
                                 <tr>
                                     <th>S. No.</th>
-                                    <th>Profile Image</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Home Status</th>
-                                    <th>Membership Details</th>
+                                    <th>Message</th>
+                                    <th>Time</th>
+                                    <th>Query Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% if all_users %}
-                                    {% for uid, user in all_users.items() %}
-                                        <tr style="height: 100px;">
+                                {% if contact_form %}
+                                    {% for uid, user in contact_form.items() %}
+                                        {% set user = user if user else {} %}
+                                        {% set status = user.get('query_status', '') %}
+                                        <tr style="height: 100px;" class="{% if status == 'Solved' %}bg-light-success{% endif %}">
                                             <td>{{ loop.index }}</td>
-                                            <td>
-                                                {% if user.get('profile_image') %}
-                                                    <img src="{{ user.profile_image }}" class="rounded-circle" alt="Profile Image" width="50" height="50">
-                                                {% else %}
-                                                    <img src="{{ url_for('static', filename='profile/default.webp') }}" class="rounded-circle" alt="Profile Image" width="50" height="50">
-                                                {% endif %}
-                                            </td>
                                             <td>{{ user.name if user.get('name') else '----' }}</td>
                                             <td>{{ user.email if user.get('email') else '----' }}</td>
                                             <td>{{ user.phone if user.get('phone') else '----' }}</td>
-                                            <td>{{ user.properties.house_status if user.get('properties', {}).get('house_status') else '----' }}</td>
+                                            <td>{{ user.message if user.get('message') else '----' }}</td>
+                                            <td>{{ user.submitted_at if user.get('submitted_at') else '----'}}</td>
                                             <td>
-                                                <form method="POST" action="{{ url_for('update_membership') }}">
+                                                <form method="POST" action="{{ url_for('contact_form') }}">
                                                     <input type="hidden" name="user_id" value="{{ uid }}">
-                                                    <input type="hidden" name="action" value="update">
 
-                                                    {% set membership = user.get('membership_details', {}) %}
-                                                    {% set selected = membership.get('plan', '') %}
+                                                    {% set selected = status %}
 
                                                     <div class="membership-form">
                                                         <select name="dropdown_option" required class="form-select">
-                                                        <option value="" disabled>Select Membership Plan</option>
-                                                        <option value="Silver" {{ 'selected' if selected == 'Silver' else '' }}>Silver</option>
-                                                        <option value="Gold" {{ 'selected' if selected == 'Gold' else '' }}>Gold</option>
-                                                        <option value="Platinum" {{ 'selected' if selected == 'Platinum' else '' }}>Platinum</option>
+                                                            <option value="" disabled {% if not selected %}selected{% endif %}>Select Status</option>
+                                                            <option value="Solved" {{ 'selected' if selected == 'Solved' else '' }}>Solved</option>
+                                                            <option value="Not Solved" {{ 'selected' if selected == 'Not Solved' else '' }}>Not Solved</option>
                                                         </select>
-
-                                                        <input type="date" name="start_date" value="{{ membership.get('start_date','') }}" required>
-                                                        <input type="date" name="end_date" value="{{ membership.get('end_date','') }}" required>
-
-                                                        <button type="submit" class="btn btn-main"><i class="bi bi-bookmark me-2"></i>Save</button>
-
-                                                        {% if membership %}
-                                                        <button type="button" class="btn btn-secondary text-white" onclick="confirmRemove(this.form)"><i class="bi bi-x-circle me-2"></i>Remove</button>
-                                                        {% endif %}
+                                                        <button type="submit" class="btn btn-main">
+                                                            <i class="bi bi-check-circle me-2"></i>Update
+                                                        </button>
                                                     </div>
                                                 </form>
                                             </td>
@@ -156,6 +143,7 @@
                                     </tr>
                                 {% endif %}
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -172,25 +160,6 @@
     </div>
 </section>
 <!---- ============================ User Dashboard End ================================== ---->
-
-<script>
-function confirmRemove(form) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This will remove the user's membership details.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, remove it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            form.querySelector('input[name="action"]').value = 'remove';
-            form.submit();
-        }
-    });
-}
-</script>
 
 <script>
 document.getElementById("userSearchInput").addEventListener("keyup", function() {
