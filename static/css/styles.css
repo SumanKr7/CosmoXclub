@@ -14574,3 +14574,9 @@ thead th {
 @keyframes spin {
 	to { transform: rotate(360deg); }
 }
+.plan_inquary {
+	font-size: 14px;
+    font-weight: 500;
+    color: #053864;
+    font-family: 'Jost', sans-serif;
+}

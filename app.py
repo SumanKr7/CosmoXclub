@@ -1,7 +1,5 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
-import pyrebase, os, firebase_admin
-import requests
-import json
+import pyrebase, os, firebase_admin, requests, shutil, json
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 from firebase_admin import credentials, db as admin_db, auth as admin_auth
@@ -319,7 +317,7 @@ def forgot_password():
 @app.route('/resend-verification-email')
 def resend_verification_email():
     if 'user' not in session or 'id_token' not in session or 'refresh_token' not in session:
-        flash("Please log in to verify your email.", "warning")
+        flash("Please log in to verify your email.", "light")
         return redirect(url_for('login'))
 
     try:
@@ -417,6 +415,9 @@ def my_home():
     if request.method == 'POST':
         try:
             admin_db.reference(f'users/{uid}/properties').delete()
+            folder_path = os.path.join('static', 'uploads', uid)
+            if os.path.exists(folder_path):
+                shutil.rmtree(folder_path)
             return jsonify({'success': True}), 200
         except Exception as e:
             return jsonify({'success': False, 'message': 'Error deleting home. Please try again later.'}), 500
