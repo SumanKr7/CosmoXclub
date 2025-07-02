@@ -15,6 +15,7 @@ from utils import (
     is_valid_email,
     is_valid_phone,
     is_valid_password,
+    is_valid_about,
     _process_post,
     validate_property_form,
     collect_property_form_data,
@@ -180,6 +181,10 @@ def contact_us():
 
         if not is_valid_phone(phone):
             flash("Please enter a valid phone number.", "light")
+            return redirect(url_for('contact_us'))
+        
+        if not is_valid_about(message):
+            flash("Please enter valid message.", "light")
             return redirect(url_for('contact_us'))
 
         try:
