@@ -27,6 +27,14 @@
         <i class="bi bi-person-badge me-2"></i>Update Membership
     </a>
 
+    <a href="/membership-request" class="sub-menu-item {% if request.path == '/membership-request' %}bg-success-subtle {% endif %}">
+        <i class="bi bi-question-circle"></i>Membership Request
+    </a>
+
+    <a href="/contact-form" class="sub-menu-item {% if request.path == '/contact-form' %}bg-success-subtle {% endif %}">
+        <i class="bi bi-person-lines-fill"></i>Contact Form Query
+    </a>
+
     <a href="{{ url_for('logout') }}" class="sub-menu-item">
         <i class="bi bi-power me-2"></i>Log Out
     </a>

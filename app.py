@@ -886,12 +886,12 @@ def membership_request():
             except Exception as e:
                 flash("Error updating membership request. Please try again later.", "light")
 
-            return redirect(url_for('membership_request'))  # fixed typo in function name
+            return redirect(url_for('membership_request'))
 
         member_request = admin_db.reference('plan_inquiries').get() or {}
         total_member_request = len(member_request)
         total_not_connected  = sum(
-            1 for req in member_request.values() if req.get('action') == 'Not Connected'
+            1 for req in member_request.values() if req.get('action') in ['Not Connected', 'Pending']
         )
 
         return render_template(
@@ -930,8 +930,9 @@ def contact_form():
 
         contact_form = admin_db.reference('contact_form').get() or {}
         total_contact_form = len(contact_form)
-        total_not_solved  = sum(
-            1 for req in contact_form.values() if req.get('query_status') == 'Not Solved'
+        total_not_solved = sum(
+            1 for req in contact_form.values() 
+            if req.get('query_status') in ['Not Solved', 'Pending']
         )
 
         return render_template(

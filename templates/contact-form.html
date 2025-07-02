@@ -61,7 +61,7 @@
                                 <span>Total Query</span>
                             </div>
                             <div class="dashboard-stat-icon">
-                                <i class="bi bi-people"></i>
+                                <i class="bi bi-envelope-check"></i>
                             </div>
                         </div>    
                     </div>
@@ -70,10 +70,10 @@
                         <div class="dashboard-stat widget-5">
                             <div class="dashboard-stat-content">
                                 <h4>{{ total_not_solved }}</h4>
-                                <span>Not Solved Query</span>
+                                <span>Not Solved or Pending Query</span>
                             </div>
                             <div class="dashboard-stat-icon">
-                                <i class="bi bi-person-badge"></i>
+                                <i class="bi bi-envelope-exclamation"></i>
                             </div>
                         </div>    
                     </div>
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="dashboard-wraper mb-3">
-                    <h3 class="mb-0">Membership Request</h3>
+                    <h3 class="mb-0">Cotact Form Query</h3>
                 </div>
 
                 <div class="dashboard-wraper mb-3 p-3">
@@ -101,7 +101,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Message</th>
-                                    <th>Time</th>
+                                    <th>Date & Time</th>
                                     <th>Query Status</th>
                                 </tr>
                             </thead>
@@ -128,6 +128,7 @@
                                                             <option value="" disabled {% if not selected %}selected{% endif %}>Select Status</option>
                                                             <option value="Solved" {{ 'selected' if selected == 'Solved' else '' }}>Solved</option>
                                                             <option value="Not Solved" {{ 'selected' if selected == 'Not Solved' else '' }}>Not Solved</option>
+                                                            <option value="Pending" {{ 'selected' if selected == 'Pending' else '' }}>Pending</option>
                                                         </select>
                                                         <button type="submit" class="btn btn-main">
                                                             <i class="bi bi-check-circle me-2"></i>Update
