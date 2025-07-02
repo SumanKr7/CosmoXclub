@@ -231,6 +231,8 @@ def validate_profile_form(profile_data: Dict[str, Any]) -> Tuple[bool, Dict[str,
 
     return (not errors), errors
 
+IST = timezone(timedelta(hours=5, minutes=30))
+
 def _update_profile_details(uid):
     required_fields = [
         "name", "occupation", "phone",
