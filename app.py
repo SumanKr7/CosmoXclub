@@ -85,24 +85,57 @@ def inject_user():
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        email = request.form.get('email', '').strip()
+        form_type = request.form.get('form_type')
 
-        if not email:
-            flash("Email is required.", "light")
-            return redirect(url_for('home'))
+        if form_type == 'newsletter':
+            email = request.form.get('email', '').strip()
+            if not email:
+                flash("Email is required.", "light")
+            elif not is_valid_email(email):
+                flash("Please enter a valid email address.", "light")
+            else:
+                try:
+                    admin_db.reference('subscriptions').push({
+                        "email": email,
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                    })
+                    flash("Thank you for subscribing!", "success")
+                except Exception as e:
+                    flash("Subscription failed. Please try again later.", "light")
 
-        if not is_valid_email(email):
-            flash("Please enter a valid email address.", "light")
-            return redirect(url_for('home'))
+        elif form_type == 'plan_inquiry':
+            fullname  = request.form.get('fullname', '').strip()
+            phone     = request.form.get('phone', '').strip()
+            email     = request.form.get('email', '').strip()
+            plan_type = request.form.get('plan-type', '').strip()
 
-        try:
-            admin_db.reference('subscriptions').push({
-                "email": email,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-            })
-            flash("Thank you for subscribing!", "success")
-        except Exception as e:
-            flash("Your email couldn't be subscribed at the moment. Please try again later.", "light")
+            if not fullname or not phone or not email or not plan_type:
+                flash("All fields are required for plan inquiry.", "light")
+                return redirect(url_for('home'))
+
+            if not is_valid_name(fullname):
+                flash("Please enter a valid name.", "light")
+                return redirect(url_for('home'))
+
+            if not is_valid_email(email):
+                flash("Please enter a valid email address.", "light")
+                return redirect(url_for('home'))
+
+            if not is_valid_phone(phone):
+                flash("Please enter a valid phone number.", "light")
+                return redirect(url_for('home'))
+
+            try:
+                admin_db.reference('plan_inquiries').push({
+                    "fullname": fullname,
+                    "phone": phone,
+                    "email": email,
+                    "plan": plan_type,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                })
+                flash("Your inquiry has been submitted!", "success")
+            except Exception as e:
+                flash("Could not submit inquiry. Try again later.", "light")
 
         return redirect(url_for('home'))
 
@@ -809,6 +842,47 @@ def update_membership():
     except Exception as e:
         flash("An unexpected error occurred while updating membership details.", "light")
         return render_template("503.html"), 503
+
+@app.route('/membership-request', methods=['GET', 'POST'])
+def membership_request():
+    if 'admin-user' not in session:
+        return redirect(url_for('home'))
+    
+    try:
+        if request.method == 'POST':
+            user_id = request.form.get('user_id')
+
+            try:
+                ref = admin_db.reference(f'plan_inquiries/{user_id}')
+                
+                ref.update({
+                    'action': request.form.get('dropdown_option')
+                })
+
+                flash("Membership request updated", "success")
+
+            except Exception as e:
+                flash("Error updating membership request. Please try again later.", "light")
+
+            return redirect(url_for('membership_request'))  # fixed typo in function name
+
+        member_request = admin_db.reference('plan_inquiries').get() or {}
+        total_member_request = len(member_request)
+        total_not_connected  = sum(
+            1 for req in member_request.values() if req.get('action') == 'Not Connected'
+        )
+
+        return render_template(
+            "membership-request.html",
+            total_member_request = total_member_request,
+            total_not_connected  = total_not_connected,
+            member_request       = member_request,
+        )
+    
+    except Exception as e:
+        flash("An unexpected error occurred while updating membership details.", "light")
+        return render_template("503.html"), 503
+
 
 @app.route('/logout')
 def logout():

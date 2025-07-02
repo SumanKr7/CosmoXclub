@@ -12,44 +12,43 @@
 				</span>
 			</span>
 			<div class="modal-body">
-				<h4 class="modal-header-title">Membership Inquary</h4>
+				<h4 class="modal-header-title">Become a Member</h4>
 				<div class="d-flex align-items-center justify-content-center mb-3">
 					<img class="logo-fixed" src="{{ url_for('static', filename='img/cosmoxclub-logo.png')}}" alt="Cosmox Club Logo">
 				</div>
 				<div class="login-form">
-					<form id="create-form" method="POST" action="{{ url_for('signup') }}" autocomplete="off">
+					<form id="plan-inquary" method="POST" action="/">
+						<input type="hidden" name="form_type" value="plan_inquiry">
 
-                        <div class="form-floating mb-3">
+						<div class="form-floating mb-3">
 							<input type="text" name="fullname" class="form-control" placeholder="Full Name">
-                            <label>Full Name</label>
+							<label>Full Name</label>
 						</div>
 
-                        <div class="form-floating mb-3">
+						<div class="form-floating mb-3">
 							<input type="tel" name="phone" class="form-control" placeholder="Phone">
-                            <label>Phone</label>
+							<label>Phone</label>
 						</div>
-					
+
 						<div class="form-floating mb-3">
 							<input type="email" name="email" class="form-control" placeholder="name@example.com">
 							<label>Email address</label>
 						</div>
 
-                        <div class="form-floating plan_inquary mb-3">
-                            <select id="plan-type" name="plan-type" class="form-control plan_inquary" style="padding: 0px 0px 0px 12px;" required>
-                                <option class="plan_inquary" value="" disabled selected>Select a plan</option>
-                                <option class="plan_inquary" value="silvar">Silvar</option>
-                                <option class="plan_inquary" value="gold">Gold</option>
-                                <option class="plan_inquary" value="platinum">Platinum</option>
-                            </select>
-                        </div>
+						<div class="form-floating plan_inquary mb-3">
+							<select id="plan-type" name="plan-type" class="form-control plan_inquary" style="padding: 0px 0px 0px 12px;" required>
+								<option class="plan_inquary" value="" disabled selected>Select a plan</option>
+								<option class="plan_inquary" value="Silver">Silver</option>
+								<option class="plan_inquary" value="Gold">Gold</option>
+								<option class="plan_inquary" value="Platinum">Platinum</option>
+							</select>
+						</div>
 
-						
 						<div class="form-group">
-							<button type="submit" class="btn btn-lg btn-primary fw-medium full-width rounded-2">Create Account</button>
+							<button type="submit" class="btn btn-lg btn-primary fw-medium full-width rounded-2">Submit Your Interest</button>
 						</div>
 
 						<div id="response-message-create" style="display: none; margin-top: 10px;"></div>
-					
 					</form>
 				</div>
 				<!-- <div class="modal-divider"><span>Or login via</span></div>

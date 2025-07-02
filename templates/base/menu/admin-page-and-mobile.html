@@ -21,6 +21,9 @@
         <li class="{% if request.path == '/update-membership' %}active{% endif %}">
             <a href="/update-membership"><i class="bi bi-person-badge me-2"></i>Update Membership</a>
         </li>
+        <li class="{% if request.path == '/membership-request' %}active{% endif %}">
+            <a href="/membership-request"><i class="bi bi-question-circle"></i>Membership Request</a>
+        </li>
         <li>
             <a href="{{ url_for('logout') }}"><i class="bi bi-power me-2"></i>Log Out</a>
         </li>
