@@ -187,23 +187,23 @@
                         <div class="overlay">Change Profile</div>
                     </div>
 
-                    <!-- Hidden File Input -->
-                    <form id="uploadForm" method="POST" action="{{ url_for('my_account') }}">
-                        <input type="file" id="inputImage" accept="image/*">
-                        <div class="filename-display" id="fileName"></div>
+                        <!-- Hidden File Input -->
+                        <form id="uploadForm" method="POST" action="{{ url_for('my_account') }}">
+                            <input type="file" id="inputImage" accept="image/*">
+                            <div class="filename-display" id="fileName"></div>
 
-                        <div class="preview">
-                            <img id="image">
-                        </div>
+                            <div class="preview">
+                                <img id="image">
+                            </div>
 
-                        <input type="hidden" name="cropped_image" id="croppedImageInput">
-                        <div class="d-flex justify-content-center mt-3 mb-5">
-                            <button type="submit" id="uploadButton" class="btn btn-primary rounded px-5" style="display: none;">
-                                <i class="bi bi-crop me-2"></i>Crop & Upload
-                            </button>
-                        </div>
+                            <input type="hidden" name="cropped_image" id="croppedImageInput">
+                            <div class="d-flex justify-content-center mt-3 mb-5">
+                                <button type="submit" id="uploadButton" class="btn btn-primary rounded px-5" style="display: none;">
+                                    <i class="bi bi-crop me-2"></i>Crop & Upload
+                                </button>
+                            </div>
 
-                    </form>
+                        </form>
 
                         <form method="POST" action="{{ url_for('my_account') }}" class="form-submit" enctype="multipart/form-data">
                             <div class="submit-section">
@@ -270,7 +270,6 @@
 </section>
 <!-- ============================ User Dashboard End ================================== -->
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     const input = document.getElementById('profileImage');
@@ -308,7 +307,6 @@
                 wheelZoom: false,
                 pinchZoom: false,
                 ready() {
-                    // Show the upload button when cropper is ready
                     document.getElementById('uploadButton').style.display = 'inline-block';
                 }
             });
@@ -336,12 +334,10 @@
     const previewImg = document.getElementById('image');
     const fileNameDisplay = document.getElementById('fileName');
 
-    // Click profile image to trigger file input
     profileTrigger.addEventListener('click', () => {
       inputImage.click();
     });
 
-    // When image is selected
     inputImage.addEventListener('change', function (event) {
       const file = event.target.files[0];
       if (file) {
@@ -352,8 +348,6 @@
           previewImg.src = e.target.result;
           previewImg.style.display = 'block';
 
-          // You can also show cropper here if needed
-          // Update current profile preview immediately (optional)
           currentProfile.src = e.target.result;
         };
         reader.readAsDataURL(file);
