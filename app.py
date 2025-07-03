@@ -503,6 +503,7 @@ def edit_home_details():
             time    = now_ist.strftime("%d-%m-%Y, %H:%M")
 
             data["house_status"] = "Not Verified"
+            data["guest_points"] = int(0)
             data["submitted_at"] = time
 
             required = [
@@ -527,12 +528,12 @@ def edit_home_details():
                 images_ref = admin_db.reference(f'users/{uid}/properties/images').get()
                 if not images_ref:
                     flash("Please upload home images.", "light")
-                    return redirect(url_for('upload_home_img'))
+                    return redirect(url_for('update_home_images'))
 
                 flash("Home details submitted successfully.", "success")
                 return redirect(url_for('edit_home_details'))
 
-            except Exception:
+            except Exception as e:
                 flash("An error occurred while submitting your home details. Please try again later.", "light")
                 return redirect(request.url)
 
@@ -579,7 +580,7 @@ def my_house_view(uid):
         return render_template("home-details.html", house_details=house_details)
     
     except Exception as e:
-        flash("An unexpected error occurred while loading your property details.", "light")
+        flash("An unexpected error occurred while loading your home details.", "light")
         return render_template("503.html"), 503
 
 # Admin routes
@@ -687,29 +688,60 @@ def all_homes():
     users_ref = admin_db.reference('users')
 
     if request.method == 'POST':
-        user_id     = request.form.get('user_id')
-        new_status  = request.form.get('dropdown_option')
+        try:
+            if request.is_json:
+                data = request.get_json()
+                user_id = data.get('user_id')
+                if not user_id:
+                    return jsonify({'success': False, 'message': 'Missing user_id'}), 400
 
-        if not user_id or not new_status:
-            flash('Missing user id or status; nothing was updated.', 'light')
+                users_ref.child(user_id).child('properties').delete()
+
+                folder_path = os.path.join('static', 'uploads', user_id)
+                if os.path.exists(folder_path):
+                    shutil.rmtree(folder_path)
+
+                return jsonify({'success': True}), 200
+
+            else:
+                user_id = request.form.get('user_id')
+                new_status = request.form.get('dropdown_option')
+                guest_points = request.form.get('guest_points')
+
+                if not user_id or not new_status or guest_points is None:
+                    flash('All fields are required.', 'light')
+                    return redirect(url_for('all_homes'))
+
+                try:
+                    guest_points = int(guest_points)
+                except ValueError:
+                    flash('Guest points must be a valid number.', 'light')
+                    return redirect(url_for('all_homes'))
+
+                update_data = {
+                    'house_status': new_status,
+                    'guest_points': guest_points
+                }
+
+                users_ref.child(user_id).child('properties').update(update_data)
+                flash('Home status and guest points updated successfully.', 'success')
+                return redirect(url_for('all_homes'))
+
+
+
+        except Exception as e:
+            if request.is_json:
+                return jsonify({'success': False, 'message': 'Error occurred.'}), 500
+            flash('An error occurred. Please try again.', 'light')
             return redirect(url_for('all_homes'))
 
-        try:
-            users_ref.child(user_id).child('properties') \
-                     .update({'house_status': new_status})
-            flash('Home status updated successfully.', 'success')
-        except Exception as e:
-            flash('Could not update the status. Please try again.', 'light')
-
-        return redirect(url_for('all_homes'))
-
     try:
-        all_users  = users_ref.get() or {}
+        all_users = users_ref.get() or {}
         house_data = all_users_properties_admin() or {}
 
-        verified_homes      = 0
-        not_verified_homes  = 0
-        member_count        = 0
+        verified_homes = 0
+        not_verified_homes = 0
+        member_count = 0
 
         for user in house_data.values():
             status = (user.get("properties", {}).get("house_status") or "").strip()
@@ -723,18 +755,20 @@ def all_homes():
                 member_count += 1
 
         context = {
-            "total_users"              : len(all_users),
-            "all_users"                : house_data,
-            "total_homes"              : verified_homes + not_verified_homes,
-            "verified_homes_count"     : verified_homes,
-            "not_verified_homes_count" : not_verified_homes,
-            "total_members"            : member_count,
+            "total_users": len(all_users),
+            "all_users": house_data,
+            "total_homes": verified_homes + not_verified_homes,
+            "verified_homes_count": verified_homes,
+            "not_verified_homes_count": not_verified_homes,
+            "total_members": member_count,
         }
+
         return render_template("all-homes.html", **context)
 
     except Exception as e:
         flash("An error occurred while loading the home data.", "light")
         return render_template("503.html"), 503
+
 
 @app.route('/admin-home-details/<uid>')
 def admin_home_details(uid):
@@ -751,7 +785,7 @@ def admin_home_details(uid):
         return render_template("admin-home-details.html", house_details=house_details)
         
     except Exception as e:
-        flash("An unexpected error occurred while load property details.", "light")
+        flash("An unexpected error occurred while load home details.", "light")
         return render_template("503.html"), 503
 
     

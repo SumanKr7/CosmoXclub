@@ -127,7 +127,8 @@
                                     <th>View Homes Details</th>
                                     <th>Edit Homes Details</th>
                                     <th>Edit Homes Images</th>
-                                    <th>Homes Status</th>
+                                    <th>Guest Point & Homes Status </th>
+                                    <th>Delete Homes</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -158,31 +159,48 @@
                                             <td>{{ user.membership_details.plan if user.get('membership_details', {}).get('plan') else '----' }}</td>
                                             <td>
                                                 <a href="/admin-home-details/{{ uid }}">
-                                                    <button class="btn btn-main" style="height: 36.5px;" type="button"><i class="bi bi-eye me-2"></i>View</button>
+                                                    <button class="btn btn-main" style="height: 40px;" type="button"><i class="bi bi-eye me-2"></i>View</button>
                                                 </a>
                                             </td>
                                             <td>
                                                 <a href="/admin-edit-home-details/{{ uid }}">
-                                                    <button class="btn btn-main" style="height: 36.5px;" type="button"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                                    <button class="btn btn-main" style="height: 40px;" type="button"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                                 </a>
                                             </td>
                                             <td>
                                                 <a href="/admin-update-home-images/{{ uid }}">
-                                                    <button class="btn btn-main" style="height: 36.5px;" type="button"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                                    <button class="btn btn-main" style="height: 40px;" type="button"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                                 </a>
                                             </td>
                                             <td>
                                                 <form method="POST" action="{{ url_for('all_homes') }}">
                                                     <input type="hidden" name="user_id" value="{{ uid }}">
+                                                    
                                                     {% set status = user.get('properties', {}).get('house_status', '') %}
-                                                    <div class="membership-form d-flex align-items-center">
+                                                    {% set guest_points = user.get('properties', {}).get('guest_points', '') %}
+
+                                                    <div class="membership-form d-flex align-items-center" style="gap: 8px;">
+                                                        <input type="text" name="guest_points" value="{{ guest_points }}"
+                                                            placeholder="Guest Points" class="form-control" style="height: 40px; width: 130px; border: 1px solid #ccc; font-size: 15px;" required>
+
                                                         <select name="dropdown_option" required class="form-select me-2">
                                                             <option value="Verified" {{ 'selected' if status == 'Verified' else '' }}>Verified</option>
                                                             <option value="Not Verified" {{ 'selected' if status == 'Not Verified' else '' }}>Not Verified</option>
                                                         </select>
-                                                        <button type="submit" class="btn btn-main"><i class="bi bi-bookmark me-2"></i>Save</button>
+
+                                                        
+                                                        <button type="submit" class="btn btn-main" style="font-size: 16px; padding: 10px 20px;">
+                                                            <i class="bi bi-bookmark me-2"></i>Save
+                                                        </button>
                                                     </div>
                                                 </form>
+
+
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" onclick="confirmDelete('{{ uid }}')" class="btn btn-main" style="height: 40px;">
+                                                    <i class="fa-regular fa-circle-xmark me-1"></i>Delete
+                                                </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -224,6 +242,39 @@ document.getElementById("userSearchInput").addEventListener("keyup", function() 
         }
     });
 });
+</script>
+
+<script>
+function confirmDelete(userId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you really want to delete this home?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/all-homes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Deleted!', 'Home has been deleted.', 'success')
+                         .then(() => window.location.reload());
+                } else {
+                    Swal.fire('Error!', data.message || 'Something went wrong.', 'error');
+                }
+            })
+            .catch(() => Swal.fire('Error!', 'Something went wrong.', 'error'));
+        }
+    });
+}
+
 </script>
 
 {% endblock %}

@@ -56,10 +56,13 @@
 <!-- End Modal -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.getElementById("plan-inquary");
-        form.addEventListener("submit", function() {
-            setTimeout(() => form.reset(), 300);
-        });
-    });
+document.addEventListener("DOMContentLoaded", function () {
+	const form = document.getElementById("plan-inquary");
+
+	form.addEventListener("submit", function (e) {
+		e.preventDefault();
+		form.reset();
+		form.submit();
+	});
+});
 </script>
