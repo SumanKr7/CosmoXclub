@@ -68,18 +68,7 @@
 									</div>
 
 									<div class="form-group col-md-6">
-										<label class="mb-2" for="status">Status</label>
-										<select id="status" name="status" class="form-control">
-											{% set status = user.get('properties', {}).get('status', '') %}
-											<option value="" disabled {% if not status %}selected{% endif %}>&nbsp;</option>
-											<option value="For Rent" {% if status == 'For Rent' %}selected{% endif %}>For Rent</option>
-											<option value="For Sale" {% if status == 'For Sale' %}selected{% endif %}>For Sale</option>
-										</select>
-
-									</div>
-									
-									<div class="form-group col-md-6">
-										<label class="mb-2" for="property_type">Property Type</label>
+										<label class="mb-2" for="property_type">Home Type</label>
 										<select id="property_type" name="property_type" class="form-control">
 											{% set property_type = user.get('properties', {}).get('property_type', '') %}
 											<option value="" disabled {% if not property_type %}selected{% endif %}>&nbsp;</option>
@@ -88,20 +77,30 @@
 											<option value="Villas" {% if property_type == 'Villas' %}selected{% endif %}>Villas</option>
 											<option value="Commercial" {% if property_type == 'Commercial' %}selected{% endif %}>Commercial</option>
 											<option value="Offices" {% if property_type == 'Offices' %}selected{% endif %}>Offices</option>
-											<option value="Garage" {% if property_type == 'Garage' %}selected{% endif %}>Garage</option>
 										</select>
 									</div>
 
 									<div class="form-group col-md-6">
-										<label class="mb-2" for="price">Price</label>
-										<input type="text" id="price" name="price" class="form-control" placeholder="Rupees"
-											value="{{ user.get('properties', {}).get('price', '') }}">
+										<label class="mb-2" for="location_type">Location Type</label>
+										<select id="location_type" name="location_type" class="form-control">
+											{% set location_type = user.get('properties', {}).get('location_type', '') %}
+											<option value="" disabled {% if not location_type %}selected{% endif %}>&nbsp;</option>
+											<option value="For Rent" {% if location_type == 'For Rent' %}selected{% endif %}>For Rent</option>
+											<option value="For Sale" {% if location_type == 'For Sale' %}selected{% endif %}>For Sale</option>
+										</select>
+
+									</div>
+
+									<div class="form-group col-md-6">
+										<label class="mb-2" for="guest_capacity">Guest Capacity</label>
+										<input type="text" id="guest_capacity" name="guest_capacity" class="form-control" placeholder="Guest Capacity"
+											value="{{ user.get('properties', {}).get('guest_capacity', '') }}">
 									</div>
 									
 									<div class="form-group col-md-6">
-										<label class="mb-2" for="area">Area</label>
-										<input type="text" id="area" name="area" class="form-control" placeholder="Square feet"
-											value="{{ user.get('properties', {}).get('area', '') }}">
+										<label class="mb-2" for="size">Size in Sqft</label>
+										<input type="text" id="size" name="size" class="form-control" placeholder="Square feet"
+											value="{{ user.get('properties', {}).get('size', '') }}">
 									</div>
 									
 									<div class="form-group col-md-6">
@@ -176,104 +175,353 @@
 										<textarea id="description" name="description" class="form-control h-120">{{ user.get('properties', {}).get('description', '') }}</textarea>
 									</div>
 									
-									<div class="form-group col-md-4">
-										<label class="mb-2" for="building_age">Building Age (optional)</label>
-										<select id="building_age" name="building_age" class="form-control">
-											{% set building_age = user.get('properties', {}).get('building_age', '') %}
-											<option value="" {% if not building_age %}selected{% endif %}>&nbsp;</option>
-											<option value="0-5" {% if building_age == '0-5' %}selected{% endif %}>0 - 5 Years</option>
-											<option value="0-10" {% if building_age == '0-10' %}selected{% endif %}>0 - 10 Years</option>
-											<option value="0-15" {% if building_age == '0-15' %}selected{% endif %}>0 - 15 Years</option>
-											<option value="0-20" {% if building_age == '0-20' %}selected{% endif %}>0 - 20 Years</option>
-											<option value="20+" {% if building_age == '20+' %}selected{% endif %}>20+ Years</option>
-										</select>
-									</div>
-									
-									<div class="form-group col-md-4">
-										<label class="mb-2" for="garage">Garage (optional)</label>
-										<select id="garage" name="garage" class="form-control">
-											{% set garage = user.get('properties', {}).get('garage', '') %}
-											<option value="" {% if not garage %}selected{% endif %}>&nbsp;</option>
-											<option value="1" {% if garage == '1' %}selected{% endif %}>1</option>
-											<option value="2" {% if garage == '2' %}selected{% endif %}>2</option>
-											<option value="3" {% if garage == '3' %}selected{% endif %}>3</option>
-											<option value="4" {% if garage == '4' %}selected{% endif %}>4</option>
-											<option value="5" {% if garage == '5' %}selected{% endif %}>5</option>
-										</select>
-									</div>
-									
-									<div class="form-group col-md-4">
-										<label class="mb-2" for="rooms">Rooms (optional)</label>
-										
-										<select id="rooms" name="rooms" class="form-control">
-											{% set rooms = user.get('properties', {}).get('rooms', '') %}
-											<option value="" {% if not rooms %}selected{% endif %}>&nbsp;</option>
-											<option value="1" {% if rooms == '1' %}selected{% endif %}>1</option>
-											<option value="2" {% if rooms == '2' %}selected{% endif %}>2</option>
-											<option value="3" {% if rooms == '3' %}selected{% endif %}>3</option>
-											<option value="4" {% if rooms == '4' %}selected{% endif %}>4</option>
-											<option value="5" {% if rooms == '5' %}selected{% endif %}>5</option>
-										</select>
-
-									</div>
-									
 									<div class="form-group col-md-12">
-										<label class="mb-2">Other Features (optional)</label>
+										<label class="mb-2 fs-5">Amenities</label>
 										<div class="o-features">
 											<ul class="no-ul-list third-row">
-												{% set features = user.get('properties', {}).get('features', []) %}
+												{% set amenities = user.get('properties', {}).get('amenities', []) %}
 
 												<li>
-													<input id="a-1" class="form-check-input" name="features" value="Air Condition" type="checkbox" {% if 'Air Condition' in features %}checked{% endif %}>
+													<input id="a-1" class="form-check-input" name="amenities" value="Air Condition" type="checkbox" {% if 'Air Condition' in amenities %}checked{% endif %}>
 													<label for="a-1" class="form-check-label">Air Condition</label>
 												</li>
 												<li>
-													<input id="a-2" class="form-check-input" name="features" value="Bedding" type="checkbox" {% if 'Bedding' in features %}checked{% endif %}>
-													<label for="a-2" class="form-check-label">Bedding</label>
+													<input id="a-2" class="form-check-input" name="amenities" value="Refrigerator" type="checkbox" {% if 'Bedding' in amenities %}checked{% endif %}>
+													<label for="a-2" class="form-check-label">Refrigerator</label>
 												</li>
 												<li>
-													<input id="a-3" class="form-check-input" name="features" value="Heating" type="checkbox" {% if 'Heating' in features %}checked{% endif %}>
+													<input id="a-3" class="form-check-input" name="amenities" value="Heating" type="checkbox" {% if 'Heating' in amenities %}checked{% endif %}>
 													<label for="a-3" class="form-check-label">Heating</label>
 												</li>
 												<li>
-													<input id="a-4" class="form-check-input" name="features" value="Internet" type="checkbox" {% if 'Internet' in features %}checked{% endif %}>
+													<input id="a-4" class="form-check-input" name="amenities" value="Internet" type="checkbox" {% if 'Internet' in amenities %}checked{% endif %}>
 													<label for="a-4" class="form-check-label">Internet</label>
 												</li>
 												<li>
-													<input id="a-5" class="form-check-input" name="features" value="Microwave" type="checkbox" {% if 'Microwave' in features %}checked{% endif %}>
+													<input id="a-5" class="form-check-input" name="amenities" value="Microwave" type="checkbox" {% if 'Microwave' in amenities %}checked{% endif %}>
 													<label for="a-5" class="form-check-label">Microwave</label>
 												</li>
 												<li>
-													<input id="a-6" class="form-check-input" name="features" value="Smoking Allow" type="checkbox" {% if 'Smoking Allow' in features %}checked{% endif %}>
+													<input id="a-6" class="form-check-input" name="amenities" value="Smoking Allow" type="checkbox" {% if 'Smoking Allow' in amenities %}checked{% endif %}>
 													<label for="a-6" class="form-check-label">Smoking Allow</label>
 												</li>
 												<li>
-													<input id="a-7" class="form-check-input" name="features" value="Terrace" type="checkbox" {% if 'Terrace' in features %}checked{% endif %}>
+													<input id="a-7" class="form-check-input" name="amenities" value="Terrace" type="checkbox" {% if 'Terrace' in amenities %}checked{% endif %}>
 													<label for="a-7" class="form-check-label">Terrace</label>
 												</li>
 												<li>
-													<input id="a-8" class="form-check-input" name="features" value="Balcony" type="checkbox" {% if 'Balcony' in features %}checked{% endif %}>
+													<input id="a-8" class="form-check-input" name="amenities" value="Balcony" type="checkbox" {% if 'Balcony' in amenities %}checked{% endif %}>
 													<label for="a-8" class="form-check-label">Balcony</label>
 												</li>
 												<li>
-													<input id="a-9" class="form-check-input" name="features" value="Icon" type="checkbox" {% if 'Icon' in features %}checked{% endif %}>
+													<input id="a-9" class="form-check-input" name="amenities" value="Icon" type="checkbox" {% if 'Icon' in amenities %}checked{% endif %}>
 													<label for="a-9" class="form-check-label">Icon</label>
 												</li>
 												<li>
-													<input id="a-10" class="form-check-input" name="features" value="Wi-Fi" type="checkbox" {% if 'Wi-Fi' in features %}checked{% endif %}>
+													<input id="a-10" class="form-check-input" name="amenities" value="Wi-Fi" type="checkbox" {% if 'Wi-Fi' in amenities %}checked{% endif %}>
 													<label for="a-10" class="form-check-label">Wi-Fi</label>
 												</li>
 												<li>
-													<input id="a-11" class="form-check-input" name="features" value="Beach" type="checkbox" {% if 'Beach' in features %}checked{% endif %}>
+													<input id="a-11" class="form-check-input" name="amenities" value="Beach" type="checkbox" {% if 'Beach' in amenities %}checked{% endif %}>
 													<label for="a-11" class="form-check-label">Beach</label>
 												</li>
 												<li>
-													<input id="a-12" class="form-check-input" name="features" value="Parking" type="checkbox" {% if 'Parking' in features %}checked{% endif %}>
+													<input id="a-12" class="form-check-input" name="amenities" value="Parking" type="checkbox" {% if 'Parking' in amenities %}checked{% endif %}>
 													<label for="a-12" class="form-check-label">Parking</label>
 												</li>
 											</ul>
 										</div>
 									</div>
+
+									<div class="form-group col-md-12">
+                                        <label class="mb-2 fs-5">Unique Facilities</label>
+                                        <div class="o-features">
+											<ul class="no-ul-list third-row">
+												{% set unique_facilities = user.get('properties', {}).get('unique_facilities', []) %}
+
+												<li>
+													<input id="b-1" class="form-check-input" name="unique_facilities" value="Air Condition" type="checkbox" {% if 'Air Condition' in unique_facilities %}checked{% endif %}>
+													<label for="b-1" class="form-check-label">Air Condition</label>
+												</li>
+												<li>
+													<input id="b-2" class="form-check-input" name="unique_facilities" value="Bedding" type="checkbox" {% if 'Bedding' in unique_facilities %}checked{% endif %}>
+													<label for="b-2" class="form-check-label">Bedding</label>
+												</li>
+												<li>
+													<input id="b-3" class="form-check-input" name="unique_facilities" value="Heating" type="checkbox" {% if 'Heating' in unique_facilities %}checked{% endif %}>
+													<label for="b-3" class="form-check-label">Heating</label>
+												</li>
+												<li>
+													<input id="b-4" class="form-check-input" name="unique_facilities" value="Internet" type="checkbox" {% if 'Internet' in unique_facilities %}checked{% endif %}>
+													<label for="b-4" class="form-check-label">Internet</label>
+												</li>
+												<li>
+													<input id="b-5" class="form-check-input" name="unique_facilities" value="Microwave" type="checkbox" {% if 'Microwave' in unique_facilities %}checked{% endif %}>
+													<label for="b-5" class="form-check-label">Microwave</label>
+												</li>
+												<li>
+													<input id="b-6" class="form-check-input" name="unique_facilities" value="Smoking Allow" type="checkbox" {% if 'Smoking Allow' in unique_facilities %}checked{% endif %}>
+													<label for="b-6" class="form-check-label">Smoking Allow</label>
+												</li>
+												<li>
+													<input id="b-7" class="form-check-input" name="unique_facilities" value="Terrace" type="checkbox" {% if 'Terrace' in unique_facilities %}checked{% endif %}>
+													<label for="b-7" class="form-check-label">Terrace</label>
+												</li>
+												<li>
+													<input id="b-8" class="form-check-input" name="unique_facilities" value="Balcony" type="checkbox" {% if 'Balcony' in unique_facilities %}checked{% endif %}>
+													<label for="b-8" class="form-check-label">Balcony</label>
+												</li>
+												<li>
+													<input id="b-9" class="form-check-input" name="unique_facilities" value="Icon" type="checkbox" {% if 'Icon' in unique_facilities %}checked{% endif %}>
+													<label for="b-9" class="form-check-label">Icon</label>
+												</li>
+												<li>
+													<input id="b-10" class="form-check-input" name="unique_facilities" value="Wi-Fi" type="checkbox" {% if 'Wi-Fi' in unique_facilities %}checked{% endif %}>
+													<label for="b-10" class="form-check-label">Wi-Fi</label>
+												</li>
+												<li>
+													<input id="b-11" class="form-check-input" name="unique_facilities" value="Beach" type="checkbox" {% if 'Beach' in unique_facilities %}checked{% endif %}>
+													<label for="b-11" class="form-check-label">Beach</label>
+												</li>
+												<li>
+													<input id="b-12" class="form-check-input" name="unique_facilities" value="Parking" type="checkbox" {% if 'Parking' in unique_facilities %}checked{% endif %}>
+													<label for="b-12" class="form-check-label">Parking</label>
+												</li>
+											</ul>
+										</div>
+                                    </div>
+
+									<div class="form-group col-md-12">
+                                        <label class="mb-2 fs-5">Kids Friendly</label>
+                                        <div class="o-features">
+											<ul class="no-ul-list third-row">
+												{% set kids_friendly = user.get('properties', {}).get('kids_friendly', []) %}
+
+												<li>
+													<input id="c-1" class="form-check-input" name="kids_friendly" value="Air Condition" type="checkbox" {% if 'Air Condition' in kids_friendly %}checked{% endif %}>
+													<label for="c-1" class="form-check-label">Air Condition</label>
+												</li>
+												<li>
+													<input id="c-2" class="form-check-input" name="kids_friendly" value="Bedding" type="checkbox" {% if 'Bedding' in kids_friendly %}checked{% endif %}>
+													<label for="c-2" class="form-check-label">Bedding</label>
+												</li>
+												<li>
+													<input id="c-3" class="form-check-input" name="kids_friendly" value="Heating" type="checkbox" {% if 'Heating' in kids_friendly %}checked{% endif %}>
+													<label for="c-3" class="form-check-label">Heating</label>
+												</li>
+												<li>
+													<input id="c-4" class="form-check-input" name="kids_friendly" value="Internet" type="checkbox" {% if 'Internet' in kids_friendly %}checked{% endif %}>
+													<label for="c-4" class="form-check-label">Internet</label>
+												</li>
+												<li>
+													<input id="c-5" class="form-check-input" name="kids_friendly" value="Microwave" type="checkbox" {% if 'Microwave' in kids_friendly %}checked{% endif %}>
+													<label for="c-5" class="form-check-label">Microwave</label>
+												</li>
+												<li>
+													<input id="c-6" class="form-check-input" name="kids_friendly" value="Smoking Allow" type="checkbox" {% if 'Smoking Allow' in kids_friendly %}checked{% endif %}>
+													<label for="c-6" class="form-check-label">Smoking Allow</label>
+												</li>
+												<li>
+													<input id="c-7" class="form-check-input" name="kids_friendly" value="Terrace" type="checkbox" {% if 'Terrace' in kids_friendly %}checked{% endif %}>
+													<label for="c-7" class="form-check-label">Terrace</label>
+												</li>
+												<li>
+													<input id="c-8" class="form-check-input" name="kids_friendly" value="Balcony" type="checkbox" {% if 'Balcony' in kids_friendly %}checked{% endif %}>
+													<label for="c-8" class="form-check-label">Balcony</label>
+												</li>
+												<li>
+													<input id="c-9" class="form-check-input" name="kids_friendly" value="Icon" type="checkbox" {% if 'Icon' in kids_friendly %}checked{% endif %}>
+													<label for="c-9" class="form-check-label">Icon</label>
+												</li>
+												<li>
+													<input id="c-10" class="form-check-input" name="kids_friendly" value="Wi-Fi" type="checkbox" {% if 'Wi-Fi' in kids_friendly %}checked{% endif %}>
+													<label for="c-10" class="form-check-label">Wi-Fi</label>
+												</li>
+												<li>
+													<input id="c-11" class="form-check-input" name="kids_friendly" value="Beach" type="checkbox" {% if 'Beach' in kids_friendly %}checked{% endif %}>
+													<label for="c-11" class="form-check-label">Beach</label>
+												</li>
+												<li>
+													<input id="c-12" class="form-check-input" name="kids_friendly" value="Parking" type="checkbox" {% if 'Parking' in kids_friendly %}checked{% endif %}>
+													<label for="c-12" class="form-check-label">Parking</label>
+												</li>
+											</ul>
+										</div>
+                                    </div>
+									
+									<div class="form-group col-md-12">
+                                        <label class="mb-2 fs-5">Eco-friendly Amenities</label>
+                                        <div class="o-features">
+											<ul class="no-ul-list third-row">
+												{% set eco_friendly_amenities = user.get('properties', {}).get('eco_friendly_amenities', []) %}
+
+												<li>
+													<input id="d-1" class="form-check-input" name="eco_friendly_amenities" value="Air Condition" type="checkbox" {% if 'Air Condition' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-1" class="form-check-label">Air Condition</label>
+												</li>
+												<li>
+													<input id="d-2" class="form-check-input" name="eco_friendly_amenities" value="Bedding" type="checkbox" {% if 'Bedding' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-2" class="form-check-label">Bedding</label>
+												</li>
+												<li>
+													<input id="d-3" class="form-check-input" name="eco_friendly_amenities" value="Heating" type="checkbox" {% if 'Heating' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-3" class="form-check-label">Heating</label>
+												</li>
+												<li>
+													<input id="d-4" class="form-check-input" name="eco_friendly_amenities" value="Internet" type="checkbox" {% if 'Internet' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-4" class="form-check-label">Internet</label>
+												</li>
+												<li>
+													<input id="d-5" class="form-check-input" name="eco_friendly_amenities" value="Microwave" type="checkbox" {% if 'Microwave' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-5" class="form-check-label">Microwave</label>
+												</li>
+												<li>
+													<input id="d-6" class="form-check-input" name="eco_friendly_amenities" value="Smoking Allow" type="checkbox" {% if 'Smoking Allow' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-6" class="form-check-label">Smoking Allow</label>
+												</li>
+												<li>
+													<input id="d-7" class="form-check-input" name="eco_friendly_amenities" value="Terrace" type="checkbox" {% if 'Terrace' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-7" class="form-check-label">Terrace</label>
+												</li>
+												<li>
+													<input id="d-8" class="form-check-input" name="eco_friendly_amenities" value="Balcony" type="checkbox" {% if 'Balcony' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-8" class="form-check-label">Balcony</label>
+												</li>
+												<li>
+													<input id="d-9" class="form-check-input" name="eco_friendly_amenities" value="Icon" type="checkbox" {% if 'Icon' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-9" class="form-check-label">Icon</label>
+												</li>
+												<li>
+													<input id="d-10" class="form-check-input" name="eco_friendly_amenities" value="Wi-Fi" type="checkbox" {% if 'Wi-Fi' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-10" class="form-check-label">Wi-Fi</label>
+												</li>
+												<li>
+													<input id="d-11" class="form-check-input" name="eco_friendly_amenities" value="Beach" type="checkbox" {% if 'Beach' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-11" class="form-check-label">Beach</label>
+												</li>
+												<li>
+													<input id="d-12" class="form-check-input" name="eco_friendly_amenities" value="Parking" type="checkbox" {% if 'Parking' in eco_friendly_amenities %}checked{% endif %}>
+													<label for="d-12" class="form-check-label">Parking</label>
+												</li>
+											</ul>
+										</div>
+                                    </div>
+
+									<div class="form-group col-md-12">
+                                        <label class="mb-2 fs-5">House Rules</label>
+                                        <div class="o-features">
+											<ul class="no-ul-list third-row">
+												{% set house_rules = user.get('properties', {}).get('house_rules', []) %}
+
+												<li>
+													<input id="e-1" class="form-check-input" name="house_rules" value="Air Condition" type="checkbox" {% if 'Air Condition' in house_rules %}checked{% endif %}>
+													<label for="e-1" class="form-check-label">Air Condition</label>
+												</li>
+												<li>
+													<input id="e-2" class="form-check-input" name="house_rules" value="Bedding" type="checkbox" {% if 'Bedding' in house_rules %}checked{% endif %}>
+													<label for="e-2" class="form-check-label">Bedding</label>
+												</li>
+												<li>
+													<input id="e-3" class="form-check-input" name="house_rules" value="Heating" type="checkbox" {% if 'Heating' in house_rules %}checked{% endif %}>
+													<label for="e-3" class="form-check-label">Heating</label>
+												</li>
+												<li>
+													<input id="e-4" class="form-check-input" name="house_rules" value="Internet" type="checkbox" {% if 'Internet' in house_rules %}checked{% endif %}>
+													<label for="e-4" class="form-check-label">Internet</label>
+												</li>
+												<li>
+													<input id="e-5" class="form-check-input" name="house_rules" value="Microwave" type="checkbox" {% if 'Microwave' in house_rules %}checked{% endif %}>
+													<label for="e-5" class="form-check-label">Microwave</label>
+												</li>
+												<li>
+													<input id="e-6" class="form-check-input" name="house_rules" value="Smoking Allow" type="checkbox" {% if 'Smoking Allow' in house_rules %}checked{% endif %}>
+													<label for="e-6" class="form-check-label">Smoking Allow</label>
+												</li>
+												<li>
+													<input id="e-7" class="form-check-input" name="house_rules" value="Terrace" type="checkbox" {% if 'Terrace' in house_rules %}checked{% endif %}>
+													<label for="e-7" class="form-check-label">Terrace</label>
+												</li>
+												<li>
+													<input id="e-8" class="form-check-input" name="house_rules" value="Balcony" type="checkbox" {% if 'Balcony' in house_rules %}checked{% endif %}>
+													<label for="e-8" class="form-check-label">Balcony</label>
+												</li>
+												<li>
+													<input id="e-9" class="form-check-input" name="house_rules" value="Icon" type="checkbox" {% if 'Icon' in house_rules %}checked{% endif %}>
+													<label for="e-9" class="form-check-label">Icon</label>
+												</li>
+												<li>
+													<input id="e-10" class="form-check-input" name="house_rules" value="Wi-Fi" type="checkbox" {% if 'Wi-Fi' in house_rules %}checked{% endif %}>
+													<label for="e-10" class="form-check-label">Wi-Fi</label>
+												</li>
+												<li>
+													<input id="e-11" class="form-check-input" name="house_rules" value="Beach" type="checkbox" {% if 'Beach' in house_rules %}checked{% endif %}>
+													<label for="e-11" class="form-check-label">Beach</label>
+												</li>
+												<li>
+													<input id="e-12" class="form-check-input" name="house_rules" value="Parking" type="checkbox" {% if 'Parking' in house_rules %}checked{% endif %}>
+													<label for="e-12" class="form-check-label">Parking</label>
+												</li>
+											</ul>
+										</div>
+                                    </div>
+
+									<div class="form-group col-md-12">
+                                        <label class="mb-2 fs-5">Remote Friendly</label>
+                                        <div class="o-features">
+											<ul class="no-ul-list third-row">
+												{% set remote_friendly = user.get('properties', {}).get('remote_friendly', []) %}
+
+												<li>
+													<input id="f-1" class="form-check-input" name="remote_friendly" value="Air Condition" type="checkbox" {% if 'Air Condition' in remote_friendly %}checked{% endif %}>
+													<label for="f-1" class="form-check-label">Air Condition</label>
+												</li>
+												<li>
+													<input id="f-2" class="form-check-input" name="remote_friendly" value="Bedding" type="checkbox" {% if 'Bedding' in remote_friendly %}checked{% endif %}>
+													<label for="f-2" class="form-check-label">Bedding</label>
+												</li>
+												<li>
+													<input id="f-3" class="form-check-input" name="remote_friendly" value="Heating" type="checkbox" {% if 'Heating' in remote_friendly %}checked{% endif %}>
+													<label for="f-3" class="form-check-label">Heating</label>
+												</li>
+												<li>
+													<input id="f-4" class="form-check-input" name="remote_friendly" value="Internet" type="checkbox" {% if 'Internet' in remote_friendly %}checked{% endif %}>
+													<label for="f-4" class="form-check-label">Internet</label>
+												</li>
+												<li>
+													<input id="f-5" class="form-check-input" name="remote_friendly" value="Microwave" type="checkbox" {% if 'Microwave' in remote_friendly %}checked{% endif %}>
+													<label for="f-5" class="form-check-label">Microwave</label>
+												</li>
+												<li>
+													<input id="f-6" class="form-check-input" name="remote_friendly" value="Smoking Allow" type="checkbox" {% if 'Smoking Allow' in remote_friendly %}checked{% endif %}>
+													<label for="f-6" class="form-check-label">Smoking Allow</label>
+												</li>
+												<li>
+													<input id="f-7" class="form-check-input" name="remote_friendly" value="Terrace" type="checkbox" {% if 'Terrace' in remote_friendly %}checked{% endif %}>
+													<label for="f-7" class="form-check-label">Terrace</label>
+												</li>
+												<li>
+													<input id="f-8" class="form-check-input" name="remote_friendly" value="Balcony" type="checkbox" {% if 'Balcony' in remote_friendly %}checked{% endif %}>
+													<label for="f-8" class="form-check-label">Balcony</label>
+												</li>
+												<li>
+													<input id="f-9" class="form-check-input" name="remote_friendly" value="Icon" type="checkbox" {% if 'Icon' in remote_friendly %}checked{% endif %}>
+													<label for="f-9" class="form-check-label">Icon</label>
+												</li>
+												<li>
+													<input id="f-10" class="form-check-input" name="remote_friendly" value="Wi-Fi" type="checkbox" {% if 'Wi-Fi' in remote_friendly %}checked{% endif %}>
+													<label for="f-10" class="form-check-label">Wi-Fi</label>
+												</li>
+												<li>
+													<input id="f-11" class="form-check-input" name="remote_friendly" value="Beach" type="checkbox" {% if 'Beach' in remote_friendly %}checked{% endif %}>
+													<label for="f-11" class="form-check-label">Beach</label>
+												</li>
+												<li>
+													<input id="f-12" class="form-check-input" name="remote_friendly" value="Parking" type="checkbox" {% if 'Parking' in remote_friendly %}checked{% endif %}>
+													<label for="f-12" class="form-check-label">Parking</label>
+												</li>
+											</ul>
+										</div>
+                                    </div>
 								</div>
 							</div>
 						</div>

@@ -20,7 +20,7 @@
 <section class="bg-light">
     <div class="container">
 
-        {% if not email_verified %}
+        {% if user.email_verified != 'Verified' %}
         <div class="text-center p-2 mb-3 rounded bg-white " >
             <p class="text-black mb-0">
                 Your email is not verified, <a href="{{ url_for('resend_verification_email') }}" class="text-danger"> click here </a> to verify now.

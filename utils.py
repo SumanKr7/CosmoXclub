@@ -121,21 +121,21 @@ def is_valid_title(title: str) -> bool:
     """Property title: 5-100 chars, letters, numbers, spaces, punctuation."""
     return bool(re.fullmatch(r"[\w\s.,'\"()\-]{5,100}", title))
 
-def is_valid_status(status: str) -> bool:
-    """Status: Must be 'For Rent' or 'For Sale'."""
-    return status in ['For Rent', 'For Sale']
+def is_valid_location_type(location_type: str) -> bool:
+    """Location Type: Must be 'For Rent' or 'For Sale'."""
+    return location_type in ['For Rent', 'For Sale']
 
 def is_valid_property_type(property_type: str) -> bool:
     """Property type: Must be one of the predefined types."""
-    return property_type in ['Houses', 'Apartment', 'Villas', 'Commercial', 'Offices', 'Garage']
+    return property_type in ['Houses', 'Apartment', 'Villas', 'Commercial', 'Offices']
 
-def is_valid_price(price: str) -> bool:
-    """Price: Digits only, optional commas and decimals."""
-    return bool(re.fullmatch(r"\d{1,3}(,\d{3})*(\.\d{1,2})?$|^\d+(\.\d{1,2})?$", price))
+def is_valid_guest_capacity(guest_capacity: str) -> bool:
+    """Guest Capacity: Digits only, optional commas and decimals."""
+    return bool(re.fullmatch(r"\d{1,3}(,\d{3})*(\.\d{1,2})?$|^\d+(\.\d{1,2})?$", guest_capacity))
 
-def is_valid_area(area: str) -> bool:
-    """Area in square feet: positive number."""
-    return bool(re.fullmatch(r"^\d+(\.\d{1,2})?$", area))
+def is_valid_size(size: str) -> bool:
+    """size in square feet: positive number."""
+    return bool(re.fullmatch(r"^\d+(\.\d{1,2})?$", size))
 
 def is_valid_bedrooms(bedrooms: str) -> bool:
     """Bedrooms: Must be 1 to 5."""
@@ -150,25 +150,53 @@ def is_valid_description(description: str) -> bool:
     desc = description.strip()
     return 1 <= len(desc) <= 1000
 
-def is_valid_building_age(building_age: str) -> bool:
-    """Building age: Must match allowed options."""
-    return building_age in ['0-5', '0-10', '0-15', '0-20', '20+', '']
-
-def is_valid_garage(garage: str) -> bool:
-    """Garage: 1-5 or empty."""
-    return garage in ['1', '2', '3', '4', '5', '']
-
-def is_valid_rooms(rooms: str) -> bool:
-    """Rooms: 1-5 or empty."""
-    return rooms in ['1', '2', '3', '4', '5', '']
-
-def is_valid_features(features: list[str]) -> bool:
-    """Features: all items must be from allowed list."""
+def is_valid_amenities(amenities: list[str]) -> bool:
+    """Amenities: all items must be from allowed list."""
     allowed = {
         "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
         "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
     }
-    return all(f in allowed for f in features)
+    return all(f in allowed for f in amenities)
+
+def is_valid_unique_facilities(unique_facilities: list[str]) -> bool:
+    """Unique Facilities: all items must be from allowed list."""
+    allowed = {
+        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
+        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+    }
+    return all(f in allowed for f in unique_facilities)
+
+def is_valid_kids_friendly(kids_friendly: list[str]) -> bool:
+    """Unique Facilities: all items must be from allowed list."""
+    allowed = {
+        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
+        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+    }
+    return all(f in allowed for f in kids_friendly)
+
+def is_valid_eco_friendly_amenities(eco_friendly_amenities: list[str]) -> bool:
+    """Unique Facilities: all items must be from allowed list."""
+    allowed = {
+        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
+        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+    }
+    return all(f in allowed for f in eco_friendly_amenities)
+
+def is_valid_house_rules(house_rules: list[str]) -> bool:
+    """House Rules: all items must be from allowed list."""
+    allowed = {
+        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
+        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+    }
+    return all(f in allowed for f in house_rules)
+
+def is_valid_remote_friendly(remote_friendly: list[str]) -> bool:
+    """Unique Facilities: all items must be from allowed list."""
+    allowed = {
+        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
+        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+    }
+    return all(f in allowed for f in remote_friendly)
 
 # My Account Profile Details and Image Upload
 
@@ -269,10 +297,10 @@ def _update_profile_details(uid):
 def collect_property_form_data(form: "Request.form") -> Dict[str, Any]:
     field_map = {
         "title"          : "title",
-        "status"         : "status",
+        "location_type"  : "location_type",
         "property_type"  : "property_type",
-        "price"          : "price",
-        "area"           : "area",
+        "guest_capacity" : "guest_capacity",
+        "size"           : "size",
         "bedrooms"       : "bedrooms",
         "bathrooms"      : "bathrooms",
         "address"        : "address",
@@ -280,9 +308,6 @@ def collect_property_form_data(form: "Request.form") -> Dict[str, Any]:
         "state"          : "state",
         "pincode"        : "pin_code",
         "description"    : "description",
-        "building_age"   : "building_age",
-        "garage"         : "garage",
-        "rooms"          : "rooms",
         "contact_name"   : "name",
         "contact_email"  : "email",
         "contact_phone"  : "phone",
@@ -292,7 +317,12 @@ def collect_property_form_data(form: "Request.form") -> Dict[str, Any]:
         dst: form.get(src, "").strip()
         for src, dst in field_map.items()
     }
-    data["features"] = form.getlist("features")
+    data["amenities"] = form.getlist("amenities")
+    data["unique_facilities"] = form.getlist("unique_facilities")
+    data["kids_friendly"] = form.getlist("kids_friendly")
+    data["eco_friendly_amenities"] = form.getlist("eco_friendly_amenities")
+    data["house_rules"] = form.getlist("house_rules")
+    data["remote_friendly"] = form.getlist("remote_friendly")
     return data
 
 
@@ -301,10 +331,10 @@ def validate_property_form(data: Dict[str, Any]) -> Tuple[bool, Dict[str, str]]:
 
     rules = {
         "title"          : (is_valid_title,        "Title must be 5-100 characters, valid punctuation allowed."),
-        "status"         : (is_valid_status,       "Status must be 'For Sale' or 'For Rent'."),
+        "location_type"  : (is_valid_location_type,"Location type must be 'For Sale' or 'For Rent'."),
         "property_type"  : (is_valid_property_type,"Choose a valid property type."),
-        "price"          : (is_valid_price,        "Enter a valid price (e.g., 100000 or 1,00,000.00)."),
-        "area"           : (is_valid_area,         "Area must be a positive number (e.g., 1200.50)."),
+        "guest_capacity" : (is_valid_guest_capacity,"Enter a valid guest capacity (e.g., 100000 or 1,00,000.00)."),
+        "size"           : (is_valid_size,         "size must be a positive number (e.g., 1200.50)."),
         "bedrooms"       : (is_valid_bedrooms,     "Bedrooms must be between 1 and 5."),
         "bathrooms"      : (is_valid_bathrooms,    "Bathrooms must be between 1 and 5."),
         "address"        : (is_valid_address,      "Address must be 5-120 characters, letters, numbers, punctuation allowed."),
@@ -312,10 +342,12 @@ def validate_property_form(data: Dict[str, Any]) -> Tuple[bool, Dict[str, str]]:
         "state"          : (is_valid_state,        "State can contain only letters & spaces (2-50 chars)."),
         "pin_code"       : (is_valid_pin_code,     "PIN code must be a valid 6-digit Indian postal code."),
         "description"    : (is_valid_description,  "Description must be 1-1000 characters."),
-        "building_age"   : (is_valid_building_age, "Select a valid building age."),
-        "garage"         : (is_valid_garage,       "Garage must be between 1-5 or left empty."),
-        "rooms"          : (is_valid_rooms,        "Rooms must be between 1-5 or left empty."),
-        "features"       : (is_valid_features,     "One or more selected features are invalid."),
+        "amenities"      : (is_valid_amenities,     "One or more selected amenities are invalid."),
+        "unique_facilities": (is_valid_unique_facilities, "One or more selected unique facilities are invalid."),
+        "kids_friendly"  : (is_valid_kids_friendly, "One or more selected kids friendly are invalid."),
+        "eco_friendly_amenities"  : (is_valid_eco_friendly_amenities, "One or more selected kids friendly are invalid."),
+        "house_rules"      : (is_valid_house_rules,     "One or more selected amenities are invalid."),
+        "remote_friendly"      : (is_valid_remote_friendly,     "One or more selected amenities are invalid."),
         "name"           : (is_valid_name,         "Name must contain only letters and spaces (min 2 chars)."),
         "email"          : (is_valid_email,        "Please enter a valid email address."),
         "phone"          : (is_valid_phone,        "Phone number must be 10-15 digits with optional '+' sign."),
@@ -323,9 +355,9 @@ def validate_property_form(data: Dict[str, Any]) -> Tuple[bool, Dict[str, str]]:
 
     for field, (validator, msg) in rules.items():
         value = data.get(field, "")
-        if field == "features" and not validator(value):
+        if field in ["amenities", "unique_facilities", "kids_friendly", "eco_friendly_amenities", "house_rules", "remote_friendly"] and not validator(value):
             errors[field] = msg
-        elif field != "features" and not validator(str(value).strip()):
+        elif field not in ["amenities", "unique_facilities", "kids_friendly", "eco_friendly_amenities", "house_rules", "remote_friendly"] and not validator(str(value).strip()):
             errors[field] = msg
 
     return (not errors), errors

@@ -459,12 +459,15 @@ def my_account():
 def my_home():
     if 'user' not in session:
         return redirect(url_for('home'))
-
-    if not is_email_verified():
-        flash("Please verify your email before adding home details.", "light")
-        return redirect(url_for('my_account'))
     
     uid = session['user']
+
+    user_email_verified = admin_db.reference(f'users/{uid}/email_verified').get()
+
+    if user_email_verified != "Verified":
+        flash("Please verify your email before adding home details.", "light")
+        return redirect(url_for('my_account'))
+
 
     if request.method == 'POST':
         try:
@@ -489,13 +492,15 @@ def edit_home_details():
     if 'user' not in session:
         return redirect(url_for('home'))
     
-    if not is_email_verified():
-        flash("Please verify your email before editing home details.", "light")
+    uid = session['user']
+
+    user_email_verified = admin_db.reference(f'users/{uid}/email_verified').get()
+
+    if user_email_verified != "Verified":
+        flash("Please verify your email before adding home details.", "light")
         return redirect(url_for('my_account'))
 
     try:
-        uid = session['user']
-
         if request.method == 'POST':
             data = collect_property_form_data(request.form)
 
@@ -507,10 +512,11 @@ def edit_home_details():
             data["submitted_at"] = time
 
             required = [
-                "title", "status", "property_type", "price", "area",
+                "title", "location_type", "property_type", "guest_capacity", "size",
                 "bedrooms", "bathrooms", "address", "city", "state",
-                "pin_code", "description", "building_age", "garage",
-                "rooms", "features", "name", "email", "phone"
+                "pin_code", "description", "amenities", "unique_facilities",
+                "kids_friendly", "eco_friendly_amenities", "house_rules",
+                "remote_friendly", "name", "email", "phone"
             ]
             if any(data[k] == "" or data[k] == [] for k in required):
                 flash("Please fill out every field.", "light")
@@ -534,6 +540,7 @@ def edit_home_details():
                 return redirect(url_for('edit_home_details'))
 
             except Exception as e:
+
                 flash("An error occurred while submitting your home details. Please try again later.", "light")
                 return redirect(request.url)
 
@@ -548,12 +555,16 @@ def update_home_images():
     if 'user' not in session:
         return redirect(url_for('home'))
     
-    if not is_email_verified():
-        flash("Please verify your email before adding home images.", "light")
+    uid = session['user']
+
+    user_email_verified = admin_db.reference(f'users/{uid}/email_verified').get()
+
+    if user_email_verified != "Verified":
+        flash("Please verify your email before adding home details.", "light")
         return redirect(url_for('my_account'))
+
     
     try:
-        uid = session['user']
         if request.method == "POST":
             return homes_images(uid)
         
@@ -567,10 +578,14 @@ def my_house_view(uid):
     if 'user' not in session:
         return redirect(url_for('home'))
     
-    if not is_email_verified():
-        flash("Please verify your email before viewing home details.", "light")
+    uid = session['user']
+
+    user_email_verified = admin_db.reference(f'users/{uid}/email_verified').get()
+
+    if user_email_verified != "Verified":
+        flash("Please verify your email before adding home details.", "light")
         return redirect(url_for('my_account'))
-    
+
     try:
         one_properties = all_users_properties_admin()
         house_details  = one_properties.get(uid)
@@ -809,10 +824,11 @@ def admin_edit_home_details1(uid):
             data["submitted_at"] = time
 
             required = [
-                "title", "status", "property_type", "price", "area",
+                "title", "location_type", "property_type", "guest_capacity", "size",
                 "bedrooms", "bathrooms", "address", "city", "state",
-                "pin_code", "description", "building_age", "garage",
-                "rooms", "features", "name", "email", "phone"
+                "pin_code", "description", "amenities", "unique_facilities",
+                "kids_friendly", "eco_friendly_amenities", "house_rules",
+                "remote_friendly", "name", "email", "phone"
             ]
             if any(data[k] == "" or data[k] == [] for k in required):
                 flash("Please fill out every field.", "light")

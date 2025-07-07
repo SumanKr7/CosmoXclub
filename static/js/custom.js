@@ -533,24 +533,6 @@
 		allowClear: true
 	});
 
-	// Select Rooms
-	$('#rooms').select2({
-		placeholder: "Choose Rooms",
-		allowClear: true
-	});
-
-	// Select Garage
-	$('#garage').select2({
-		placeholder: "Choose Rooms",
-		allowClear: true
-	});
-
-	// Select Rooms
-	$('#building_age').select2({
-		placeholder: "Select An Option",
-		allowClear: true
-	});
-
 	// Choose Ratting
 	$('#ratting').select2({
 		placeholder: "Choose Ratting",
