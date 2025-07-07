@@ -514,9 +514,7 @@ def edit_home_details():
             required = [
                 "title", "location_type", "property_type", "guest_capacity", "size",
                 "bedrooms", "bathrooms", "address", "city", "state",
-                "pin_code", "description", "amenities", "unique_facilities",
-                "kids_friendly", "eco_friendly_amenities", "house_rules",
-                "remote_friendly", "name", "email", "phone"
+                "pin_code", "description", "name", "email", "phone"
             ]
             if any(data[k] == "" or data[k] == [] for k in required):
                 flash("Please fill out every field.", "light")
@@ -547,6 +545,7 @@ def edit_home_details():
         return render_template("edit-home-details.html")
     
     except Exception as e:
+        print(e)
         flash("An unexpected error occurred while submitting your home details.", "light")
         return render_template("503.html"), 503
 

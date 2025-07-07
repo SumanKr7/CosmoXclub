@@ -153,48 +153,45 @@ def is_valid_description(description: str) -> bool:
 def is_valid_amenities(amenities: list[str]) -> bool:
     """Amenities: all items must be from allowed list."""
     allowed = {
-        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
-        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+        "Air Condition", "Refrigerator", "Microwave Oven", "Heating System", "Washing Machine",
+        "Wifi", "Smart TV", "Dishwasher", "Induction", "Bathtub", "Phone"
     }
     return all(f in allowed for f in amenities)
 
 def is_valid_unique_facilities(unique_facilities: list[str]) -> bool:
     """Unique Facilities: all items must be from allowed list."""
     allowed = {
-        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
-        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+        "Private Backyard", "Balcony / Terrace", "BBQ", "Pool", "Bicycle",
+        "Cleaning Person", "Private Parking", "Fire Place", "Private Gym", "Elevator", "Guide"
     }
     return all(f in allowed for f in unique_facilities)
 
 def is_valid_kids_friendly(kids_friendly: list[str]) -> bool:
     """Unique Facilities: all items must be from allowed list."""
     allowed = {
-        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
-        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+        "Kids Playground", "Baby Gear", "Secured Pool", "Kids Toy"
     }
     return all(f in allowed for f in kids_friendly)
 
 def is_valid_eco_friendly_amenities(eco_friendly_amenities: list[str]) -> bool:
     """Unique Facilities: all items must be from allowed list."""
     allowed = {
-        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
-        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+        "Selective Waste Sorting", "Public Transport Access", "Vegitable Garden",
+        "Renewable Energy Provider"
     }
     return all(f in allowed for f in eco_friendly_amenities)
 
 def is_valid_house_rules(house_rules: list[str]) -> bool:
     """House Rules: all items must be from allowed list."""
     allowed = {
-        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
-        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+        "Children Welcome", "Pets Welcome", "Plants to Water"
     }
     return all(f in allowed for f in house_rules)
 
 def is_valid_remote_friendly(remote_friendly: list[str]) -> bool:
     """Unique Facilities: all items must be from allowed list."""
     allowed = {
-        "Air Condition", "Bedding", "Heating", "Internet", "Microwave",
-        "Smoking Allow", "Terrace", "Balcony", "Icon", "Wi-Fi", "Beach", "Parking"
+        "Dedicated Work Space", "High Speed Internet"
     }
     return all(f in allowed for f in remote_friendly)
 

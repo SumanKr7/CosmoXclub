@@ -5143,7 +5143,7 @@ ul:last-child {
 	width: 100%;
 	margin-bottom: 15px;
 	flex-wrap: wrap;
-	justify-content: center;
+	/* justify-content: center; */
 	align-items: center;
 }
 
