@@ -72,11 +72,11 @@
 										<select id="property_type" name="property_type" class="form-control">
 											{% set property_type = user.get('properties', {}).get('property_type', '') %}
 											<option value="" disabled {% if not property_type %}selected{% endif %}>&nbsp;</option>
-											<option value="Houses" {% if property_type == 'Houses' %}selected{% endif %}>Houses</option>
-											<option value="Apartment" {% if property_type == 'Apartment' %}selected{% endif %}>Apartment</option>
+											<option value="Bungalow" {% if property_type == 'Bungalow' %}selected{% endif %}>Bungalow</option>
+											<option value="Townhome" {% if property_type == 'Townhome' %}selected{% endif %}>Townhome</option>
 											<option value="Villas" {% if property_type == 'Villas' %}selected{% endif %}>Villas</option>
-											<option value="Commercial" {% if property_type == 'Commercial' %}selected{% endif %}>Commercial</option>
-											<option value="Offices" {% if property_type == 'Offices' %}selected{% endif %}>Offices</option>
+											<option value="Farmhouse" {% if property_type == 'Farmhouse' %}selected{% endif %}>Farmhouse</option>
+											<option value="Apartment" {% if property_type == 'Apartment' %}selected{% endif %}>Apartment</option>
 										</select>
 									</div>
 
@@ -84,17 +84,26 @@
 										<label class="mb-2" for="location_type">Location Type</label>
 										<select id="location_type" name="location_type" class="form-control">
 											{% set location_type = user.get('properties', {}).get('location_type', '') %}
-											<option value="" disabled {% if not location_type %}selected{% endif %}>&nbsp;</option>
-											<option value="For Rent" {% if location_type == 'For Rent' %}selected{% endif %}>For Rent</option>
-											<option value="For Sale" {% if location_type == 'For Sale' %}selected{% endif %}>For Sale</option>
+\											<option value="" disabled {% if not location_type %}selected{% endif %}>&nbsp;</option>
+											<option value="Mountain" {% if location_type == 'Mountain' %}selected{% endif %}>Mountain</option>
+											<option value="Beach" {% if location_type == 'Beach' %}selected{% endif %}>Beach</option>
+											<option value="City" {% if location_type == 'City' %}selected{% endif %}>City</option>
+											<option value="Wildlife Area" {% if location_type == 'Wildlife Area' %}selected{% endif %}>Wildlife Area</option>
 										</select>
 
 									</div>
 
 									<div class="form-group col-md-6">
 										<label class="mb-2" for="guest_capacity">Guest Capacity</label>
-										<input type="text" id="guest_capacity" name="guest_capacity" class="form-control" placeholder="Guest Capacity"
-											value="{{ user.get('properties', {}).get('guest_capacity', '') }}">
+										<select id="guest_capacity" name="guest_capacity" class="form-control">
+											{% set guest_capacity = user.get('properties', {}).get('guest_capacity', '') %}
+											<option value="" disabled {% if not guest_capacity %}selected{% endif %}>&nbsp;</option>
+											<option value="1" {% if guest_capacity == '1' %}selected{% endif %}>1</option>
+											<option value="2" {% if guest_capacity == '2' %}selected{% endif %}>2</option>
+											<option value="3" {% if guest_capacity == '3' %}selected{% endif %}>3</option>
+											<option value="4" {% if guest_capacity == '4' %}selected{% endif %}>4</option>
+											<option value="5" {% if guest_capacity == '5' %}selected{% endif %}>5</option>
+										</select>
 									</div>
 									
 									<div class="form-group col-md-6">
@@ -114,7 +123,6 @@
 											<option value="4" {% if bedrooms == '4' %}selected{% endif %}>4</option>
 											<option value="5" {% if bedrooms == '5' %}selected{% endif %}>5</option>
 										</select>
-
 									</div>
 									
 									<div class="form-group col-md-6">

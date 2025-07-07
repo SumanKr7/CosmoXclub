@@ -456,22 +456,22 @@
 	});
 
 	// Select Bedrooms
-	$('#bedrooms').select2({
-		placeholder: "Bedrooms",
-		allowClear: true
-	});
+	// $('#bedrooms').select2({
+	// 	placeholder: "Bedrooms",
+	// 	allowClear: true
+	// });
 
 	// Select Bathrooms
-	$('#bathrooms').select2({
-		placeholder: "Bathrooms",
-		allowClear: true
-	});
+	// $('#bathrooms').select2({
+	// 	placeholder: "Bathrooms",
+	// 	allowClear: true
+	// });
 
 	// Select Property Types
-	$('#property_type').select2({
-		placeholder: "Show All",
-		allowClear: true
-	});
+	// $('#property_type').select2({
+	// 	placeholder: "Show All",
+	// 	allowClear: true
+	// });
 
 	// Select Property Types
 	$('#status').select2({

@@ -122,12 +122,12 @@ def is_valid_title(title: str) -> bool:
     return bool(re.fullmatch(r"[\w\s.,'\"()\-]{5,100}", title))
 
 def is_valid_location_type(location_type: str) -> bool:
-    """Location Type: Must be 'For Rent' or 'For Sale'."""
-    return location_type in ['For Rent', 'For Sale']
+    """Location Type"""
+    return location_type in ['Mountain', 'Beach', 'City', 'Wildlife Area']
 
 def is_valid_property_type(property_type: str) -> bool:
     """Property type: Must be one of the predefined types."""
-    return property_type in ['Houses', 'Apartment', 'Villas', 'Commercial', 'Offices']
+    return property_type in ['Bungalow', 'Townhome', 'Villas', 'Farmhouse', 'Apartment']
 
 def is_valid_guest_capacity(guest_capacity: str) -> bool:
     """Guest Capacity: Digits only, optional commas and decimals."""
@@ -154,7 +154,7 @@ def is_valid_amenities(amenities: list[str]) -> bool:
     """Amenities: all items must be from allowed list."""
     allowed = {
         "Air Condition", "Refrigerator", "Microwave Oven", "Heating System", "Washing Machine",
-        "Wifi", "Smart TV", "Dishwasher", "Induction", "Bathtub", "Phone"
+        "Wifi", "Smart TV", "Dishwasher", "Induction", "kettle", "Bathtub"
     }
     return all(f in allowed for f in amenities)
 
