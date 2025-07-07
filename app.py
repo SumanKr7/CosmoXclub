@@ -562,7 +562,6 @@ def update_home_images():
         flash("Please verify your email before adding home details.", "light")
         return redirect(url_for('my_account'))
 
-    
     try:
         if request.method == "POST":
             return homes_images(uid)

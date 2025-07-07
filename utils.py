@@ -131,7 +131,7 @@ def is_valid_property_type(property_type: str) -> bool:
 
 def is_valid_guest_capacity(guest_capacity: str) -> bool:
     """Guest Capacity: Digits only, optional commas and decimals."""
-    return bool(re.fullmatch(r"\d{1,3}(,\d{3})*(\.\d{1,2})?$|^\d+(\.\d{1,2})?$", guest_capacity))
+    return guest_capacity in ['1', '2', '3', '4', '5']
 
 def is_valid_size(size: str) -> bool:
     """size in square feet: positive number."""

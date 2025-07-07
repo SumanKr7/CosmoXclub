@@ -71,7 +71,7 @@
 										<label class="mb-2" for="property_type">Home Type</label>
 										<select id="property_type" name="property_type" class="form-control">
 											{% set property_type = user.get('properties', {}).get('property_type', '') %}
-											<option value="" disabled {% if not property_type %}selected{% endif %}>&nbsp;</option>
+											<option value="" disabled {% if not property_type %}selected{% endif %}>Select Home Type</option>
 											<option value="Bungalow" {% if property_type == 'Bungalow' %}selected{% endif %}>Bungalow</option>
 											<option value="Townhome" {% if property_type == 'Townhome' %}selected{% endif %}>Townhome</option>
 											<option value="Villas" {% if property_type == 'Villas' %}selected{% endif %}>Villas</option>
@@ -84,7 +84,7 @@
 										<label class="mb-2" for="location_type">Location Type</label>
 										<select id="location_type" name="location_type" class="form-control">
 											{% set location_type = user.get('properties', {}).get('location_type', '') %}
-\											<option value="" disabled {% if not location_type %}selected{% endif %}>&nbsp;</option>
+\											<option value="" disabled {% if not location_type %}selected{% endif %}>Select Location Type</option>
 											<option value="Mountain" {% if location_type == 'Mountain' %}selected{% endif %}>Mountain</option>
 											<option value="Beach" {% if location_type == 'Beach' %}selected{% endif %}>Beach</option>
 											<option value="City" {% if location_type == 'City' %}selected{% endif %}>City</option>
@@ -97,7 +97,7 @@
 										<label class="mb-2" for="guest_capacity">Guest Capacity</label>
 										<select id="guest_capacity" name="guest_capacity" class="form-control">
 											{% set guest_capacity = user.get('properties', {}).get('guest_capacity', '') %}
-											<option value="" disabled {% if not guest_capacity %}selected{% endif %}>&nbsp;</option>
+											<option value="" disabled {% if not guest_capacity %}selected{% endif %}>Guest Capacity</option>
 											<option value="1" {% if guest_capacity == '1' %}selected{% endif %}>1</option>
 											<option value="2" {% if guest_capacity == '2' %}selected{% endif %}>2</option>
 											<option value="3" {% if guest_capacity == '3' %}selected{% endif %}>3</option>
@@ -116,7 +116,7 @@
 										<label class="mb-2" for="bedrooms">Bedrooms</label>
 										<select id="bedrooms" name="bedrooms" class="form-control">
 											{% set bedrooms = user.get('properties', {}).get('bedrooms', '') %}
-											<option value="" disabled {% if not bedrooms %}selected{% endif %}>&nbsp;</option>
+											<option value="" disabled {% if not bedrooms %}selected{% endif %}>Select Total Bedrooms</option>
 											<option value="1" {% if bedrooms == '1' %}selected{% endif %}>1</option>
 											<option value="2" {% if bedrooms == '2' %}selected{% endif %}>2</option>
 											<option value="3" {% if bedrooms == '3' %}selected{% endif %}>3</option>
@@ -129,7 +129,7 @@
 										<label class="mb-2" for="bathrooms">Bathrooms</label>
 										<select id="bathrooms" name="bathrooms" class="form-control">
 											{% set bathrooms = user.get('properties', {}).get('bathrooms', '') %}
-											<option value="" disabled {% if not bathrooms %}selected{% endif %}>&nbsp;</option>
+											<option value="" disabled {% if not bathrooms %}selected{% endif %}>Select Total Bathrooms</option>
 											<option value="1" {% if bathrooms == '1' %}selected{% endif %}>1</option>
 											<option value="2" {% if bathrooms == '2' %}selected{% endif %}>2</option>
 											<option value="3" {% if bathrooms == '3' %}selected{% endif %}>3</option>
