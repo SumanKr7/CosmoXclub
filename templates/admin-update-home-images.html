@@ -233,8 +233,8 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					const canvas = cropper.getCroppedCanvas({
-						width: 512,
-						height: 512,
+						width: 1280,
+						height: 850,
 					});
 					document.getElementById('croppedImageInput').value = canvas.toDataURL('image/webp');
 					e.target.submit();

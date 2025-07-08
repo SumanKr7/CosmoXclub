@@ -154,7 +154,7 @@ def is_valid_amenities(amenities: list[str]) -> bool:
     """Amenities: all items must be from allowed list."""
     allowed = {
         "Air Condition", "Refrigerator", "Microwave Oven", "Heating System", "Washing Machine",
-        "Wifi", "Smart TV", "Dishwasher", "Induction", "kettle", "Bathtub"
+        "Wifi", "Smart TV", "Dishwasher", "Induction", "Kettle", "Bathtub"
     }
     return all(f in allowed for f in amenities)
 

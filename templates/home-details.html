@@ -5,28 +5,16 @@
 <!-- ============================ Hero Banner  Start================================== -->
 <div class="featured_slick_gallery gray">
 	<div class="featured_slick_gallery-slide">
-		{% set images = house_details.properties.images if house_details.properties.images else [] %}
-		{% set min_required = 3 %}
-		{% set default_img = url_for('static', filename='uploads/default.webp') %}
+			{% set images = house_details.properties.images or [] %}
 
-		{% for i in range(images|length) %}
-			<div class="featured_slick_padd">
-				<a href="{{ images[i] }}" class="mfp-gallery">
-					<img src="{{ images[i] }}" class="img-fluid mx-auto w-100 h-100 object-fit-cover" alt="Property Image {{ i + 1 }}" />
-				</a>
-			</div>
-		{% endfor %}
-
-		{% for i in range(min_required - images|length) %}
-			<div class="featured_slick_padd">
-				<a href="{{ default_img }}" class="mfp-gallery">
-					<img src="{{ default_img }}" class="img-fluid mx-auto" alt="Default Property Image" />
-				</a>
-			</div>
-		{% endfor %}
-
+			{% for image in images %}
+				<div class="featured_slick_padd">
+					<a href="{{ image }}" class="mfp-gallery">
+						<img src="{{ image }}" class="img-fluid mx-auto w-100 h-100 object-fit-cover" alt="Property Image" />
+					</a>
+				</div>
+			{% endfor %}
 	</div>
-	<a href="JavaScript:Void(0);" class="btn-view-pic">View photos</a>
 </div>
 <!-- ============================ Hero Banner End ================================== -->
 
@@ -247,24 +235,14 @@
 					<div id="clSev" class="panel-collapse collapse show">
 						<div class="block-body">
 							<ul class="list-gallery-inline">
+								{% set images = house_details.properties.images if house_details.properties.images else [] %}
+								{% set default_img = url_for('static', filename='uploads/default.webp') %}
+
+								{% for i in range(images|length) %}
 								<li>
-									<a href="{{ static_url }}/uploads/default.webp" class="mfp-gallery"><img src="{{ static_url }}/uploads/default.webp" class="img-fluid mx-auto" alt="" /></a>
+									<a href="{{ images[i] }}" class=""><img src="{{ images[i] }}" class="img-fluid mx-auto" alt="" /></a>
 								</li>
-								<li>
-									<a href="{{ static_url }}/uploads/default.webp" class="mfp-gallery"><img src="{{ static_url }}/uploads/default.webp" class="img-fluid mx-auto" alt="" /></a>
-								</li>
-								<li>
-									<a href="{{ static_url }}/uploads/default.webp" class="mfp-gallery"><img src="{{ static_url }}/uploads/default.webp" class="img-fluid mx-auto" alt="" /></a>
-								</li>
-								<li>
-									<a href="{{ static_url }}/uploads/default.webp" class="mfp-gallery"><img src="{{ static_url }}/uploads/default.webp" class="img-fluid mx-auto" alt="" /></a>
-								</li>
-								<li>
-									<a href="{{ static_url }}/uploads/default.webp" class="mfp-gallery"><img src="{{ static_url }}/uploads/default.webp" class="img-fluid mx-auto" alt="" /></a>
-								</li>
-								<li>
-									<a href="{{ static_url }}/uploads/default.webp" class="mfp-gallery"><img src="{{ static_url }}/uploads/default.webp" class="img-fluid mx-auto" alt="" /></a>
-								</li>
+								{% endfor %}
 							</ul>
 						</div>
 					</div>
