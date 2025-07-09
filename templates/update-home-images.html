@@ -177,7 +177,7 @@
         removeButton.addEventListener('click', function () {
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'Do you want to save the changes after removing the image(s)?',
+                text: 'If your home details are already verified, they will be marked as not verified again and GP points will be reset.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, submit',
@@ -231,7 +231,7 @@
         if (cropper) {
             Swal.fire({
                 title: 'Are you sure?',
-                text: "Do you want to crop and upload this image?",
+                text: "If your home details are already verified, they will be marked as not verified again and GP points will be reset.",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, upload it!',

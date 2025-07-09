@@ -391,7 +391,9 @@ def add_homes_image(uid: str):
         existing_images.append(url_path)
 
         admin_db.reference(f'users/{uid}/properties/images').set(existing_images)
-        admin_db.reference(f'users/{uid}/properties/house_status').set('Not Verified')
+        if 'user' in session:
+            admin_db.reference(f'users/{uid}/properties/house_status').set('Not Verified')
+            admin_db.reference(f'users/{uid}/properties/guest_points').set('0')
 
         flash("Image uploaded successfully!", "success")
     except Exception as e:
@@ -423,6 +425,10 @@ def delete_homes_details(uid: str):
                     flash("Error deleting file(s).", "light")
 
         admin_db.reference(f'users/{uid}/properties/images').set(images_to_keep)
+        if 'user' in session:
+            admin_db.reference(f'users/{uid}/properties/house_status').set('Not Verified')
+            admin_db.reference(f'users/{uid}/properties/guest_points').set('0')
+
         flash("Images updated successfully!", "success")
     except Exception as e:
         flash("Error updating homes images. Please try again later.", "light")

@@ -427,9 +427,13 @@
 						<!-- Submit Button -->
 						{% set properties = user['properties'] if 'properties' in user else None %}
 						{% if properties['images'] and properties['images'][0] %}
-							<button type="submit" class="btn btn-primary mt-3"><i class="bi bi-bookmark me-2"></i>Save</button>
+							<button type="submit" class="btn btn-primary mt-3" id="saveButton">
+								<i class="bi bi-bookmark me-2"></i>Save
+							</button>
 						{% else %}
-							<button type="submit" class="btn btn-primary mt-3"><i class="bi bi-bookmark me-2"></i>Save & Next</button>
+							<button type="submit" class="btn btn-primary mt-3" id="saveNextButton">
+								<i class="bi bi-bookmark me-2"></i>Save & Next
+							</button>
 						{% endif %}
 					</form>
 				</div>
@@ -447,4 +451,32 @@
 		document.getElementById("filter_search").style.display = "none";
 	}
 </script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const saveBtn = document.getElementById("saveButton");
+		if (saveBtn) {
+			saveBtn.addEventListener("click", function (event) {
+				event.preventDefault();
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: 'If your home details are already verified, they will be marked as not verified again and GP points will be reset.',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, Save it',
+					cancelButtonText: 'Cancel'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						saveBtn.closest("form").submit();
+					}
+				});
+			});
+		}
+	});
+</script>
+
+
 {% endblock %}
