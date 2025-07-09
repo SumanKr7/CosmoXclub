@@ -72,7 +72,7 @@
 								</div>
 							</div>
 							<div class="click rounded-3 overflow-hidden mb-0">
-								{% if item.properties.images and item.properties.images|length > 0 %}
+								{% if item.properties.images and item.properties.images %}
 									{% for img in item.properties.images %}
 										<div>
 											<a href="/home-details/{{ uid }}">
@@ -80,14 +80,7 @@
 											</a>
 										</div>
 									{% endfor %}
-								{% else %}
-									<div>
-										<a href="/home-details/{{ uid }}">
-											<img src="{{ url_for('static', filename='uploads/default.webp') }}" class="img-fluid" alt="Default Property Image" />
-										</a>
-									</div>
 								{% endif %}
-
 							</div>
 
 						</div>
@@ -98,7 +91,7 @@
 								<div class="listing-short-detail-wrap">
 									<div class="listing-short-detail">
 										<div class="d-flex align-items-center">
-											<span class="label bg-light-success text-success prt-type me-2">For Sell</span><span class="label bg-light-purple text-purple property-cats">Apartment</span>
+											<span class="label bg-light-success text-success prt-type me-2">{{ item['properties']['property_type'] }}</span><span class="label bg-light-purple text-purple property-cats">{{ item['properties']['location_type'] }}</span>
 										</div>
 										<h4 class="listing-name fw-semibold fs-5 mb-2 mt-3">{{ item['properties']['title'] }}</h4>
 										<div class="prt-location text-muted-2">
@@ -108,7 +101,7 @@
 													<path d="M12.0624 13.0453C13.7193 13.0453 15.0624 11.7022 15.0624 10.0453C15.0624 8.38849 13.7193 7.04535 12.0624 7.04535C10.4056 7.04535 9.06241 8.38849 9.06241 10.0453C9.06241 11.7022 10.4056 13.0453 12.0624 13.0453Z" fill="currentColor"/>
 												</svg>
 											</span>
-											{{ item['properties']['address'] }}, {{ item['properties']['city'] }}
+											{{ item['properties']['city'] }}, {{ item['properties']['state'] }}
 										</div>
 									</div>
 								</div>
@@ -120,19 +113,19 @@
 										<div class="square--25 text-muted-2 fs-sm circle gray-simple me-1">
 											<i class="fa-solid fa-building-shield fs-xs"></i>
 										</div>
-										<span class="text-muted-2 fs-sm">3BHK</span>
+										<span class="text-muted-2 fs-sm">{{ item['properties']['bedrooms'] }} Beds</span>
 									</div>
 									<div class="listing-card d-flex align-items-center">
 										<div class="square--25 text-muted-2 fs-sm circle gray-simple me-1">
 											<i class="fa-solid fa-bed fs-xs"></i>
 										</div>
-										<span class="text-muted-2 fs-sm">3 Beds</span>
+										<span class="text-muted-2 fs-sm">{{ item['properties']['guest_capacity'] }} Guest Capacity</span>
 									</div>
 									<div class="listing-card d-flex align-items-center">
 										<div class="square--25 text-muted-2 fs-sm circle gray-simple me-1">
 											<i class="fa-solid fa-clone fs-xs"></i>
 										</div>
-										<span class="text-muted-2 fs-sm">1800 SQFT</span>
+										<span class="text-muted-2 fs-sm">{{ item['properties']['size'] }} Sqft</span>
 									</div>
 								</div>
 							</div>
@@ -140,7 +133,7 @@
 							<div class="listing-detail-footer d-flex align-items-center justify-content-between py-4">
 								<div class="listing-short-detail-flex">
 									<h6 class="listing-card-info-price m-0">
-										₹{{ item['properties']['guest_points'] }}
+										{{ item['properties']['guest_points'] }} <sub class="fs-6 text-muted">GP/Night</sub>
 									</h6>
 								</div>
 								<div class="footer-flex">
@@ -166,25 +159,33 @@
 		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12">
 				<ul class="pagination p-center">
+					{% if page > 1 %}
 					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Previous">
-						<i class="fa-solid fa-arrow-left-long"></i>
-						<span class="sr-only">Previous</span>
+						<a class="page-link" href="{{ url_for('home_exchange', page=page-1) }}" aria-label="Previous">
+							<i class="fa-solid fa-arrow-left-long"></i>
+							<span class="sr-only">Previous</span>
 						</a>
 					</li>
-					<li class="page-item active"><a class="page-link" href="#">1</a></li>
-					<li class="page-item"><a class="page-link" href="#">2</a></li>
-					<li class="page-item"><a class="page-link" href="#">...</a></li>
-					<li class="page-item"><a class="page-link" href="#">18</a></li>
+					{% endif %}
+
+					{% for p in range(1, total_pages + 1) %}
+						<li class="page-item {% if p == page %}active{% endif %}">
+							<a class="page-link" href="{{ url_for('home_exchange', page=p) }}">{{ p }}</a>
+						</li>
+					{% endfor %}
+
+					{% if page < total_pages %}
 					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Next">
-						<i class="fa-solid fa-arrow-right-long"></i>
-						<span class="sr-only">Next</span>
+						<a class="page-link" href="{{ url_for('home_exchange', page=page+1) }}" aria-label="Next">
+							<i class="fa-solid fa-arrow-right-long"></i>
+							<span class="sr-only">Next</span>
 						</a>
 					</li>
+					{% endif %}
 				</ul>
 			</div>
 		</div>
+
 		
 	</div>		
 </section>			

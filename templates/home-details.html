@@ -5,15 +5,16 @@
 <!-- ============================ Hero Banner  Start================================== -->
 <div class="featured_slick_gallery gray">
 	<div class="featured_slick_gallery-slide">
-			{% set images = house_details.properties.images or [] %}
+		{% set images = house_details.properties.images if house_details.properties.images else [] %}
 
-			{% for image in images %}
-				<div class="featured_slick_padd">
-					<a href="{{ image }}" class="mfp-gallery">
-						<img src="{{ image }}" class="img-fluid mx-auto w-100 h-100 object-fit-cover" alt="Property Image" />
-					</a>
-				</div>
-			{% endfor %}
+		{% for img in images %}
+			<div class="featured_slick_padd">
+				<a href="{{ img }}" class="mfp-gallery">
+					<img src="{{ img }}" class="img-fluid mx-auto w-100 h-100 object-fit-cover" alt="Home Image" />
+				</a>
+			</div>
+		{% endfor %}
+
 	</div>
 </div>
 <!-- ============================ Hero Banner End ================================== -->
@@ -29,26 +30,26 @@
 				<div class="property_block_wrap style-2 p-4">
 					<div class="prt-detail-title-desc">
 						<span class="label text-light bg-success">
-                            Verified
+                            {{ house_details.properties.house_status }}
 						</span>
 						<h3 class="mt-3">
                             {{ house_details.properties.title }}
 						</h3>
 						<span><i class="lni-map-marker"></i> 
-                            {{ house_details.properties.location }}
+                            <i class="fa-solid fa-location-pin me-1"></i>{{ house_details.properties.city }}, {{ house_details.properties.state }}
 						</span>
 						<h3 class="prt-price-fix text-primary mt-2">
                             {{ house_details.properties.guest_points }}
-						<span>/month</span></h3>
+						<span>GP/Night</span></h3>
 						<div class="list-fx-features">
 							<div class="listing-card-info-icon">
-								<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/bed.svg" width="13" alt=""></div>3 Beds
+								<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/bed.svg" width="13" alt=""></div>{{ house_details.properties.bedrooms }} Beds
 							</div>
 							<div class="listing-card-info-icon">
-								<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/bathtub.svg" width="13" alt=""></div>1 Bath
+								<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/bathtub.svg" width="13" alt=""></div>{{ house_details.properties.bathrooms }} Bath
 							</div>
 							<div class="listing-card-info-icon">
-								<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/move.svg" width="13" alt=""></div>800 sqft
+								<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/move.svg" width="13" alt=""></div>{{ house_details.properties.size }} sqft
 							</div>
 						</div>
 					</div>
@@ -64,22 +65,12 @@
 					<div id="clOne" class="panel-collapse collapse show" aria-labelledby="clOne">
 						<div class="block-body">
 							<ul class="deatil_features">
-								<li><strong>Bedrooms:</strong>3 Beds</li>
-								<li><strong>Bathrooms:</strong>2 Bath</li>
-								<li><strong>Areas:</strong>4,240 sq ft</li>
-								<li><strong>Garage</strong>1</li>
-								<li><strong>Property Type:</strong>Apartment</li>
-								<li><strong>Year:</strong>Built1982</li>
-								<li><strong>Status:</strong>Active</li>
-								<li><strong>Cooling:</strong>Central A/C</li>
-								<li><strong>Heating Type:</strong>Forced Air</li>
-								<li><strong>Kitchen Features:</strong>Kitchen Facilities</li>
-								<li><strong>Exterior:</strong>FinishBrick</li>
-								<li><strong>Swimming Pool:</strong>Yes</li>
-								<li><strong>Elevetor:</strong>Yes</li>
-								<li><strong>Fireplace:</strong>Yes</li>
-								<li><strong>Free WiFi:</strong>No</li>
-								
+								<li><strong>Bedrooms:</strong>{{ house_details.properties.bedrooms }}  Beds</li>
+								<li><strong>Bathrooms:</strong>{{ house_details.properties.bathrooms }}  Bath</li>
+								<li><strong>Guest Capacity:</strong>{{ house_details.properties.guest_capacity }}</li>
+								<li><strong>Size:</strong>{{ house_details.properties.size }}  sqft</li>
+								<li><strong>Homes Type:</strong>{{ house_details.properties.property_type }}</li>
+								<li><strong>Location Type:</strong>{{ house_details.properties.location_type }}</li>
 							</ul>
 						</div>
 					</div>
@@ -94,15 +85,14 @@
 					</div>
 					<div id="clTwo" class="panel-collapse collapse show">
 						<div class="block-body">
-							<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.</p>
-							<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+							{{ house_details.properties.description }}
 						</div>
 					</div>
 				</div>
 
 				<!-- Single Block Wrap -->
-				<div class="property_block_wrap style-2">
-					
+				{% if house_details.properties.amenities %}
+				<div class="property_block_wrap style-2">					
 					<div class="property_block_wrap_header">
 						<a data-bs-toggle="collapse" data-parent="#amen"  data-bs-target="#clThree" aria-controls="clThree" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Ameneties</h4></a>
 					</div>
@@ -110,28 +100,115 @@
 					<div id="clThree" class="panel-collapse collapse show">
 						<div class="block-body">
 							<ul class="avl-features third color">
-								<li>Air Conditioning</li>
-								<li>Swimming Pool</li>
-								<li>Central Heating</li>
-								<li>Laundry Room</li>
-								<li>Gym</li>
-								<li>Alarm</li>
-								<li>Window Covering</li>
-								<li>Internet</li>
-								<li>Pets Allow</li>
-								<li>Free WiFi</li>
-								<li>Car Parking</li>
-								<li>Spa & Massage</li>
+								{% for amenity in house_details.properties.amenities %}
+									<li><i class="{{ amenity_icons.get(amenity, 'fa-solid fa-circle') }} me-2"></i>{{ amenity }}</li>
+								{% endfor %}
 							</ul>
 						</div>
 					</div>
 				</div>
+				{% endif%}
+
+				{% if house_details.properties.unique_facilities %}
+				<div class="property_block_wrap style-2">
+					
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#amen1"  data-bs-target="#clThree1" aria-controls="clThree1" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Unique Facilities</h4></a>
+					</div>
+					
+					<div id="clThree1" class="panel-collapse collapse show">
+						<div class="block-body">
+							<ul class="avl-features third color">
+								{% for unique_facilities1 in house_details.properties.unique_facilities %}
+									<li><i class="{{ amenity_icons.get(unique_facilities1, 'fa-solid fa-circle') }} me-2"></i>{{ unique_facilities1 }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				{% endif%}
+
+				{% if house_details.properties.kids_friendly %}
+				<div class="property_block_wrap style-2">
+					
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree2" aria-controls="clThree2" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Kids Friendly</h4></a>
+					</div>
+					
+					<div id="clThree2" class="panel-collapse collapse show">
+						<div class="block-body">
+							<ul class="avl-features third color">
+								{% for kids_friendly1 in house_details.properties.kids_friendly %}
+									<li><i class="{{ amenity_icons.get(kids_friendly1, 'fa-solid fa-circle') }} me-2"></i>{{ kids_friendly1 }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				{% endif%}
+
+				{% if house_details.properties.eco_friendly_amenities %}
+				<div class="property_block_wrap style-2">
+					
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree2" aria-controls="clThree2" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Eco-friendly Amenities</h4></a>
+					</div>
+					
+					<div id="clThree2" class="panel-collapse collapse show">
+						<div class="block-body">
+							<ul class="avl-features third color">
+								{% for eco_friendly_amenities1 in house_details.properties.eco_friendly_amenities %}
+									<li><i class="{{ amenity_icons.get(eco_friendly_amenities1, 'fa-solid fa-circle') }} me-2"></i>{{ eco_friendly_amenities1 }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				{% endif%}
+
+				{% if house_details.properties.house_rules %}
+				<div class="property_block_wrap style-2">
+					
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree2" aria-controls="clThree2" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">House Rules</h4></a>
+					</div>
+					
+					<div id="clThree2" class="panel-collapse collapse show">
+						<div class="block-body">
+							<ul class="avl-features third color">
+								{% for house_rules1 in house_details.properties.house_rules %}
+									<li><i class="{{ amenity_icons.get(house_rules1, 'fa-solid fa-circle') }} me-2"></i>{{ house_rules1 }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				{% endif%}
+
+				{% if house_details.properties.remote_friendly %}
+				<div class="property_block_wrap style-2">
+					
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree2" aria-controls="clThree2" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Remote Friendly</h4></a>
+					</div>
+					
+					<div id="clThree2" class="panel-collapse collapse show">
+						<div class="block-body">
+							<ul class="avl-features third color">
+								{% for remote_friendly1 in house_details.properties.remote_friendly %}
+									<li><i class="{{ amenity_icons.get(remote_friendly1, 'fa-solid fa-circle') }} me-2"></i>{{ remote_friendly1 }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+				{% endif%}
 
 				<!-- Single Block Wrap -->
 				<!-- <div class="property_block_wrap style-2">
 					
 					<div class="property_block_wrap_header">
-						<a data-bs-toggle="collapse" data-parent="#vid"  data-bs-target="#clFour" aria-controls="clFour" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Property video</h4></a>
+						<a data-bs-toggle="collapse" data-parent="#vid"  data-bs-target="#clFour" aria-controls="clFour" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Home video</h4></a>
 					</div>
 					
 					<div id="clFour" class="panel-collapse collapse">
@@ -143,61 +220,9 @@
 										<div class="bb-video-box">
 											<div class="bb-video-box-inner">
 												<div class="bb-video-box-innerup">
-													<a href="" data-bs-toggle="modal" data-bs-target="#popup-video" class="text-primary"><i class="fa-solid fa-play"></i></a>
+													<a href="#" data-bs-toggle="modal" data-bs-target="#popup-video" class="text-primary"><i class="fa-solid fa-play"></i></a>
 												</div>
 											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-				</div> -->
-
-				<!-- Single Block Wrap -->
-				<!-- <div class="property_block_wrap style-2">
-					
-					<div class="property_block_wrap_header">
-						<a data-bs-toggle="collapse" data-parent="#floor"  data-bs-target="#clFive" aria-controls="clFive" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Floor Plan</h4></a>
-					</div>
-					
-					<div id="clFive" class="panel-collapse collapse">
-						<div class="block-body">
-							<div class="accordion" id="floor-option">
-								<div class="card">
-									<div class="card-header" id="firstFloor">
-										<h2 class="mb-0">
-											<button type="button" class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#firstfloor" aria-controls="firstfloor">First Floor<span>740 sq ft</span></button>									
-										</h2>
-									</div>
-									<div id="firstfloor" class="collapse" aria-labelledby="firstFloor" data-parent="#floor-option">
-										<div class="card-body">
-											<img src="{{ static_url }}/img/floor.jpg" class="img-fluid" alt="" />
-										</div>
-									</div>
-								</div>
-								<div class="card">
-									<div class="card-header" id="seconfFloor">
-										<h2 class="mb-0">
-											<button type="button" class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#secondfloor" aria-controls="secondfloor">Second Floor<span>710 sq ft</span></button>
-										</h2>
-									</div>
-									<div id="secondfloor" class="collapse" aria-labelledby="seconfFloor" data-parent="#floor-option">
-										<div class="card-body">
-											<img src="{{ static_url }}/img/floor.jpg" class="img-fluid" alt="" />
-										</div>
-									</div>
-								</div>
-								<div class="card">
-									<div class="card-header" id="third-garage">
-										<h2 class="mb-0">
-											<button type="button" class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#garages" aria-controls="garages">Garage<span>520 sq ft</span></button>                     
-										</h2>
-									</div>
-									<div id="garages" class="collapse" aria-labelledby="third-garage" data-parent="#floor-option">
-										<div class="card-body">
-											<img src="{{ static_url }}/img/floor.jpg" class="img-fluid" alt="" />
 										</div>
 									</div>
 								</div>
@@ -236,11 +261,9 @@
 						<div class="block-body">
 							<ul class="list-gallery-inline">
 								{% set images = house_details.properties.images if house_details.properties.images else [] %}
-								{% set default_img = url_for('static', filename='uploads/default.webp') %}
-
-								{% for i in range(images|length) %}
+								{% for img in images %}
 								<li>
-									<a href="{{ images[i] }}" class=""><img src="{{ images[i] }}" class="img-fluid mx-auto" alt="" /></a>
+									<a href="{{ img }}" class="mfp-gallery"><img src="{{ img }}" class="img-fluid mx-auto" alt="" /></a>
 								</li>
 								{% endfor %}
 							</ul>
@@ -500,7 +523,7 @@
 <div class="modal fade" id="popup-video" tabindex="-1" role="dialog" aria-labelledby="popupvideo" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" id="popupvideo">
-			<iframe class="embed-responsive-item" class="full-width" height="480" src="https://www.youtube.com/embed/qN3OueBm9F4?rel=0" frameborder="0" allowfullscreen></iframe>
+			<iframe class="embed-responsive-item" class="full-width" height="480" src="#" frameborder="0" allowfullscreen></iframe>
 		</div>
 	</div>
 </div>

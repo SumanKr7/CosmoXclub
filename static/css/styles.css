@@ -6632,13 +6632,13 @@ span.tag_t {
 	list-style: none;
 	position: relative;
 	margin: 10px 0 10px;
-	padding-left: 30px;
+	/* padding-left: 30px; */
 	-ms-flex: 0 0 33.333333%;
 	flex: 0 0 33.333333%;
 	max-width: 33.333333%;
 }
 
-.avl-features li:before {
+/* .avl-features li:before {
 	content: "\f058";
 	font-family: "Font Awesome 6 Free";
 	position: absolute;
@@ -6652,7 +6652,7 @@ span.tag_t {
 	left: 0;
 	top: 5px;
 	font-size: 10px;
-}
+} */
 
 .dw-proprty-info li {
 	display: block;
@@ -7964,7 +7964,7 @@ ul.deatil_features li strong {
 }
 
 .list-fx-features {
-	margin-top: 20px;
+	margin-top: 7px;
 	justify-content: flex-start;
 }
 

@@ -81,22 +81,25 @@
 								<div class="listing-detail-wrapper-box">
 									<div class="listing-detail-wrapper d-flex align-items-center justify-content-between">
 										<div class="listing-short-detail">
-											<span class="label for-sale bg-success d-inline-flex mb-1">{{ properties['location_type'] }}</span>
+											<span class="label for-sale bg-success d-inline-flex mb-1">{{ properties['house_status'] }}</span>
 											<h4 class="listing-name mb-3"><a href="#">{{ properties['title'] }}</a></h4>
-											<div class="fr-can-rating">
-												<span class="label bg-light-success text-success prt-type reviews_text fs-sm text-muted ms-2">{{ properties['property_type'] }}</span>
+											<div class="list-fx-features">
+												<div class="listing-card-info-icon">
+													<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/bed.svg" width="13" alt=""></div>{{ properties['bedrooms'] }} Beds
+												</div>
+												<div class="listing-card-info-icon">
+													<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/bathtub.svg" width="13" alt=""></div>{{ properties['bathrooms'] }} Bath
+												</div>
+												<div class="listing-card-info-icon">
+													<div class="inc-fleat-icon me-1"><img src="{{ static_url }}/img/move.svg" width="13" alt=""></div>{{ properties['size'] }} sqft
+												</div>
 											</div>
+											<div class="listing-card d-flex align-items-center mt-3">
+											<div class="text-muted-2 fs-sm me-1"><i class="fa-solid fa-location-pin me-1"></i></div><span class="text-muted-2 fs-sm">{{ properties['address'] }}, {{ properties['city'] }}, {{ properties['state'] }}</span>
+										</div>
 										</div>
 										<div class="list-price">
-											<h6 class="listing-card-info-price text-main">₹ {{ properties['guest_points'] }}</h6>
-										</div>
-									</div>
-								</div>
-
-								<div class="price-features-wrapper">
-									<div class="list-fx-features d-flex align-items-center justify-content-between mt-3 mb-1">
-										<div class="listing-card d-flex align-items-center">
-											<div class="text-muted-2 fs-sm me-1 ms-2"><i class="fa-solid fa-location-pin me-1"></i></div><span class="text-muted-2 fs-sm">{{ properties['address'] }}, {{ properties['city'] }}, {{ properties['state'] }}</span>
+											<h6 class="listing-card-info-price text-main">{{ properties['guest_points'] }}<sub class="fs-6 text-muted">GP/Night</sub></h6>
 										</div>
 									</div>
 								</div>

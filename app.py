@@ -19,7 +19,8 @@ from utils import (
     _process_post,
     validate_property_form,
     collect_property_form_data,
-    homes_images
+    homes_images,
+    get_amenity_icons
 )
 
 load_dotenv()
@@ -223,14 +224,32 @@ def blog():
 
 @app.route('/home-exchange')
 def home_exchange():
-    house = all_users_properties()
-    return render_template("home-exchange.html", house=house)
+    house      = all_users_properties()
+    house_list = list(house.items())
+    
+    per_page        = 8
+    page            = int(request.args.get('page', 1))
+    total           = len(house_list)
+    start           = (page - 1) * per_page
+    end             = start + per_page
+    paginated_house = dict(house_list[start:end]) 
+    total_pages     = (total + per_page - 1) // per_page
+
+    return render_template(
+        "home-exchange.html",
+        house       = paginated_house,
+        page        = page,
+        total_pages = total_pages
+    )
+
 
 @app.route('/home-details/<uid>')
 def home_details(uid):
     one_properties = all_users_properties()
     house_details = one_properties.get(uid)
-    return render_template("home-details.html", house_details=house_details)
+    return render_template("home-details.html",
+            house_details = house_details,
+            amenity_icons = get_amenity_icons())
 
 # User authentication routes
 
@@ -590,9 +609,12 @@ def my_house_view(uid):
         if not house_details:
                 return render_template('404.html'), 404
         
-        return render_template("home-details.html", house_details=house_details)
+        return render_template("home-details.html",
+                house_details = house_details,
+                amenity_icons = get_amenity_icons())
     
     except Exception as e:
+        print(e)
         flash("An unexpected error occurred while loading your home details.", "light")
         return render_template("503.html"), 503
 
@@ -795,7 +817,9 @@ def admin_home_details(uid):
         if not house_details:
             return render_template('404.html'), 404
             
-        return render_template("admin-home-details.html", house_details=house_details)
+        return render_template("admin-home-details.html",
+                house_details = house_details,
+                amenity_icons = get_amenity_icons())
         
     except Exception as e:
         flash("An unexpected error occurred while load home details.", "light")

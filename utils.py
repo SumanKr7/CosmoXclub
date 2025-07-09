@@ -184,7 +184,7 @@ def is_valid_eco_friendly_amenities(eco_friendly_amenities: list[str]) -> bool:
 def is_valid_house_rules(house_rules: list[str]) -> bool:
     """House Rules: all items must be from allowed list."""
     allowed = {
-        "Children Welcome", "Pets Welcome", "Plants to Water"
+        "Children Welcome", "Pets Welcome", "Pets not Allowed", "Somke Allowed", "Smoke not Allowed", "Plants to Water"
     }
     return all(f in allowed for f in house_rules)
 
@@ -428,3 +428,45 @@ def delete_homes_details(uid: str):
         flash("Error updating homes images. Please try again later.", "light")
 
     return redirect(request.url)
+
+def get_amenity_icons():
+    return {
+        'Air Condition': 'fa-solid fa-snowflake',
+        'Refrigerator': 'hgi hgi-stroke hgi-refrigerator',
+        'Microwave Oven': 'hgi hgi-stroke hgi-microwave',
+        'Heating System': 'fa-solid fa-fire',
+        'Washing Machine': 'fa-solid fa-soap',
+        'Wifi': 'fa-solid fa-wifi',
+        'Smart TV': 'fa-solid fa-tv',
+        'Dishwasher': 'hgi hgi-stroke hgi-dish-washer',
+        'Induction': 'hgi hgi-stroke hgi-gas-stove',
+        'Kettle': 'hgi hgi-stroke hgi-kettle',
+        'Bathtub': 'fa-solid fa-bath',
+        'Private Backyard': 'fa-solid fa-tree',
+        'Balcony / Terrace': 'fa-solid fa-person-shelter',
+        'BBQ': 'fa-solid fa-fire-burner',
+        'Pool': 'fa-solid fa-water-ladder',
+        'Bicycle': 'fa-solid fa-bicycle',
+        'Cleaning Person': 'fa-solid fa-broom',
+        'Private Parking': 'fa-solid fa-square-parking',
+        'Fire Place': 'hgi hgi-stroke hgi-fire-pit',
+        'Private Gym': 'fa-solid fa-dumbbell',
+        'Elevator': 'fa-solid fa-elevator',
+        'Guide': 'fa-solid fa-map-location-dot',
+        'Kids Playground': 'fa-solid fa-child-reaching',
+        'Baby Gear': 'fa-solid fa-baby',
+        'Secured Pool': 'fa-solid fa-water-ladder',
+        'Kids Toy': 'fa-solid fa-puzzle-piece',
+        'Selective Waste Sorting': 'fa-solid fa-recycle',
+        'Public Transport Access': 'fa-solid fa-bus',
+        'Vegitable Garden': 'fa-solid fa-seedling',
+        'Renewable Energy Provider': 'fa-solid fa-solar-panel',
+        'Children Welcome': 'fa-solid fa-children',
+        'Pets Welcome': 'fa-solid fa-dog',
+        'Pets not Allowed': 'fa-solid fa-ban',
+        'Somke Allowed': 'fa-solid fa-smoking',
+        'Smoke not Allowed': 'fa-solid fa-smoking-ban',
+        'Plants to Water': 'fa-solid fa-plant-wilt',
+        'Dedicated Work Space': 'fa-solid fa-briefcase',
+        'High Speed Internet': 'fa-solid fa-wifi',
+    }
