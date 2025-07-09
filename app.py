@@ -527,7 +527,7 @@ def edit_home_details():
             time    = now_ist.strftime("%d-%m-%Y, %H:%M")
 
             data["house_status"] = "Not Verified"
-            data["guest_points"] = int(0)
+            data["guest_points"] = "0"
             data["submitted_at"] = time
 
             required = [
