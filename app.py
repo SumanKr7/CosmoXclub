@@ -848,9 +848,7 @@ def admin_edit_home_details1(uid):
             required = [
                 "title", "location_type", "property_type", "guest_capacity", "size",
                 "bedrooms", "bathrooms", "address", "city", "state",
-                "pin_code", "description", "amenities", "unique_facilities",
-                "kids_friendly", "eco_friendly_amenities", "house_rules",
-                "remote_friendly", "name", "email", "phone"
+                "pin_code", "description","name", "email", "phone"
             ]
             if any(data[k] == "" or data[k] == [] for k in required):
                 flash("Please fill out every field.", "light")
@@ -890,7 +888,6 @@ def admin_update_home_images(uid):
         return render_template("admin-update-home-images.html", user=user_data, uid=uid)
     except Exception as e:
         flash("An unexpected error occurred while editing the home images.", "light")
-        print(e)
         return render_template("503.html"), 503
     
 @app.route('/update-membership', methods=['GET', 'POST'])
