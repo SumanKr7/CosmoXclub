@@ -205,52 +205,6 @@
 				{% endif%}
 
 				<!-- Single Block Wrap -->
-				<!-- <div class="property_block_wrap style-2">
-					
-					<div class="property_block_wrap_header">
-						<a data-bs-toggle="collapse" data-parent="#vid"  data-bs-target="#clFour" aria-controls="clFour" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Home video</h4></a>
-					</div>
-					
-					<div id="clFour" class="panel-collapse collapse">
-						<div class="block-body">
-							<div class="property_video">
-								<div class="thumb">
-									<img class="pro_img img-fluid w100" src="{{ static_url }}/uploads/default.webp" alt="">
-									<div class="overlay_icon">
-										<div class="bb-video-box">
-											<div class="bb-video-box-inner">
-												<div class="bb-video-box-innerup">
-													<a href="#" data-bs-toggle="modal" data-bs-target="#popup-video" class="text-primary"><i class="fa-solid fa-play"></i></a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-				</div> -->
-
-				<!-- Single Block Wrap -->
-				<!-- <div class="property_block_wrap style-2">
-					
-					<div class="property_block_wrap_header">
-						<a data-bs-toggle="collapse" data-parent="#loca"  data-bs-target="#clSix" aria-controls="clSix" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Location</h4></a>
-					</div>
-					
-					<div id="clSix" class="panel-collapse collapse">
-						<div class="block-body">
-							<div class="map-container">
-								<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.3838103135677!2d80.87929001488125!3d26.827742183164247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399bfe8bc34b51bb%3A0xa3ca86eec63f6f8!2sINFOSYS%20DIGITAL%20COMPUTER%20(Prabhat%20Computer%20Classes)!5e0!3m2!1sen!2sin!4v1680238790732!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-							</div>
-
-						</div>
-					</div>
-					
-				</div> -->
-
-				<!-- Single Block Wrap -->
 				<div class="property_block_wrap style-2">
 					
 					<div class="property_block_wrap_header">
@@ -270,6 +224,52 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- Single Block Wrap -->
+				<!-- <div class="property_block_wrap style-2">
+					
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#vid"  data-bs-target="#clFour" aria-controls="clFour" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Home video</h4></a>
+					</div>
+					
+					<div id="clFour" class="panel-collapse collapse">
+						<div class="block-body">
+							<div class="property_video">
+								<div class="thumb">
+									<img class="pro_img img-fluid w100" src="{{ static_url }}/uploads/default.webp" alt="">
+									<div class="overlay_icon">
+										<div class="bb-video-box">
+											<div class="bb-video-box-inner">
+												<div class="bb-video-box-innerup">
+													<a href="{{ static_url }}/img/banners.mp4" data-bs-toggle="modal" data-bs-target="#popup-video" class="text-primary"><i class="fa-solid fa-play"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+				<div class="property_block_wrap style-2">
+					
+					<div class="property_block_wrap_header">
+						<a data-bs-toggle="collapse" data-parent="#loca"  data-bs-target="#clSix" aria-controls="clSix" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Location</h4></a>
+					</div>
+
+					<div id="clSix" class="panel-collapse collapse">
+						<div class="block-body">
+							<div class="map-container">
+								<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.761096437797!2d77.36366467570896!3d28.622922884516637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce544da5a9ebf%3A0x4024cbbabd66b412!2sKLJ%20Noida%20One!5e1!3m2!1sen!2sin!4v1752132514263!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+							</div>
+
+						</div>
+					</div>
+					
+				</div> -->
+
 			</div>
 			
 			<!-- property Sidebar -->
@@ -281,7 +281,10 @@
 					{% if 'user' in session %}
 					<div class="sides-widget">
 						<div class="sides-widget-body simple-form">
-							<button class="btn btn-primary fw-medium rounded full-width">Send Exchange Request</button>
+							<form method="POST" autocomplete="off">
+								<input type="hidden" name="user-exchange" value="1">
+								<button class="btn btn-primary fw-medium rounded full-width">Send Exchange Request</button>
+							</form>
 						</div>
 					</div>
 					{% else %}
@@ -416,14 +419,14 @@
 </section>
 <!-- ============================ Property Detail End ================================== -->
 
-<!-- Video Modal -->
+<!-- 
 <div class="modal fade" id="popup-video" tabindex="-1" role="dialog" aria-labelledby="popupvideo" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" id="popupvideo">
-			<iframe class="embed-responsive-item" class="full-width" height="480" src="#" frameborder="0" allowfullscreen></iframe>
+			<iframe class="embed-responsive-item" class="full-width" height="336.38" src="{{ static_url }}/img/banners.mp4" frameborder="0" allowfullscreen></iframe>
 		</div>
 	</div>
-</div>
-<!-- End Video Modal -->
+</div> -->
+
 
 {% endblock %}

@@ -242,60 +242,108 @@ def home_exchange():
         total_pages = total_pages
     )
 
+def get_user_by_uid(uid):
+    try:
+        ref = admin_db.reference(f'users/{uid}')
+        return ref.get() or {}
+    except Exception as e:
+        return {}
+
 @app.route('/home-details/<uid>', methods=['GET', 'POST'])
 def home_details(uid):
     one_properties = all_users_properties()
     house_details = one_properties.get(uid)
 
     if request.method == 'POST':
-        name    = request.form.get('name', '').strip()
-        email   = request.form.get('email', '').strip()
-        phone   = request.form.get('phone', '').strip()
-        message = request.form.get('message', '').strip()
+        if 'user-exchange' in request.form:
+            user_uid = session.get('user')
+            if not user_uid:
+                flash("You must be logged in to send an exchange request.", "light")
+                return redirect(url_for('home_details', uid=uid))
 
-        if not all([name, email, phone, message]):
-            flash("All fields are required.", "light")
+            user_data = get_user_by_uid(user_uid)
+
+            name = user_data.get('name', 'User')
+            email = user_data.get('email', session.get('email', 'N/A'))
+            phone = user_data.get('phone', 'N/A')
+            house_status = user_data.get('house_status', 'Home not listed.')
+            message = "I'm interested in this home for exchange."
+
+            try:
+                now_ist = datetime.now(IST)
+                time = now_ist.strftime("%d-%m-%Y, %H:%M")
+
+                admin_db.reference(f'exchange_requests/{uid}').push({
+                    "name": name,
+                    "email": email,
+                    "phone": phone,
+                    "message": message,
+                    "user_type": "User",
+                    "query_status": "Not Solved",
+                    "House Status": house_status,
+                    "submitted_at": time
+                })
+
+                flash("Exchange request sent successfully!", "success")
+            except Exception as e:
+                print(f"Error saving exchange request (user): {e}")
+                flash("Could not send your request at the moment. Try again later.", "light")
+
             return redirect(url_for('home_details', uid=uid))
 
-        if not is_valid_name(name):
-            flash("Please enter a valid name.", "light")
+        else:
+            name    = request.form.get('name', '').strip()
+            email   = request.form.get('email', '').strip()
+            phone   = request.form.get('phone', '').strip()
+            message = request.form.get('message', '').strip()
+
+            if not all([name, email, phone, message]):
+                flash("All fields are required.", "light")
+                return redirect(url_for('home_details', uid=uid))
+
+            if not is_valid_name(name):
+                flash("Please enter a valid name.", "light")
+                return redirect(url_for('home_details', uid=uid))
+
+            if not is_valid_email(email):
+                flash("Please enter a valid email address.", "light")
+                return redirect(url_for('home_details', uid=uid))
+
+            if not is_valid_phone(phone):
+                flash("Please enter a valid phone number.", "light")
+                return redirect(url_for('home_details', uid=uid))
+
+            if not is_valid_about(message):
+                flash("Please enter a valid message.", "light")
+                return redirect(url_for('home_details', uid=uid))
+
+            try:
+                now_ist = datetime.now(IST)
+                time = now_ist.strftime("%d-%m-%Y, %H:%M")
+
+                admin_db.reference(f'exchange_requests/{uid}').push({
+                    "name": name,
+                    "email": email,
+                    "phone": phone,
+                    "message": message,
+                    "user_type": "Not User",
+                    "query_status": "Not Solved",
+                    "House Status": "Home not listed.",
+                    "submitted_at": time
+                })
+
+                flash("Exchange request sent successfully!", "success")
+            except Exception as e:
+                print(f"Error saving exchange request (guest): {e}")
+                flash("Could not send your request at the moment. Try again later.", "light")
+
             return redirect(url_for('home_details', uid=uid))
 
-        if not is_valid_email(email):
-            flash("Please enter a valid email address.", "light")
-            return redirect(url_for('home_details', uid=uid))
-
-        if not is_valid_phone(phone):
-            flash("Please enter a valid phone number.", "light")
-            return redirect(url_for('home_details', uid=uid))
-
-        if not is_valid_about(message):
-            flash("Please enter a valid message.", "light")
-            return redirect(url_for('home_details', uid=uid))
-
-        try:
-            now_ist = datetime.now(IST)
-            time = now_ist.strftime("%d-%m-%Y, %H:%M")
-
-            admin_db.reference(f'exchange_requests/{uid}').push({
-                "name"         : name,
-                "email"        : email,
-                "phone"        : phone,
-                "message"      : message,
-                "user_type"    : "Not User",
-                "query_status" : "Not Solved",
-                "submitted_at" : time
-            })
-
-            flash("Exchange request sent successfully!", "success")
-        except Exception as e:
-            flash("Could not send your request at the moment. Try again later.", "light")
-
-        return redirect(url_for('home_details', uid=uid))
-
+    # GET method: show the page
     return render_template("home-details.html",
-        house_details=house_details,
-        amenity_icons=get_amenity_icons())
+                           house_details=house_details,
+                           amenity_icons=get_amenity_icons())
+
 
 
 # User authentication routes
@@ -656,7 +704,7 @@ def my_house_view(uid):
         if not house_details:
                 return render_template('404.html'), 404
         
-        return render_template("home-details.html",
+        return render_template("my-home-details.html",
                 house_details = house_details,
                 amenity_icons = get_amenity_icons())
     

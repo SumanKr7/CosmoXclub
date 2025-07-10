@@ -1,10 +1,6 @@
 {% extends '/base/style/base.html' %}
 {% set static_url = '/static' %}
 
-{% block navbar %}
-    {% include 'base/style/navbar-admin.html' %}
-{% endblock %}
-
 {% block content %}
 <!-- ============================ Hero Banner  Start================================== -->
 <div class="featured_slick_gallery gray">
@@ -40,7 +36,7 @@
                             {{ house_details.properties.title }}
 						</h3>
 						<span><i class="lni-map-marker"></i> 
-                            <i class="fa-solid fa-location-pin me-1"></i>{{ house_details.properties.city }}, {{ house_details.properties.state }}
+                            <i class="bi bi-geo-alt me-1"></i>{{ house_details.properties.city }}, {{ house_details.properties.state }}
 						</span>
 						<h3 class="prt-price-fix text-primary mt-2">
                             {{ house_details.properties.guest_points }}
@@ -59,6 +55,7 @@
 					</div>
 				</div>
 				
+				<!-- single-propertys-1 code  -->
 				<!-- Single Block Wrap -->
 				<div class="property_block_wrap style-2">
 									
@@ -87,8 +84,8 @@
 						<a data-bs-toggle="collapse" data-parent="#dsrp" data-bs-target="#clTwo" aria-controls="clTwo" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Description</h4></a>
 					</div>
 					<div id="clTwo" class="panel-collapse collapse show">
-						<div class="block-body">
-							{{ house_details.properties.description }}
+						<div class="block-body" style="max-height: 250px; overflow-y: scroll;">
+							{{ house_details.properties.description.replace('\n', '<br>')|safe }}
 						</div>
 					</div>
 				</div>
@@ -206,7 +203,8 @@
 					</div>
 				</div>
 				{% endif%}
-				
+
+				<!-- Single Block Wrap -->
 				<div class="property_block_wrap style-2">
 					
 					<div class="property_block_wrap_header">
@@ -225,11 +223,9 @@
 							</ul>
 						</div>
 					</div>
-					
 				</div>
-				
-				<!-- Single Block Wrap -->
-				<!-- <div class="property_block_wrap style-2">
+
+                <!-- <div class="property_block_wrap style-2">
 					
 					<div class="property_block_wrap_header">
 						<a data-bs-toggle="collapse" data-parent="#vid"  data-bs-target="#clFour" aria-controls="clFour" href="javascript:void(0);" aria-expanded="true" class="collapsed"><h4 class="property_block_title">Home video</h4></a>
@@ -273,7 +269,6 @@
 					
 				</div> -->
 
-				
 			</div>
 			
 		</div>
@@ -281,14 +276,12 @@
 </section>
 <!-- ============================ Property Detail End ================================== -->
 
-
 <!-- <div class="modal fade" id="popup-video" tabindex="-1" role="dialog" aria-labelledby="popupvideo" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" id="popupvideo">
-			<iframe class="embed-responsive-item" class="full-width" height="336.38" src="{{ static_url }}/img/banners.mp4" frameborder="0" allowfullscreen></iframe>
+			<iframe class="embed-responsive-item" class="full-width" height="480" src="#" frameborder="0" allowfullscreen></iframe>
 		</div>
 	</div>
 </div> -->
-
 
 {% endblock %}
