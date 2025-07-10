@@ -84,8 +84,8 @@
 						<a data-bs-toggle="collapse" data-parent="#dsrp" data-bs-target="#clTwo" aria-controls="clTwo" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Description</h4></a>
 					</div>
 					<div id="clTwo" class="panel-collapse collapse show">
-						<div class="block-body">
-							{{ house_details.properties.description }}
+						<div class="block-body" style="max-height: 250px; overflow-y: scroll;">
+							{{ house_details.properties.description.replace('\n', '<br>')|safe }}
 						</div>
 					</div>
 				</div>
@@ -151,10 +151,10 @@
 				<div class="property_block_wrap style-2">
 					
 					<div class="property_block_wrap_header">
-						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree2" aria-controls="clThree2" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Eco-friendly Amenities</h4></a>
+						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree3" aria-controls="clThree3" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Eco-friendly Amenities</h4></a>
 					</div>
 					
-					<div id="clThree2" class="panel-collapse collapse show">
+					<div id="clThree3" class="panel-collapse collapse show">
 						<div class="block-body">
 							<ul class="avl-features third color">
 								{% for eco_friendly_amenities1 in house_details.properties.eco_friendly_amenities %}
@@ -170,10 +170,10 @@
 				<div class="property_block_wrap style-2">
 					
 					<div class="property_block_wrap_header">
-						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree2" aria-controls="clThree2" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">House Rules</h4></a>
+						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree4" aria-controls="clThree4" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">House Rules</h4></a>
 					</div>
 					
-					<div id="clThree2" class="panel-collapse collapse show">
+					<div id="clThree4" class="panel-collapse collapse show">
 						<div class="block-body">
 							<ul class="avl-features third color">
 								{% for house_rules1 in house_details.properties.house_rules %}
@@ -189,10 +189,10 @@
 				<div class="property_block_wrap style-2">
 					
 					<div class="property_block_wrap_header">
-						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree2" aria-controls="clThree2" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Remote Friendly</h4></a>
+						<a data-bs-toggle="collapse" data-parent="#amen2"  data-bs-target="#clThree5" aria-controls="clThree5" href="javascript:void(0);" aria-expanded="true"><h4 class="property_block_title">Remote Friendly</h4></a>
 					</div>
 					
-					<div id="clThree2" class="panel-collapse collapse show">
+					<div id="clThree5" class="panel-collapse collapse show">
 						<div class="block-body">
 							<ul class="avl-features third color">
 								{% for remote_friendly1 in house_details.properties.remote_friendly %}
@@ -278,7 +278,13 @@
 				<!-- property-sidebar1 code  -->
 				<div class="details-sidebar">
 
-					<!-- Agent Detail -->
+					{% if 'user' in session %}
+					<div class="sides-widget">
+						<div class="sides-widget-body simple-form">
+							<button class="btn btn-primary fw-medium rounded full-width">Send Exchange Request</button>
+						</div>
+					</div>
+					{% else %}
 					<div class="sides-widget">
 						<div class="sides-widget-header bg-primary">
 							<div class="agent-photo"><img src="{{ static_url }}/img/profile.png" alt=""></div>
@@ -289,22 +295,30 @@
 							<div class="clearfix"></div>
 						</div>
 						
-						<div class="sides-widget-body simple-form">
-							<div class="form-group">
-								<label>Email</label>
-								<input type="text" class="form-control" placeholder="Your Email">
+						<form method="POST" autocomplete="off">
+							<div class="sides-widget-body simple-form">
+								<div class="form-group">
+									<label>Name</label>
+									<input type="text" name="name" class="form-control" placeholder="Your Name" required>
+								</div>
+								<div class="form-group">
+									<label>Email</label>
+									<input type="email" name="email" class="form-control" placeholder="Your Email" required>
+								</div>
+								<div class="form-group">
+									<label>Phone No.</label>
+									<input type="text" name="phone" class="form-control" placeholder="Your Phone" required>
+								</div>
+								<div class="form-group">
+									<label>Description</label>
+									<textarea name="message" class="form-control" required>I'm interested in this home for exchange.</textarea>
+								</div>
+								<button type="submit" class="btn btn-primary fw-medium rounded full-width">Send Exchange Request</button>
 							</div>
-							<div class="form-group">
-								<label>Phone No.</label>
-								<input type="text" class="form-control" placeholder="Your Phone">
-							</div>
-							<div class="form-group">
-								<label>Description</label>
-								<textarea class="form-control">I'm interested in this property.</textarea>
-							</div>
-							<button class="btn btn-light-primary fw-medium rounded full-width">Send Message</button>
-						</div>
+						</form>
 					</div>
+
+					{% endif %}
 					
 					<!-- Featured Property -->
 					<div class="sidebar-widgets">

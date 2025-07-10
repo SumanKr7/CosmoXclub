@@ -242,14 +242,61 @@ def home_exchange():
         total_pages = total_pages
     )
 
-
-@app.route('/home-details/<uid>')
+@app.route('/home-details/<uid>', methods=['GET', 'POST'])
 def home_details(uid):
     one_properties = all_users_properties()
     house_details = one_properties.get(uid)
+
+    if request.method == 'POST':
+        name    = request.form.get('name', '').strip()
+        email   = request.form.get('email', '').strip()
+        phone   = request.form.get('phone', '').strip()
+        message = request.form.get('message', '').strip()
+
+        if not all([name, email, phone, message]):
+            flash("All fields are required.", "light")
+            return redirect(url_for('home_details', uid=uid))
+
+        if not is_valid_name(name):
+            flash("Please enter a valid name.", "light")
+            return redirect(url_for('home_details', uid=uid))
+
+        if not is_valid_email(email):
+            flash("Please enter a valid email address.", "light")
+            return redirect(url_for('home_details', uid=uid))
+
+        if not is_valid_phone(phone):
+            flash("Please enter a valid phone number.", "light")
+            return redirect(url_for('home_details', uid=uid))
+
+        if not is_valid_about(message):
+            flash("Please enter a valid message.", "light")
+            return redirect(url_for('home_details', uid=uid))
+
+        try:
+            now_ist = datetime.now(IST)
+            time = now_ist.strftime("%d-%m-%Y, %H:%M")
+
+            admin_db.reference(f'exchange_requests/{uid}').push({
+                "name"         : name,
+                "email"        : email,
+                "phone"        : phone,
+                "message"      : message,
+                "user_type"    : "Not User",
+                "query_status" : "Not Solved",
+                "submitted_at" : time
+            })
+
+            flash("Exchange request sent successfully!", "success")
+        except Exception as e:
+            flash("Could not send your request at the moment. Try again later.", "light")
+
+        return redirect(url_for('home_details', uid=uid))
+
     return render_template("home-details.html",
-            house_details = house_details,
-            amenity_icons = get_amenity_icons())
+        house_details=house_details,
+        amenity_icons=get_amenity_icons())
+
 
 # User authentication routes
 

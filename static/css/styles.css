@@ -4904,6 +4904,14 @@ ul:last-child {
 	top: 9px;
 }
 
+.block-body::-webkit-scrollbar {
+	width: 6px;
+}
+.block-body::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.2);
+	border-radius: 3px;
+}
+
 #module a:not(.collapsed):before {
 	content: "\f068";
 	font-weight: 900;
@@ -6487,7 +6495,7 @@ span.tag_t {
 	height: 30px;
 	opacity: 0;
 	line-height: 30px;
-	background: rgba(255, 255, 255, 0.4);
+	background: #252525;
 	font-size: 10px;
 	color: #ffffff;
 	cursor: pointer;
@@ -10068,7 +10076,7 @@ h3.pa-name {
 	height: 40px;
 	display: inline-block;
 	line-height: 40px;
-	background: rgba(255, 255, 255, 0.4);
+	background: #252525;
 	font-size: 12px;
 	color: #ffffff;
 	cursor: pointer;
@@ -10076,6 +10084,20 @@ h3.pa-name {
 	font-weight: 900;
 	box-shadow: 0 5px 24px rgba(31, 37, 59, 0.15);
 	transition: 0.2s;
+	border: solid 1px #fff;
+}
+
+.collapsed-description {
+	max-height: 150px;
+	overflow: hidden;
+	position: relative;
+	transition: max-height 0.4s ease;
+}
+
+.expanded-description {
+	max-height: 1000px;
+	overflow: hidden;
+	transition: max-height 0.4s ease;
 }
 
 .top-arrow>.slick-next {
@@ -13939,6 +13961,7 @@ th.next.available,
 	text-decoration: none;
 	background: #333c56;
 	color: #ffffff;
+	border: solid 1px #fff;
 }
 
 #back2Top:hover {
