@@ -339,7 +339,6 @@ def home_details(uid):
 
             return redirect(url_for('home_details', uid=uid))
 
-    # GET method: show the page
     return render_template("home-details.html",
                            house_details=house_details,
                            amenity_icons=get_amenity_icons())
@@ -1115,6 +1114,53 @@ def contact_form():
         flash("An unexpected error occurred while updating membership details.", "light")
         return render_template("503.html"), 503
 
+@app.route('/exchange-request', methods=['GET', 'POST'])
+def exchange_request():
+    if 'admin-user' not in session:
+        return redirect(url_for('home'))
+
+    try:
+        if request.method == 'POST':
+            user_id = request.form.get('user_id')
+            request_id = request.form.get('request_id')
+            new_status = request.form.get('dropdown_option')
+
+            try:
+                ref = admin_db.reference(f'exchange_requests/{user_id}/{request_id}')
+                ref.update({'query_status': new_status})
+                flash("Exchange request updated", "success")
+            except Exception as e:
+                flash("Error updating exchange request. Please try again later.", "light")
+
+            return redirect(url_for('exchange_request'))
+
+        exchange_requests_raw = admin_db.reference('exchange_requests').get() or {}
+
+        exchange_requests = []
+        for user_id, requests in exchange_requests_raw.items():
+            if requests:
+                for request_id, req_data in requests.items():
+                    exchange_requests.append({
+                        'user_id': user_id,
+                        'request_id': request_id,
+                        **req_data
+                    })
+
+        total_exchange_requests = len(exchange_requests)
+        total_not_solved = sum(1 for req in exchange_requests if req.get('query_status') in ['Not Solved', 'Pending'])
+
+        return render_template(
+            "exchange-request.html",
+            total_member_request=total_exchange_requests,
+            total_not_solved=total_not_solved,
+            exchange_requests=exchange_requests,
+        )
+
+    except Exception as e:
+        flash("An unexpected error occurred while processing exchange requests.", "light")
+        return render_template("503.html"), 503
+
+    
 @app.route('/logout')
 def logout():
     session.clear()

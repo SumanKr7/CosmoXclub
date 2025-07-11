@@ -14603,3 +14603,33 @@ thead th {
     color: #053864;
     font-family: 'Jost', sans-serif;
 }
+
+    .request-wrapper {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out, padding 0.3s;
+        padding: 0 10px;
+    }
+
+    .request-wrapper.open {
+        max-height: 1000px; /* large enough to show content */
+        padding: 10px;
+    }
+
+    .inner-request-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+    }
+
+    .inner-request-table th,
+    .inner-request-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        vertical-align: middle;
+    }
+
+    .inner-request-table th {
+        background: #f8f8f8;
+        font-weight: bold;
+    }

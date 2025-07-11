@@ -3,30 +3,43 @@
         <li class="{% if request.path == '/dashboard' %}active{% endif %}">
             <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
         </li>
+
         <li class="{% if '/edit-user-profile' in request.path %}active{% endif %}">
             <a href="#" class="text-secondary"><i class="bi bi-person ms-3 me-2"></i>Edit Users Profile</a>
         </li>
+
+        <li class="{% if request.path == '/exchange-request' %}active{% endif %}">
+            <a href="/exchange-request"><i class="bi bi-houses me-2"></i>Exchange Request</a>
+        </li>
+
         <li class="{% if request.path == '/all-homes' %}active{% endif %}">
             <a href="/all-homes"><i class="bi bi-houses me-2"></i>All Homes</a>
         </li>
+
         <li class="{% if '/admin-home-details' in request.path %}active{% endif %}">
             <a href="#" class="text-secondary"><i class="bi bi-eye ms-3 me-2"></i>View Homes Details</a>
         </li>
+        
         <li class="{% if '/admin-edit-home-details' in request.path %}active{% endif %}">
             <a href="#" class="text-secondary"><i class="bi bi-pencil-square ms-3 me-2"></i>Edit Homes Details</a>
         </li>
+        
         <li class="{% if '/admin-update-home-images' in request.path %}active{% endif %}">
             <a href="#" class="text-secondary"><i class="bi bi-cloud-arrow-up ms-3 me-2"></i>Update Homes Images</a>
         </li>
+        
         <li class="{% if request.path == '/update-membership' %}active{% endif %}">
             <a href="/update-membership"><i class="bi bi-person-badge me-2"></i>Update Membership</a>
         </li>
+        
         <li class="{% if request.path == '/membership-request' %}active{% endif %}">
             <a href="/membership-request"><i class="bi bi-question-circle"></i>Membership Request</a>
         </li>
+        
         <li class="{% if request.path == '/contact-form' %}active{% endif %}">
             <a href="/contact-form"><i class="bi bi-person-lines-fill"></i>Contact Form Query</a>
         </li>
+        
         <li>
             <a href="{{ url_for('logout') }}"><i class="bi bi-power me-2"></i>Log Out</a>
         </li>
