@@ -3,29 +3,37 @@
         <i class="bi bi-speedometer2 me-2"></i>Dashboard
     </a>
     
+    {% if '/edit-user-profile' in request.path %}
     <a href="#" class="sub-menu-item text-secondary {% if '/edit-user-profile' in request.path %}bg-success-subtle{% endif %}">
         <i class="bi bi-person ms-3 me-2"></i>Edit Users Profile
     </a>
+    {% endif %}
 
     <a href="/exchange-request" class="sub-menu-item {% if request.path == '/exchange-request' %}bg-success-subtle{% endif %}">
-        <i class="bi bi-houses me-2"></i>Exchange Request
+        <i class="bi bi-arrow-left-right"></i></i>Exchange Request
     </a>
 
     <a href="/all-homes" class="sub-menu-item {% if request.path == '/all-homes' %}bg-success-subtle{% endif %}">
         <i class="bi bi-houses me-2"></i>All Homes
     </a>
 
+    {% if '/admin-home-details' in request.path %}
     <a href="#" class="sub-menu-item text-secondary {% if '/admin-home-details' in request.path %}bg-success-subtle{% endif %}">
         <i class="bi bi-eye ms-3 me-2"></i>View Homes
     </a>
+    {% endif %}
 
+    {% if '/admin-edit-home-details' in request.path %}
     <a href="#" class="sub-menu-item text-secondary {% if '/admin-edit-home-details' in request.path %}bg-success-subtle{% endif %}">
         <i class="bi bi-pencil-square ms-3 me-2"></i>Edit Homes Details
     </a>
+    {% endif %}
 
+    {% if '/admin-update-home-images' in request.path %}
     <a href="#" class="sub-menu-item text-secondary {% if '/admin-update-home-images' in request.path %}bg-success-subtle{% endif %}">
         <i class="bi bi-cloud-arrow-up ms-3 me-2"></i>Update Homes Images
     </a>
+    {% endif %}
 
     <a href="/update-membership" class="sub-menu-item {% if request.path == '/update-membership' %}bg-success-subtle {% endif %}">
         <i class="bi bi-person-badge me-2"></i>Update Membership

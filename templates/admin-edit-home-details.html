@@ -174,142 +174,6 @@
 									</div>
 									
                                     <div class="form-group col-md-12">
-										<label class="mb-2">Amenities</label>
-										<div class="o-features">
-											<ul class="no-ul-list third-row">
-												{% set amenities = user.get('properties', {}).get('amenities', []) %}
-
-												<li>
-													<input id="a-1" class="form-check-input" name="amenities" value="Air Condition" type="checkbox" {% if 'Air Condition' in amenities %}checked{% endif %}>
-													<label for="a-1" class="form-check-label">Air Condition</label>
-												</li>
-												<li>
-													<input id="a-2" class="form-check-input" name="amenities" value="Refrigerator" type="checkbox" {% if 'Refrigerator' in amenities %}checked{% endif %}>
-													<label for="a-2" class="form-check-label">Refrigerator</label>
-												</li>
-												<li>
-													<input id="a-3" class="form-check-input" name="amenities" value="Oven" type="checkbox" {% if 'Oven' in amenities %}checked{% endif %}>
-													<label for="a-3" class="form-check-label">Oven</label>
-												</li>
-												<li>
-													<input id="a-4" class="form-check-input" name="amenities" value="Heating System" type="checkbox" {% if 'Heating System' in amenities %}checked{% endif %}>
-													<label for="a-4" class="form-check-label">Heating System</label>
-												</li>
-												<li>
-													<input id="a-5" class="form-check-input" name="amenities" value="Microwave" type="checkbox" {% if 'Microwave' in amenities %}checked{% endif %}>
-													<label for="a-5" class="form-check-label">Microwave</label>
-												</li>
-												<li>
-													<input id="a-6" class="form-check-input" name="amenities" value="Washing Machine" type="checkbox" {% if 'Washing Machine' in amenities %}checked{% endif %}>
-													<label for="a-6" class="form-check-label">Washing Machine</label>
-												</li>
-												<li>
-													<input id="a-7" class="form-check-input" name="amenities" value="Wifi" type="checkbox" {% if 'Wifi' in amenities %}checked{% endif %}>
-													<label for="a-7" class="form-check-label">Wifi</label>
-												</li>
-												<li>
-													<input id="a-8" class="form-check-input" name="amenities" value="Smart TV" type="checkbox" {% if 'Smart TV' in amenities %}checked{% endif %}>
-													<label for="a-8" class="form-check-label">Smart TV</label>
-												</li>
-												<li>
-													<input id="a-9" class="form-check-input" name="amenities" value="Dishwasher" type="checkbox" {% if 'Dishwasher' in amenities %}checked{% endif %}>
-													<label for="a-9" class="form-check-label">Dishwasher</label>
-												</li>
-												<li>
-													<input id="a-10" class="form-check-input" name="amenities" value="Induction" type="checkbox" {% if 'Induction' in amenities %}checked{% endif %}>
-													<label for="a-10" class="form-check-label">Induction</label>
-												</li>
-												<li>
-													<input id="a-12" class="form-check-input" name="amenities" value="Kettle" type="checkbox" {% if 'Kettle' in amenities %}checked{% endif %}>
-													<label for="a-12" class="form-check-label">Kettle</label>
-												</li>
-												<li>
-													<input id="a-11" class="form-check-input" name="amenities" value="Bathtub" type="checkbox" {% if 'Bathtub' in amenities %}checked{% endif %}>
-													<label for="a-11" class="form-check-label">Bathtub</label>
-												</li>
-											</ul>
-										</div>
-									</div>
-
-									<div class="form-group col-md-12">
-                                        <label class="mb-2">Unique Facilities</label>
-                                        <div class="o-features">
-											<ul class="no-ul-list third-row">
-												{% set unique_facilities = user.get('properties', {}).get('unique_facilities', []) %}
-
-												<li>
-													<input id="b-1" class="form-check-input" name="unique_facilities" value="Private Backyard" type="checkbox" {% if 'Private Backyard' in unique_facilities %}checked{% endif %}>
-													<label for="b-1" class="form-check-label">Private Backyard</label>
-												</li>
-												<li>
-													<input id="b-3" class="form-check-input" name="unique_facilities" value="Balcony / Terrace" type="checkbox" {% if 'Balcony / Terrace' in unique_facilities %}checked{% endif %}>
-													<label for="b-3" class="form-check-label">Balcony / Terrace</label>
-												</li>
-												<li>
-													<input id="b-4" class="form-check-input" name="unique_facilities" value="BBQ" type="checkbox" {% if 'BBQ' in unique_facilities %}checked{% endif %}>
-													<label for="b-4" class="form-check-label">BBQ</label>
-												</li>
-												<li>
-													<input id="b-5" class="form-check-input" name="unique_facilities" value="Pool" type="checkbox" {% if 'Pool' in unique_facilities %}checked{% endif %}>
-													<label for="b-5" class="form-check-label">Pool</label>
-												</li>
-												<li>
-													<input id="b-6" class="form-check-input" name="unique_facilities" value="Bicycle" type="checkbox" {% if 'Bicycle' in unique_facilities %}checked{% endif %}>
-													<label for="b-6" class="form-check-label">Bicycle</label>
-												</li>
-												<li>
-													<input id="b-7" class="form-check-input" name="unique_facilities" value="Cleaning Person" type="checkbox" {% if 'Cleaning Person' in unique_facilities %}checked{% endif %}>
-													<label for="b-7" class="form-check-label">Cleaning Person</label>
-												</li>
-												<li>
-													<input id="b-8" class="form-check-input" name="unique_facilities" value="Private Parking" type="checkbox" {% if 'Private Parking' in unique_facilities %}checked{% endif %}>
-													<label for="b-8" class="form-check-label">Private Parking</label>
-												</li>
-												<li>
-													<input id="b-9" class="form-check-input" name="unique_facilities" value="Fire Place" type="checkbox" {% if 'Fire Place' in unique_facilities %}checked{% endif %}>
-													<label for="b-9" class="form-check-label">Fire Place</label>
-												</li>
-												<li>
-													<input id="b-10" class="form-check-input" name="unique_facilities" value="Private Gym" type="checkbox" {% if 'Private Gym' in unique_facilities %}checked{% endif %}>
-													<label for="b-10" class="form-check-label">Private Gym</label>
-												</li>
-												<li>
-													<input id="b-11" class="form-check-input" name="unique_facilities" value="Elevator" type="checkbox" {% if 'Elevator' in unique_facilities %}checked{% endif %}>
-													<label for="b-11" class="form-check-label">Elevator</label>
-												</li>
-												<li>
-													<input id="b-12" class="form-check-input" name="unique_facilities" value="Guide" type="checkbox" {% if 'Guide' in unique_facilities %}checked{% endif %}>
-													<label for="b-12" class="form-check-label">Guide</label>
-												</li>
-											</ul>
-										</div>
-                                    </div>
-
-									<div class="form-group col-md-12">
-                                        <label class="mb-2">Kids Friendly</label>
-                                        <div class="o-features">
-											<ul class="no-ul-list third-row">
-												{% set kids_friendly = user.get('properties', {}).get('kids_friendly', []) %}
-
-												<li>
-													<input id="c-1" class="form-check-input" name="kids_friendly" value="Kid's Playground" type="checkbox" {% if 'Kid's Playground' in kids_friendly %}checked{% endif %}>
-													<label for="c-1" class="form-check-label">Kid's Playground</label>
-												</li>
-												<li>
-													<input id="c-2" class="form-check-input" name="kids_friendly" value="Baby Gear" type="checkbox" {% if 'Baby Gear' in kids_friendly %}checked{% endif %}>
-													<label for="c-2" class="form-check-label">Baby Gear</label>
-												</li>
-												<li>
-													<input id="c-3" class="form-check-input" name="kids_friendly" value="Secured Pool" type="checkbox" {% if 'Secured Pool' in kids_friendly %}checked{% endif %}>
-													<label for="c-3" class="form-check-label">Secured Pool</label>
-												</li>
-												<li>
-													<input id="c-4" class="form-check-input" name="kids_friendly" value="Kid's Toy" type="checkbox" {% if 'Kid's Toy' in kids_friendly %}checked{% endif %}>
-													<label for="c-4" class="form-check-label">Kid's Toy</label>
-												</li>
-											</ul>
-										</div>
-                                    </div><div class="form-group col-md-12">
 										<label class="mb-2 fs-5">Amenities</label>
 										<div class="o-features">
 											<ul class="no-ul-list third-row">
@@ -352,12 +216,12 @@
 													<label for="a-10" class="form-check-label">Induction</label>
 												</li>
 												<li>
-													<input id="a-11" class="form-check-input" name="amenities" value="Bathtub" type="checkbox" {% if 'Bathtub' in amenities %}checked{% endif %}>
-													<label for="a-11" class="form-check-label">Bathtub</label>
+													<input id="a-12" class="form-check-input" name="amenities" value="Kettle" type="checkbox" {% if 'Kettle' in amenities %}checked{% endif %}>
+													<label for="a-12" class="form-check-label">Kettle</label>
 												</li>
 												<li>
-													<input id="a-12" class="form-check-input" name="amenities" value="Phone" type="checkbox" {% if 'Phone' in amenities %}checked{% endif %}>
-													<label for="a-12" class="form-check-label">Phone</label>
+													<input id="a-11" class="form-check-input" name="amenities" value="Bathtub" type="checkbox" {% if 'Bathtub' in amenities %}checked{% endif %}>
+													<label for="a-11" class="form-check-label">Bathtub</label>
 												</li>
 											</ul>
 										</div>

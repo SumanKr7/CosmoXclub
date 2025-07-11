@@ -158,17 +158,17 @@
                                             <td>{{ user.properties.city if user.get('properties', {}).get('city') else '----' }}</td>
                                             <td>{{ user.membership_details.plan if user.get('membership_details', {}).get('plan') else '----' }}</td>
                                             <td>
-                                                <a href="/admin-home-details/{{ uid }}">
+                                                <a href="/admin-home-details/{{ uid }}" target="_blank">
                                                     <button class="btn btn-main" style="height: 40px;" type="button"><i class="bi bi-eye me-2"></i>View</button>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="/admin-edit-home-details/{{ uid }}">
+                                                <a href="/admin-edit-home-details/{{ uid }}" target="_blank">
                                                     <button class="btn btn-main" style="height: 40px;" type="button"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="/admin-update-home-images/{{ uid }}">
+                                                <a href="/admin-update-home-images/{{ uid }}" target="_blank">
                                                     <button class="btn btn-main" style="height: 40px;" type="button"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                                 </a>
                                             </td>
@@ -188,14 +188,11 @@
                                                             <option value="Not Verified" {{ 'selected' if status == 'Not Verified' else '' }}>Not Verified</option>
                                                         </select>
 
-                                                        
                                                         <button type="submit" class="btn btn-main" style="font-size: 16px; padding: 10px 20px;">
                                                             <i class="bi bi-bookmark me-2"></i>Save
                                                         </button>
                                                     </div>
                                                 </form>
-
-
                                             </td>
                                             <td>
                                                 <a href="javascript:void(0);" onclick="confirmDelete('{{ uid }}')" class="btn btn-main" style="height: 40px;">

@@ -76,11 +76,11 @@
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="dashboard-stat widget-6">
                             <div class="dashboard-stat-content">
-                                <h4>0</h4>
+                                <h4>{{ total_not_solved }}</h4>
                                 <span>Request For Exchange</span>
                             </div>
                             <div class="dashboard-stat-icon">
-                                <i class="bi bi-basket"></i>
+                                <i class="bi bi-arrow-left-right"></i>
                             </div>
                         </div>    
                     </div>
@@ -185,7 +185,7 @@
                                             <td>{{ user.properties.city if user.get('properties', {}).get('city') else '----' }}</td>
                                             <td>{{ user.membership_details.plan if user.get('membership_details', {}).get('plan') else '----' }}</td>
                                             <td>
-                                                <a href="edit-user-profile/{{ uid }}">
+                                                <a href="edit-user-profile/{{ uid }}" target="_blank">
                                                     <button class="btn btn-main" style="height: 40px;" type="button"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                                 </a>
                                             </td>

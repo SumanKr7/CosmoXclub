@@ -771,11 +771,25 @@ def dashboard():
                 not_verified_homes_count += 1
 
             membership = user_data.get("membership_details", {})
-            plan = membership.get("plan", "").strip().lower()
+            plan = membership.get("plan", "").strip()
             if plan in ['Silver', 'Gold', 'Platinum']:
                 total_members += 1
 
         total_homes = verified_homes_count + not_verified_homes_count
+
+        exchange_requests_raw = admin_db.reference('exchange_requests').get() or {}
+
+        exchange_requests = []
+        for user_id, requests in exchange_requests_raw.items():
+            if requests:
+                for request_id, req_data in requests.items():
+                    exchange_requests.append({
+                        'user_id': user_id,
+                        'request_id': request_id,
+                        **req_data
+                    })
+
+        total_not_solved = sum(1 for req in exchange_requests if req.get('query_status') in ['Not Solved', 'Pending'])
 
         return render_template("dashboard.html",
             total_users               = total_users,
@@ -783,7 +797,9 @@ def dashboard():
             total_homes               = total_homes,
             verified_homes_count      = verified_homes_count,
             not_verified_homes_count  = not_verified_homes_count,
-            total_members             = total_members
+            total_members             = total_members,
+            total_not_solved          = total_not_solved
+
         )
     except Exception as e:
         flash("An error occurred while loading the dashboard. Please try again later.", "light")
@@ -1160,7 +1176,22 @@ def exchange_request():
         flash("An unexpected error occurred while processing exchange requests.", "light")
         return render_template("503.html"), 503
 
-    
+@app.route('/get-user-details/<user_id>')
+def get_user_details(user_id):
+    if 'admin-user' not in session:
+        return {'status': 'unauthorized'}, 403
+    try:
+        user_data = admin_db.reference(f'users/{user_id}').get()
+        if user_data:
+            return {
+                'status': 'success',
+                'user': user_data
+            }
+        else:
+            return {'status': 'not_found'}, 404
+    except Exception as e:
+        return {'status': 'error', 'message': str(e)}, 500
+
 @app.route('/logout')
 def logout():
     session.clear()

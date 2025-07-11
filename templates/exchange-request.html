@@ -97,7 +97,7 @@
                             <thead>
                                 <tr>
                                     <th>S. No.</th>
-                                    <th>User ID</th>
+                                    <th>Home Details</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
@@ -111,7 +111,14 @@
                                     {% for req in exchange_requests %}
                                         <tr style="height: 100px;" class="{% if req.query_status == 'Solved' %}bg-light-success{% endif %}">
                                             <td>{{ loop.index }}</td>
-                                            <td>{{ req.user_id }}</td>
+                                            <td>
+                                                <button 
+                                                    class="btn btn-sm border view-user-details"
+                                                    data-user-id="{{ req.user_id }}"
+                                                    type="button">
+                                                    View
+                                                </button>
+                                            </td>
                                             <td>{{ req.name or '----' }}</td>
                                             <td>{{ req.email or '----' }}</td>
                                             <td>{{ req.phone or '----' }}</td>
@@ -175,6 +182,38 @@ document.getElementById("userSearchInput").addEventListener("keyup", function() 
         }
     });
 });
+</script>
+<script>
+    document.querySelectorAll('.view-user-details').forEach(button => {
+        button.addEventListener('click', function () {
+            const userId = this.getAttribute('data-user-id');
+
+            fetch(`/get-user-details/${userId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.status === "success") {
+                        const user = data.user;
+                        Swal.fire({
+                            title: `<strong>Home Details</strong>`,
+                            html: `
+                                <p><strong>Name:</strong> ${user.name}</p>
+                                <p><strong>Email:</strong> ${user.email}</p>
+                                <p><strong>Phone:</strong> ${user.phone}</p>
+                                <p><strong>Home Title:</strong> ${user.properties.title}</p>
+                                <p><strong>Guest Points:</strong> ${user.properties.guest_points}</p>
+                            `,
+                            confirmButtonText: 'Close'
+                        });
+                    } else {
+                        Swal.fire("Error", "User details not found.", "error");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    Swal.fire("Error", "Something went wrong while fetching user details.", "error");
+                });
+        });
+    });
 </script>
 
 {% endblock %}
