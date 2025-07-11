@@ -868,8 +868,6 @@ def all_homes():
                 flash('Home status and guest points updated successfully.', 'success')
                 return redirect(url_for('all_homes'))
 
-
-
         except Exception as e:
             if request.is_json:
                 return jsonify({'success': False, 'message': 'Error occurred.'}), 500
