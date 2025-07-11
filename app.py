@@ -286,7 +286,6 @@ def home_details(uid):
 
                 flash("Exchange request sent successfully!", "success")
             except Exception as e:
-                print(f"Error saving exchange request (user): {e}")
                 flash("Could not send your request at the moment. Try again later.", "light")
 
             return redirect(url_for('home_details', uid=uid))
@@ -334,7 +333,6 @@ def home_details(uid):
 
                 flash("Exchange request sent successfully!", "success")
             except Exception as e:
-                print(f"Error saving exchange request (guest): {e}")
                 flash("Could not send your request at the moment. Try again later.", "light")
 
             return redirect(url_for('home_details', uid=uid))
@@ -658,7 +656,6 @@ def edit_home_details():
         return render_template("edit-home-details.html")
     
     except Exception as e:
-        print(e)
         flash("An unexpected error occurred while submitting your home details.", "light")
         return render_template("503.html"), 503
 
@@ -708,7 +705,6 @@ def my_house_view(uid):
                 amenity_icons = get_amenity_icons())
     
     except Exception as e:
-        print(e)
         flash("An unexpected error occurred while loading your home details.", "light")
         return render_template("503.html"), 503
 
@@ -937,7 +933,7 @@ def admin_home_details(uid):
 
     
 @app.route('/admin-edit-home-details/<uid>', methods=['GET', 'POST'])
-def admin_edit_home_details1(uid):
+def admin_edit_home_details(uid):
     if 'admin-user' not in session:
         return redirect(url_for('home'))
     try:
@@ -970,12 +966,10 @@ def admin_edit_home_details1(uid):
                     flash(msg, "light")
                 return redirect(request.url)
 
-            
             admin_db.reference(f'users/{uid}/properties').update(data)
 
-            user_ref.child('properties').update(data)
             flash("Home details updated successfully.", "success")
-            return redirect(url_for('edit_home_details', user=user_data, uid=uid))
+            return redirect(url_for('admin_edit_home_details', uid=uid))
 
         return render_template("admin-edit-home-details.html", user=user_data, uid=uid)
 
