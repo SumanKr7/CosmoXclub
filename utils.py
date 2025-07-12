@@ -123,7 +123,7 @@ def is_valid_title(title: str) -> bool:
 
 def is_valid_location_type(location_type: str) -> bool:
     """Location Type"""
-    return location_type in ['Mountain', 'Beach', 'City', 'Wildlife Area']
+    return location_type in ['Mountain', 'Beach', 'City', 'Wildlife']
 
 def is_valid_property_type(property_type: str) -> bool:
     """Property type: Must be one of the predefined types."""

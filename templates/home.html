@@ -25,31 +25,32 @@
 			<div class="col-xl-7 col-lg-9 col-md-12 col-sm-10 header-search-form">
 				<div class="full-search-2 eclip-search italian-search hero-search-radius shadow-hard">
 					<div class="hero-search-content">
-
-						<div class="row  justify-content-center">
-
-							<div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 elio">
-							   
-								<div class="form-group borders">
-									<div class="position-relative">
-										<input type="text" class="form-control ps-5" placeholder="Enter Your Membership ID for Home Exchange">
-										<div class="position-absolute top-50 start-0 translate-middle-y ms-2">
-											<span class="svg-icon text-primary svg-icon-2hx">
-                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" x="0" y="0" viewBox="0 0 64 64" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M18.34 41.37a1.001 1.001 0 0 0-1.371-.348l-1.544.919v-1.796a1 1 0 0 0-2 0v1.796l-1.543-.918a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0 1.022 1.719l1.543-.918v1.796a1 1 0 0 0 2 0v-1.796l1.544.919a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 0 0 .348-1.371zM30.056 41.37a1.001 1.001 0 0 0-1.371-.348l-1.544.919v-1.796a1 1 0 0 0-2 0v1.796l-1.543-.918a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0 1.022 1.719l1.543-.918v1.796a1 1 0 0 0 2 0v-1.796l1.544.919a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 0 0 .348-1.371zM41.772 41.37a1.001 1.001 0 0 0-1.371-.348l-1.543.918v-1.796a1 1 0 0 0-2 0v1.796l-1.544-.919a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0 1.022 1.719l1.544-.919v1.796a1 1 0 0 0 2 0v-1.796l1.543.918a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 0 0 .348-1.371zM45.66 46.027a1.001 1.001 0 0 0 1.37.348l1.544-.919v1.796a1 1 0 0 0 2 0v-1.796l1.543.918a.997.997 0 0 0 1.37-.348 1.001 1.001 0 0 0-.348-1.371l-1.61-.958 1.61-.958a1 1 0 1 0-1.023-1.719l-1.543.918v-1.796a1 1 0 0 0-2 0v1.796l-1.544-.919a1.001 1.001 0 0 0-1.023 1.719l1.61.958-1.61.958a1 1 0 0 0-.348 1.371z" fill="currentColor" opacity="1" data-original="currentColor" class=""></path><path d="M57.89 32.22H42.9a1 1 0 0 0 0 2h14.99c1.164 0 2.11.946 2.11 2.11v14.74c0 1.164-.946 2.11-2.11 2.11H6.11A2.112 2.112 0 0 1 4 51.07V36.33c0-1.164.946-2.11 2.11-2.11H21.1a1 1 0 0 0 0-2H6.11A4.115 4.115 0 0 0 2 36.33v14.74a4.114 4.114 0 0 0 4.11 4.11h51.78A4.115 4.115 0 0 0 62 51.07V36.33a4.115 4.115 0 0 0-4.11-4.11zM36.559 19.756v-1.009c0-2.514-2.045-4.559-4.559-4.559s-4.559 2.045-4.559 4.559v1.009a2.021 2.021 0 0 0-1.586 1.971v5.062c0 1.114.906 2.021 2.021 2.021h8.25a2.023 2.023 0 0 0 2.021-2.021v-5.062c0-.965-.681-1.771-1.586-1.971zM32 16.188a2.562 2.562 0 0 1 2.559 2.559v.959h-5.118v-.959A2.562 2.562 0 0 1 32 16.188zm4.125 10.622-8.271-.021.021-5.083h8.25c.011 0 .021.009.021.021z" fill="currentColor" opacity="1" data-original="#currentColor" class=""></path><path d="M32 8.821c-7.418 0-13.453 6.035-13.453 13.453S24.582 35.728 32 35.728s13.453-6.035 13.453-13.454S39.418 8.821 32 8.821zm0 24.907c-6.315 0-11.453-5.138-11.453-11.454S25.685 10.821 32 10.821s11.453 5.138 11.453 11.453S38.315 33.728 32 33.728z" fill="currentColor" opacity="1" data-original="currentColor" class=""></path></g>
-                                                </svg>
-											</span>
+						
+						<form method="GET" action="{{ url_for('home_exchange') }}">
+							<div class="row justify-content-center">
+								<div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 elio">
+									<div class="form-group borders">
+										<div class="position-relative">
+											<input type="text" name="city" value="{{ selected_city }}" class="form-control ps-5" placeholder="Enter City Name for Home Exchange">
+											<div class="position-absolute top-50 start-0 translate-middle-y ms-2">
+												<span class="svg-icon text-primary svg-icon-2hx">
+													<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path opacity="0.3" d="M18.0624 15.3453L13.1624 20.7453C12.5624 21.4453 11.5624 21.4453 10.9624 20.7453L6.06242 15.3453C4.56242 13.6453 3.76242 11.4453 4.06242 8.94534C4.56242 5.34534 7.46242 2.44534 11.0624 2.04534C15.8624 1.54534 19.9624 5.24534 19.9624 9.94534C20.0624 12.0453 19.2624 13.9453 18.0624 15.3453Z" fill="currentColor"/>
+														<path d="M12.0624 13.0453C13.7193 13.0453 15.0624 11.7022 15.0624 10.0453C15.0624 8.38849 13.7193 7.04535 12.0624 7.04535C10.4056 7.04535 9.06241 8.38849 9.06241 10.0453C9.06241 11.7022 10.4056 13.0453 12.0624 13.0453Z" fill="currentColor"/>
+													</svg>
+												</span>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							
-							<div class="col-xl-5 col-lg-5 col-md-5 col-sm-12">
-								<div class="form-group">
-									<button type="button" class="btn btn-primary full-width">Search</button>
+
+								<div class="col-xl-5 col-lg-5 col-md-5 col-sm-12">
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary full-width">Search</button>
+									</div>
 								</div>
 							</div>
-									
-						</div>
+						</form>
 					</div>
 				</div>
 				

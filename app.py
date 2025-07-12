@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 from firebase_admin import credentials, db as admin_db, auth as admin_auth
 from datetime import datetime, timezone, timedelta
+from collections import defaultdict
 
 from utils import (
     all_users_properties,
@@ -90,6 +91,19 @@ def get_user_by_uid(uid):
         return ref.get() or {}
     except Exception as e:
         return {}
+    
+def get_location_type_counts():
+    """Return counts of *verified* homes by location_type."""
+    counts = defaultdict(int)
+    for data in all_users_properties().values():
+        props        = data.get('properties', {})
+        loc_type     = props.get('location_type', '').lower()
+        house_status = props.get('house_status', '').lower()
+
+        if loc_type and house_status == 'verified':
+            counts[loc_type] += 1
+
+    return counts
 
 # Route for the home page
 
@@ -106,15 +120,12 @@ def home():
                 flash("Please enter a valid email address.", "light")
             else:
                 try:
-                    now_ist = datetime.now(IST)
-                    time    = now_ist.strftime("%d-%m-%Y, %H:%M")
-
-                    admin_db.reference('subscriptions').push({
-                        "email"        : email,
-                        "submitted_at" : time
-                    })
+                    now_ist = datetime.now(IST).strftime("%d-%m-%Y, %H:%M")
+                    admin_db.reference('subscriptions').push(
+                        {"email": email, "submitted_at": now_ist}
+                    )
                     flash("Thank you for subscribing!", "success")
-                except Exception as e:
+                except Exception:
                     flash("Subscription failed. Please try again later.", "light")
 
         elif form_type == 'plan_inquiry':
@@ -123,41 +134,38 @@ def home():
             email     = request.form.get('email', '').strip()
             plan_type = request.form.get('plan-type', '').strip()
 
-            if not fullname or not phone or not email or not plan_type:
+            # validations …
+            if not (fullname and phone and email and plan_type):
                 flash("All fields are required for plan inquiry.", "light")
                 return redirect(url_for('home'))
-
             if not is_valid_name(fullname):
-                flash("Please enter a valid name.", "light")
-                return redirect(url_for('home'))
-
+                flash("Please enter a valid name.", "light"); return redirect(url_for('home'))
             if not is_valid_email(email):
-                flash("Please enter a valid email address.", "light")
-                return redirect(url_for('home'))
-
+                flash("Please enter a valid email address.", "light"); return redirect(url_for('home'))
             if not is_valid_phone(phone):
-                flash("Please enter a valid phone number.", "light")
-                return redirect(url_for('home'))
+                flash("Please enter a valid phone number.", "light"); return redirect(url_for('home'))
 
             try:
-                now_ist = datetime.now(IST)
-                time    = now_ist.strftime("%d-%m-%Y, %H:%M")
-                
-                admin_db.reference('plan_inquiries').push({
-                    "fullname"     : fullname,
-                    "phone"        : phone,
-                    "email"        : email,
-                    "plan"         : plan_type,
-                    "action"       : "Not Connected",
-                    "submitted_at" : time
-                })
+                now_ist = datetime.now(IST).strftime("%d-%m-%Y, %H:%M")
+                admin_db.reference('plan_inquiries').push(
+                    {
+                        "fullname": fullname, "phone": phone, "email": email,
+                        "plan": plan_type, "action": "Not Connected",
+                        "submitted_at": now_ist
+                    }
+                )
                 flash("Your inquiry has been submitted!", "success")
-            except Exception as e:
+            except Exception:
                 flash("Could not submit inquiry. Try again later.", "light")
 
         return redirect(url_for('home'))
 
-    return render_template('home.html')
+    location_type_counts = get_location_type_counts()
+
+    return render_template(
+        'home.html',
+        location_type_counts=location_type_counts
+    )
 
 # Route for about pages
 
@@ -231,23 +239,45 @@ def blog():
 
 @app.route('/home-exchange')
 def home_exchange():
-    house      = all_users_properties()
-    house_list = list(house.items())
-    
-    per_page        = 8
-    page            = int(request.args.get('page', 1))
-    total           = len(house_list)
-    start           = (page - 1) * per_page
-    end             = start + per_page
-    paginated_house = dict(house_list[start:end]) 
-    total_pages     = (total + per_page - 1) // per_page
+    house_dict = all_users_properties()
+    house_list = list(house_dict.items())
+
+    selected_city        = request.args.get('city', '').strip().lower()
+    selected_location    = request.args.get('location_type', '').strip().lower()
+
+    filtered = []
+    for uid, data in house_list:
+        props = data.get('properties', {})
+        city  = props.get('city', '').lower()
+        loc   = props.get('location_type', '').lower()
+
+        if selected_city and selected_city != city:
+            continue
+        if selected_location and selected_location != loc:
+            continue
+        filtered.append((uid, data))
+
+    per_page    = 8
+    page        = request.args.get('page', default=1, type=int)
+    total       = len(filtered)
+    start, end  = (page - 1) * per_page, page * per_page
+    paginated   = dict(filtered[start:end])
+    total_pages = (total + per_page - 1) // per_page or 1
+
+    cities          = sorted({d['properties'].get('city') for _, d in house_list if d.get('properties', {}).get('city')})
+    location_types  = sorted({d['properties'].get('location_type') for _, d in house_list if d.get('properties', {}).get('location_type')})
 
     return render_template(
         "home-exchange.html",
-        house       = paginated_house,
-        page        = page,
-        total_pages = total_pages
+        house             = paginated,
+        page              = page,
+        total_pages       = total_pages,
+        cities            = cities,
+        location_types    = location_types,
+        selected_city     = selected_city,
+        selected_location = selected_location
     )
+
 
 @app.route('/home-details/<uid>', methods=['GET', 'POST'])
 def home_details(uid):
