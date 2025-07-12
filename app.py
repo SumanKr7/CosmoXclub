@@ -83,6 +83,13 @@ def inject_user():
         return dict(user=get_current_user())
     except Exception as e:
         return dict(user={})
+    
+def get_user_by_uid(uid):
+    try:
+        ref = admin_db.reference(f'users/{uid}')
+        return ref.get() or {}
+    except Exception as e:
+        return {}
 
 # Route for the home page
 
@@ -241,13 +248,6 @@ def home_exchange():
         page        = page,
         total_pages = total_pages
     )
-
-def get_user_by_uid(uid):
-    try:
-        ref = admin_db.reference(f'users/{uid}')
-        return ref.get() or {}
-    except Exception as e:
-        return {}
 
 @app.route('/home-details/<uid>', methods=['GET', 'POST'])
 def home_details(uid):
