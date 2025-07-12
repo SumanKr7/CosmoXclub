@@ -1039,6 +1039,7 @@ def update_membership():
         )
     
     except Exception as e:
+        print(e)
         flash("An unexpected error occurred while updating membership details.", "light")
         return render_template("503.html"), 503
 
