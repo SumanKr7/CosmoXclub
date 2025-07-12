@@ -266,7 +266,8 @@ def home_details(uid):
             name = user_data.get('name', 'User')
             email = user_data.get('email', session.get('email', 'N/A'))
             phone = user_data.get('phone', 'N/A')
-            house_status = user_data.get('house_status', 'Home not listed.')
+            house_status = user_data.get('properties', {}).get('house_status', 'Home not listed.')
+            guest_point = user_data.get('gp_wallet', {}).get('guest_points', '0') 
             message = "I'm interested in this home for exchange."
 
             try:
@@ -279,8 +280,9 @@ def home_details(uid):
                     "phone": phone,
                     "message": message,
                     "user_type": "User",
+                    "guest_point": guest_point,
+                    "house_status": house_status,
                     "query_status": "Not Solved",
-                    "House Status": house_status,
                     "submitted_at": time
                 })
 
@@ -326,8 +328,9 @@ def home_details(uid):
                     "phone": phone,
                     "message": message,
                     "user_type": "Not User",
+                    "guest_point": "0",
+                    "house_status": "Home not listed.",
                     "query_status": "Not Solved",
-                    "House Status": "Home not listed.",
                     "submitted_at": time
                 })
 
@@ -340,8 +343,6 @@ def home_details(uid):
     return render_template("home-details.html",
                            house_details=house_details,
                            amenity_icons=get_amenity_icons())
-
-
 
 # User authentication routes
 
@@ -1154,6 +1155,14 @@ def exchange_request():
                         **req_data
                     })
 
+        def parse_datetime(dt_str):
+            try:
+                return datetime.strptime(dt_str, "%d-%m-%Y, %H:%M")
+            except:
+                return datetime.min
+
+        exchange_requests.sort(key=lambda r: parse_datetime(r.get('submitted_at', '')), reverse=True)
+
         total_exchange_requests = len(exchange_requests)
         total_not_solved = sum(1 for req in exchange_requests if req.get('query_status') in ['Not Solved', 'Pending'])
 
@@ -1165,6 +1174,7 @@ def exchange_request():
         )
 
     except Exception as e:
+        print(e)
         flash("An unexpected error occurred while processing exchange requests.", "light")
         return render_template("503.html"), 503
 
@@ -1183,6 +1193,107 @@ def get_user_details(user_id):
             return {'status': 'not_found'}, 404
     except Exception as e:
         return {'status': 'error', 'message': str(e)}, 500
+    
+@app.route('/user-gp-wallet', methods=['GET', 'POST'])
+def user_gp_wallet():
+    if 'admin-user' not in session:
+        return redirect(url_for('home'))
+
+    users_ref = admin_db.reference('users')
+
+    if request.method == 'POST':
+        try:
+            user_id       = request.form.get('user_id', '').strip()
+            guest_points_ = request.form.get('guest_points', '').strip()
+
+            if not user_id or not guest_points_:
+                flash('All fields are required.', 'light')
+                return redirect(url_for('user_gp_wallet'))
+
+            try:
+                increment = int(guest_points_)
+            except ValueError:
+                flash('Guest points must be a valid number.', 'light')
+                return redirect(url_for('user_gp_wallet'))
+
+            gp_ref = users_ref.child(user_id).child('gp_wallet')
+            current = gp_ref.child('guest_points').get()
+            try:
+                current = int(current)
+            except (TypeError, ValueError):
+                current = 0
+
+            new_total = current + increment
+            gp_ref.update({'guest_points': new_total})
+
+            flash('Guest points updated successfully.', 'success')
+            return redirect(url_for('user_gp_wallet'))
+
+        except Exception as e:
+            if request.is_json:
+                return jsonify({'success': False, 'message': 'Error occurred.'}), 500
+            flash('An error occurred. Please try again.', 'light')
+            return redirect(url_for('user_gp_wallet'))
+
+
+    try:
+        all_users = users_ref.get() or {}
+        house_data  = all_users_properties_admin() or {}
+
+        filtered_house_data = {
+            uid: data
+            for uid, data in house_data.items()
+            if data.get("membership_details")
+        }
+
+        verified_homes = 0
+
+        for user in filtered_house_data.values():
+            status = (user.get("properties", {}).get("house_status") or "").strip()
+            if status == "Verified":
+                verified_homes += 1
+
+        context = {
+            "total_users"        : len(all_users),
+            "all_users"          : filtered_house_data,
+            "verified_homes_count": verified_homes,
+            "total_members"      : len(filtered_house_data),
+        }
+
+        return render_template("user-gp-wallet.html", **context)
+
+    except Exception as e:
+        flash("An error occurred while loading the home data.", "light")
+        return render_template("503.html"), 503
+
+@app.route('/subscribe-mails', methods=['GET'])
+def subscribe_mail():
+    if 'admin-user' not in session:
+        return redirect(url_for('home'))
+
+    try:
+        raw = admin_db.reference('subscriptions').get() or {}
+        
+        subscriptions = []
+        for data in raw.values():
+            try:
+                submitted_at = datetime.strptime(data.get('submitted_at', ''), '%d-%m-%Y, %H:%M')
+            except ValueError:
+                submitted_at = None
+
+            subscriptions.append({
+                'email': data.get('email', ''),
+                'submitted_at': submitted_at
+            })
+
+        subscriptions.sort(key=lambda x: (x['submitted_at'] is not None, x['submitted_at']), reverse=True)
+
+        return render_template('subscribe-mail.html', subscriptions=subscriptions)
+
+    except Exception as e:
+        flash("An error occurred while loading the subscribe mails.", "light")
+        return render_template("503.html"), 503
+
 
 @app.route('/logout')
 def logout():

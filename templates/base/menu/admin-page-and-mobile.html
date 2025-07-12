@@ -14,6 +14,10 @@
             <a href="/exchange-request"><i class="bi bi-arrow-left-right"></i></i>Exchange Request</a>
         </li>
 
+        <li class="{% if request.path == '/user-gp-wallet' %}active{% endif %}">
+            <a href="/user-gp-wallet"><i class="bi bi-wallet2 me-2"></i>User GP Wallets</a>
+        </li>
+
         <li class="{% if request.path == '/all-homes' %}active{% endif %}">
             <a href="/all-homes"><i class="bi bi-houses me-2"></i>All Homes</a>
         </li>

@@ -101,6 +101,9 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
+                                    <th>Guest Point</th>
+                                    <th>User Type</th>
+                                    <th>House Status</th>
                                     <th>Message</th>
                                     <th>Date & Time</th>
                                     <th>Query Status</th>
@@ -112,16 +115,14 @@
                                         <tr style="height: 100px;" class="{% if req.query_status == 'Solved' %}bg-light-success{% endif %}">
                                             <td>{{ loop.index }}</td>
                                             <td>
-                                                <button 
-                                                    class="btn btn-sm border view-user-details"
-                                                    data-user-id="{{ req.user_id }}"
-                                                    type="button">
-                                                    View
-                                                </button>
+                                                <button class="btn btn-sm border view-user-details" data-user-id="{{ req.user_id }}" type="button">View</button>
                                             </td>
                                             <td>{{ req.name or '----' }}</td>
                                             <td>{{ req.email or '----' }}</td>
                                             <td>{{ req.phone or '----' }}</td>
+                                            <td>{{ req.guest_point or '0' }}</td>
+                                            <td>{{ req.user_type or '----' }}</td>
+                                            <td>{{ req.house_status or '----' }}</td>
                                             <td>{{ req.message or '----' }}</td>
                                             <td>{{ req.submitted_at or '----' }}</td>
                                             <td>

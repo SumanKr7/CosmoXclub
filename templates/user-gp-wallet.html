@@ -1,0 +1,202 @@
+{% extends '/base/style/base.html' %}
+{% set static_url = '/static' %}
+
+{% block navbar %}
+    {% include 'base/style/navbar-admin.html' %}
+{% endblock %}
+
+{% block content %}
+
+<!---- ============================ Page Title Start ================================== ---->
+<div class="page-title">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <h2 class="ipt-title">All Properties</h2>
+                <span class="ipn-subtitle">Browse and manage all listed properties</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!---- ============================ Page Title End ================================== ---->
+
+<!---- ============================ User Dashboard ================================== ---->
+<section class="bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-12 pe-xl-4">
+                
+                <div class="simple-sidebar sm-sidebar">
+                    
+                    <div class="sidebar-widgets">
+                        <div class="dashboard-navbar">
+                            
+                            <div class="d-user-avater">
+                                <img src="{{ url_for('static', filename='profile/default.webp') }}" class="img-fluid avater" alt=""/>
+                                <h4>Hi, Admin</h4>
+                            </div>
+                            
+                            <div class="d-navigation">
+                                <ul>    
+                                    {% include '/base/menu/admin-page-and-mobile.html' %}
+                                </ul>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-12">
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dashboard-stat widget-3">
+                            <div class="dashboard-stat-content">
+                                <h4>{{ total_users }}</h4>
+                                <span>Total Users</span>
+                            </div>
+                            <div class="dashboard-stat-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                        </div>    
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dashboard-stat widget-1">
+                            <div class="dashboard-stat-content">
+                                <h4>{{ total_members }}</h4>
+                                <span>Total Members</span>
+                            </div>
+                            <div class="dashboard-stat-icon">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                        </div>    
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="dashboard-stat widget-2">
+                            <div class="dashboard-stat-content">
+                                <h4>{{ verified_homes_count }}</h4>
+                                <span>Verified Homes</span>
+                            </div>
+                            <div class="dashboard-stat-icon">
+                                <i class="bi bi-house-check"></i>
+                            </div>
+                        </div>    
+                    </div>
+
+                </div>
+
+                <div class="dashboard-wraper mb-3">
+                    <h3 class="mb-0">All Users Guest Points Wallets</h3>
+                </div>
+
+                <div class="dashboard-wraper mb-3 p-3">
+                    <!-- Fixed search bar -->
+                    <div style="margin-bottom: 15px;" class="float-end">
+                        <input type="text" id="userSearchInput" placeholder="Search"
+                            style="padding: 8px; width: 250px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+
+                    <!-- Scrollable table -->
+                    <div style="max-height: 100vh; max-width: 100%; overflow: auto; clear: both;">
+                        <table cellpadding="10" cellspacing="0" style="width: 100%; min-width: max-content;">
+                            <thead>
+                                <tr>
+                                    <th>S. No.</th>
+                                    <th>Profile Image</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Email Verified</th>
+                                    <th>Phone</th>
+                                    <th>User ID</th>
+                                    <th>Home Titles</th>
+                                    <th>Home Status</th>
+                                    <th>Membership Plan</th>
+                                    <th>Guest Point</th>
+                                    <th>Add Guest Point</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if all_users %}
+                                    {% for uid, user in all_users.items() %}
+                                        <tr style="height: 100px;">
+                                            <td>{{ loop.index }}</td>
+                                            <td>
+                                                {% if user.get('profile_image') %}
+                                                    <img src="{{ user.profile_image }}" class="rounded-circle" alt="Profile Image" width="50" height="50">
+                                                {% else %}
+                                                    <img src="{{ url_for('static', filename='profile/default.webp') }}" class="rounded-circle" alt="Profile Image" width="50" height="50">
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ user.name if user.get('name') else '----' }}</td>
+                                            <td>{{ user.email if user.get('email') else '----' }}</td>
+                                            <td>{{ user.email_verified if user.get('email_verified') else 'Not Verified' }}</td>
+                                            <td>{{ user.phone if user.get('phone') else '----' }}</td>
+                                            <td>{{ uid }}</td>
+                                            <td>{{ user.properties.title if user.get('properties', {}).get('title') else '----' }}</td>
+                                            <td>{{ user.properties.house_status if user.get('properties', {}).get('house_status') else '----' }}</td>
+                                            <td>{{ user.membership_details.plan if user.get('membership_details', {}).get('plan') else '----' }}</td>
+                                            <td>{{ user.gp_wallet.guest_points if user.get('gp_wallet',{}).get('guest_points') else '0' }}
+                                            <td>
+                                                <form method="POST" action="{{ url_for('user_gp_wallet') }}">
+                                                    <input type="hidden" name="user_id" value="{{ uid }}">
+                                                    
+                                                    <div class="membership-form d-flex align-items-center" style="gap: 8px;">
+                                                        <input type="text" name="guest_points"
+                                                            placeholder="Enter GP" class="form-control" style="height: 40px; width: 130px; border: 1px solid #ccc; font-size: 15px;" required>
+
+                                                        <button type="submit" class="btn btn-main" style="font-size: 16px; padding: 10px 20px;">
+                                                            <i class="bi bi-wallet2 me-2"></i>Add
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="19">No homes found.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 list-layout">
+                        <div class="row">
+                            <!-- Additional content can go here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!---- ============================ User Dashboard End ================================== ---->
+
+<script>
+document.getElementById("userSearchInput").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(function(row) {
+        let text = row.textContent.toLowerCase();
+        if (text.includes(filter)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+</script>
+
+{% endblock %}s
