@@ -4,51 +4,11 @@
     {
         'id': 1,
         'img': '/uploads/default.webp',
-        'date': '30 July 2025',
-        'title': 'Why people choose listio for own properties',
-        'desc': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+        'date': '01 August 2025',
+        'title': 'Why people choose Cosmo Xclub for Home Exchange',
+        'desc': 'Why people choose Cosmo Xclub for Home Exchange',
         'btn': 'Continue'
     },
-    {
-        'id': 2,
-        'img': '/uploads/default.webp',
-        'date': '10 August 2025',
-        'title': 'List of benifits and impressive Cosmo services',
-        'desc': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        'btn': 'Continue'
-    },
-    {
-        'id': 3,
-        'img': '/uploads/default.webp',
-        'date': '30 Sep 2025',
-        'title': 'What people says about listio properties',
-        'desc': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        'btn': 'Continue'
-    },
-    {
-        'id': 4,
-        'img': '/uploads/default.webp',
-        'date': '30 July 2025',
-        'title': 'Why people choose listio for own properties1',
-        'desc': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        'btn': 'Continue'
-    },
-    {
-        'id': 5,
-        'img': '/uploads/default.webp',
-        'date': '10 August 2025',
-        'title': 'List of benifits and impressive Cosmo services1',
-        'desc': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        'btn': 'Continue'
-    },
-    {
-        'id': 6,
-        'img': '/uploads/default.webp',
-        'date': '30 Sep 2025',
-        'title': 'What people says about listio properties1',
-        'desc': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
-        'btn': 'Continue'
-    }
 ] %}
 {% for item in blogs %}
 <!-- Single blog Grid -->
@@ -56,7 +16,7 @@
     <div class="blog-wrap-grid h-100 shadow">
         
         <div class="blog-thumb">
-            <a href="{{ url_for('blog', title=item.title|lower|replace(' ', '-')|urlencode) }}">
+            <a href="#">
                 <img src="{{ static_url ~ item.img }}" class="img-fluid" alt="">
             </a>
         </div>
@@ -69,12 +29,12 @@
         
         <div class="blog-body">
             <h4 class="bl-title">
-                <a href="{{ url_for('blog', title=item.title|lower|replace(' ', '-')|urlencode) }}">
+                <a href="#">
                     {{ item.title }}
                 </a>
             </h4>
             <p>{{ item.desc }}</p>
-            <a href="{{ url_for('blog', title=item.title|lower|replace(' ', '-')|urlencode) }}" class="text-primary fw-medium">
+            <a href="#" class="text-primary fw-medium">
                 {{ item.btn }}<i class="fa-solid fa-arrow-right ms-2"></i>
             </a>
         </div>
