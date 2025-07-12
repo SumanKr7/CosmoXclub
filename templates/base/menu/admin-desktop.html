@@ -10,7 +10,7 @@
     {% endif %}
 
     <a href="/exchange-request" class="sub-menu-item {% if request.path == '/exchange-request' %}bg-success-subtle{% endif %}">
-        <i class="bi bi-arrow-left-right"></i></i>Exchange Request
+        <i class="bi bi-arrow-left-right me-2"></i></i>Exchange Request
     </a>
 
     <a href="/user-gp-wallet" class="sub-menu-item {% if request.path == '/user-gp-wallet' %}bg-success-subtle{% endif %}">
@@ -44,11 +44,15 @@
     </a>
 
     <a href="/membership-request" class="sub-menu-item {% if request.path == '/membership-request' %}bg-success-subtle {% endif %}">
-        <i class="bi bi-question-circle"></i>Membership Request
+        <i class="bi bi-question-circle me-2"></i>Membership Request
     </a>
 
     <a href="/contact-form" class="sub-menu-item {% if request.path == '/contact-form' %}bg-success-subtle {% endif %}">
-        <i class="bi bi-person-lines-fill"></i>Contact Form Query
+        <i class="bi bi-person-lines-fill me-2"></i>Contact Form Query
+    </a>
+
+    <a href="/subscribe-mails" class="sub-menu-item {% if request.path == '/subscribe-mails' %}bg-success-subtle {% endif %}">
+        <i class="bi bi-envelope-at me-2"></i>Subscribe Mails
     </a>
 
     <a href="{{ url_for('logout') }}" class="sub-menu-item">

@@ -1042,6 +1042,7 @@ def update_membership():
         flash("An unexpected error occurred while updating membership details.", "light")
         return render_template("503.html"), 503
 
+
 @app.route('/membership-request', methods=['GET', 'POST'])
 def membership_request():
     if 'admin-user' not in session:
@@ -1053,72 +1054,98 @@ def membership_request():
 
             try:
                 ref = admin_db.reference(f'plan_inquiries/{user_id}')
-                
                 ref.update({
                     'action': request.form.get('dropdown_option')
                 })
-
                 flash("Membership request updated", "success")
-
             except Exception as e:
                 flash("Error updating membership request. Please try again later.", "light")
 
             return redirect(url_for('membership_request'))
 
-        member_request = admin_db.reference('plan_inquiries').get() or {}
-        total_member_request = len(member_request)
-        total_not_connected  = sum(
-            1 for req in member_request.values() if req.get('action') in ['Not Connected', 'Pending']
+        member_request_data = admin_db.reference('plan_inquiries').get() or {}
+
+        # Sort by 'submitted_at' in descending order
+        def parse_datetime(submitted_at):
+            try:
+                return datetime.strptime(submitted_at, "%d-%m-%Y, %H:%M")
+            except:
+                return datetime.min  # fallback if format is wrong
+
+        sorted_member_request = dict(
+            sorted(
+                member_request_data.items(),
+                key=lambda item: parse_datetime(item[1].get('submitted_at', '01-01-1970, 00:00')),
+                reverse=True
+            )
+        )
+
+        total_member_request = len(sorted_member_request)
+        total_not_connected = sum(
+            1 for req in sorted_member_request.values()
+            if req.get('action') in ['Not Connected', 'Pending']
         )
 
         return render_template(
             "membership-request.html",
             total_member_request = total_member_request,
             total_not_connected  = total_not_connected,
-            member_request       = member_request,
+            member_request       = sorted_member_request,
         )
-    
+
     except Exception as e:
         flash("An unexpected error occurred while updating membership details.", "light")
         return render_template("503.html"), 503
-    
+
 @app.route('/contact-form', methods=['GET', 'POST'])
 def contact_form():
     if 'admin-user' not in session:
         return redirect(url_for('home'))
-    
+
     try:
         if request.method == 'POST':
             user_id = request.form.get('user_id')
-
             try:
                 ref = admin_db.reference(f'contact_form/{user_id}')
-                
                 ref.update({
                     'query_status': request.form.get('dropdown_option')
                 })
-
                 flash("Membership request updated", "success")
-
             except Exception as e:
                 flash("Error updating membership request. Please try again later.", "light")
-
             return redirect(url_for('contact_form'))
 
-        contact_form = admin_db.reference('contact_form').get() or {}
-        total_contact_form = len(contact_form)
+        # Fetch contact form data
+        contact_form_data = admin_db.reference('contact_form').get() or {}
+
+        # Sort by submitted_at datetime descending
+        def parse_datetime(submitted_at):
+            try:
+                return datetime.strptime(submitted_at, "%d-%m-%Y, %H:%M")
+            except:
+                return datetime.min  # fallback if format is wrong
+
+        sorted_contact_form = dict(
+            sorted(
+                contact_form_data.items(),
+                key=lambda item: parse_datetime(item[1].get('submitted_at', '01-01-1970, 00:00')),
+                reverse=True
+            )
+        )
+
+        total_contact_form = len(sorted_contact_form)
         total_not_solved = sum(
-            1 for req in contact_form.values() 
+            1 for req in sorted_contact_form.values()
             if req.get('query_status') in ['Not Solved', 'Pending']
         )
 
         return render_template(
             "contact-form.html",
-            total_member_request = total_contact_form,
-            total_not_solved  = total_not_solved,
-            contact_form       = contact_form,
+            total_member_request=total_contact_form,
+            total_not_solved=total_not_solved,
+            contact_form=sorted_contact_form,
         )
-    
+
     except Exception as e:
         flash("An unexpected error occurred while updating membership details.", "light")
         return render_template("503.html"), 503
@@ -1174,7 +1201,6 @@ def exchange_request():
         )
 
     except Exception as e:
-        print(e)
         flash("An unexpected error occurred while processing exchange requests.", "light")
         return render_template("503.html"), 503
 
@@ -1286,9 +1312,11 @@ def subscribe_mail():
                 'submitted_at': submitted_at
             })
 
+        total_mails = len(subscriptions)
+
         subscriptions.sort(key=lambda x: (x['submitted_at'] is not None, x['submitted_at']), reverse=True)
 
-        return render_template('subscribe-mail.html', subscriptions=subscriptions)
+        return render_template('subscribe-mail.html', subscriptions=subscriptions, total_mails=total_mails)
 
     except Exception as e:
         flash("An error occurred while loading the subscribe mails.", "light")

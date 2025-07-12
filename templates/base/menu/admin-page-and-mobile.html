@@ -51,6 +51,10 @@
         <li class="{% if request.path == '/contact-form' %}active{% endif %}">
             <a href="/contact-form"><i class="bi bi-person-lines-fill"></i>Contact Form Query</a>
         </li>
+
+        <li class="{% if request.path == '/subscribe-mails' %}active{% endif %}">
+            <a href="/subscribe-mails"><i class="bi bi-envelope-at"></i>Subscribe Mails</a>
+        </li>
         
         <li>
             <a href="{{ url_for('logout') }}"><i class="bi bi-power me-2"></i>Log Out</a>
