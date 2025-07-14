@@ -150,7 +150,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const imagePreview = document.getElementById('imagePreview');
         const removeButton = document.getElementById('removeButton');
-        const cancelRemoveButton = document.getElementById('removeButtonCancel'); // NEW
+        const cancelRemoveButton = document.getElementById('removeButtonCancel');
         const form = document.getElementById('uploadForm');
         const imagesToKeepInput = document.getElementById('imagesToKeep');
         let originalImages = JSON.parse(imagesToKeepInput.value);
@@ -159,7 +159,7 @@
             const currentImages = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src);
             const hasChanges = JSON.stringify(currentImages) !== JSON.stringify(originalImages);
             removeButton.classList.toggle('d-none', !hasChanges);
-            cancelRemoveButton.classList.toggle('d-none', !hasChanges); // Show/hide cancel button too
+            cancelRemoveButton.classList.toggle('d-none', !hasChanges);
         }
 
         imagePreview.addEventListener('click', function (e) {
@@ -173,7 +173,6 @@
         const observer = new MutationObserver(checkForChanges);
         observer.observe(imagePreview, { childList: true, subtree: true });
 
-        // Confirm Remove
         removeButton.addEventListener('click', function () {
             Swal.fire({
                 title: 'Are you sure?',
@@ -193,9 +192,8 @@
             });
         });
 
-        // Cancel Remove
         cancelRemoveButton.addEventListener('click', function () {
-            location.reload(); // Simply refresh page to discard removals
+            location.reload();
         });
     });
 </script>

@@ -143,24 +143,21 @@
 <script>
     const currentPath = window.location.pathname;
 
-    // Find and highlight the active submenu item
     const subMenuItems = document.querySelectorAll('.sub-menu-item');
     subMenuItems.forEach((item) => {
         if (item.getAttribute('href') === currentPath) {
             item.classList.add('active');
 
-            // Highlight all parent menus recursively
             let parentMenu = item.closest('.parent-menu-item');
             while (parentMenu && !parentMenu.classList.contains('processed')) {
                 const parentLink = parentMenu.querySelector('a');
                 if (parentLink) {
                     parentLink.classList.add('active');
                 }
-                parentMenu.classList.add('processed'); // Mark as processed to avoid re-processing
+                parentMenu.classList.add('processed');
                 parentMenu = parentMenu.closest('.parent-parent-menu-item');
             }
 
-            // Highlight the top-level parent menu
             const topLevelMenu = item.closest('.parent-parent-menu-item');
             if (topLevelMenu) {
                 const topLevelLink = topLevelMenu.querySelector('.home-link');

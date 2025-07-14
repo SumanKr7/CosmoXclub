@@ -131,7 +131,6 @@
 		const form = document.getElementById('uploadForm');
 		const imagesToKeepInput = document.getElementById('imagesToKeep');
 
-		// 🔧 Normalize initial image paths to relative
 		let originalImages = JSON.parse(imagesToKeepInput.value || '[]').map(path => {
 			try {
 				const url = new URL(path, window.location.origin);
@@ -141,7 +140,6 @@
 			}
 		});
 
-		// ✅ Update imagesToKeepInput and button visibility
 		function checkForChanges() {
 			const currentImages = Array.from(imagePreview.querySelectorAll('img')).map(img => {
 				const url = new URL(img.src);
@@ -153,7 +151,6 @@
 			imagesToKeepInput.value = JSON.stringify(currentImages);
 		}
 
-		// ✅ Remove image on click of × button
 		imagePreview.addEventListener('click', function (e) {
 			if (e.target.classList.contains('remove-img-btn')) {
 				const imgDiv = e.target.closest('.img-thumb');
@@ -162,11 +159,9 @@
 			}
 		});
 
-		// ✅ Watch for DOM changes (image removal)
 		const observer = new MutationObserver(checkForChanges);
 		observer.observe(imagePreview, { childList: true, subtree: true });
 
-		// ✅ Submit form to delete images
 		removeButton.addEventListener('click', function () {
 			Swal.fire({
 				title: 'Are you sure?',
@@ -186,7 +181,6 @@
 			});
 		});
 
-		// ✅ Cancel and reload original image list
 		cancelRemoveButton.addEventListener('click', function () {
 			location.reload();
 		});

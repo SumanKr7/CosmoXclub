@@ -179,10 +179,10 @@ function confirmDelete() {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch('/my-home', {           // <-- same endpoint
+            fetch('/my-home', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({})     // not strictly required, but explicit
+                body: JSON.stringify({})
             })
             .then(res => res.json())
             .then(data => {

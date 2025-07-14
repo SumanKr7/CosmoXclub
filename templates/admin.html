@@ -70,7 +70,6 @@ $(document).ready(function () {
             url: url,
             data: formData,
             success: function (response) {
-                // Only redirect — do not show any message
                 if (response.redirect) {
                     window.location.href = response.redirect;
                 }
@@ -88,7 +87,6 @@ $(document).ready(function () {
                         display: 'block'
                     });
 
-                // Hide after 10 seconds
                 setTimeout(() => {
                     $msgBox.fadeOut();
                 }, 10000);
