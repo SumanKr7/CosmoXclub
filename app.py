@@ -278,7 +278,6 @@ def home_exchange():
         selected_location = selected_location
     )
 
-
 @app.route('/home-details/<uid>', methods=['GET', 'POST'])
 def home_details(uid):
     one_properties = all_users_properties()
